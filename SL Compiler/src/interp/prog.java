@@ -78,5 +78,27 @@ public class prog {
                     )
             ));
                     
-                     
+
+    public static Stm tricky = new PrintStm(
+            new PairExpList(
+                    new EseqExp(
+                            new PrintStm(
+                                    new PairExpList(new IdExp("a"),
+                                            new PairExpList(new IdExp("a"),
+                                                    new PairExpList(new IdExp("a"),
+                                                            new PairExpList(new IdExp("a"),
+                                                                    new PairExpList(new IdExp("a"),
+                                                                            new PairExpList(new IdExp("a"),
+                                                                                    new PairExpList(new IdExp("a"),
+                                                                                            new LastExpList(new IdExp("end"))
+                                                                                    )
+                                                                            )
+                                                                    )
+                                                            )
+                                                    )
+                                            )
+                                    )
+                            ), new IdExp("x")
+                    ), 
+                    new LastExpList(new IdExp("x"))));
 }

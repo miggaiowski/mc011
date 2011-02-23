@@ -15,16 +15,21 @@ import grammar.Stm;
 public class Interpreter {
     
     static int maxargs(ExpList el) {
+        int max = 0, expval;
         int n = 1;
-        while (el instanceof PairExpList) {
-//            System.out.println("MAIS UM");
-            n++;
-            el = ((PairExpList)el).tail;
+        while (el instanceof PairExpList) { // traverse linked list
+            expval = maxargs(((PairExpList)el).head); // get the maxargs for this exp
+            if (expval > max) // if it returns not zero, then it had a print somewhere
+                max = expval; // save this value, we need it to compare to ourself
+            n++; // anyhow, this was one more parameter for us
+            el = ((PairExpList)el).tail; // move the pointer to the next linked list item
         }
-        return n;
+        return Math.max(n, max); // return our size or some other print inside us that was bigger
     }
     
     static int maxargs(Exp e) {
+        // this is the only case where you might have a print somewhere, because there is a statement
+        // in there. See?
         if (e instanceof EseqExp) {
             return maxargs(((EseqExp) e).stm);
         }
@@ -53,5 +58,6 @@ public class Interpreter {
         System.out.println(maxargs(prog.prog2));
         System.out.println(maxargs(prog.pequeno));
         System.out.println(maxargs(prog.grande));
+        System.out.println(maxargs(prog.tricky));
 	}
 }
