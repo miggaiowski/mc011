@@ -2,6 +2,7 @@ package interp;
 import grammar.AssignStm;
 import grammar.CompoundStm;
 import grammar.EseqExp;
+import grammar.Exp;
 import grammar.IdExp;
 import grammar.LastExpList;
 import grammar.NumExp;
@@ -51,4 +52,31 @@ public class prog {
                             new IdExp("a")))),
                 new PrintStm(
                     new LastExpList(new IdExp("b")))));
+    
+    public static Stm pequeno = new PrintStm(new LastExpList(new IdExp("x")));
+    
+    public static Stm grande = new PrintStm(
+            new PairExpList(new IdExp("a"),
+                    new PairExpList(new IdExp("a"),
+                            new PairExpList(new IdExp("a"),
+                                    new PairExpList(new IdExp("a"),
+                                            new PairExpList(new IdExp("a"),
+                                                    new PairExpList(new IdExp("a"),
+                                                            new PairExpList(new IdExp("a"),
+                                                                    new PairExpList(new IdExp("a"),
+                                                                            new PairExpList(new IdExp("a"),
+                                                                                    new PairExpList(new IdExp("a"),
+                                                                                            new LastExpList(new IdExp("end"))
+                                                                                    )
+                                                                            )
+                                                                    )
+                                                            )
+                                                    )
+                                            )
+                                    )
+                            )
+                    )
+            ));
+                    
+                     
 }

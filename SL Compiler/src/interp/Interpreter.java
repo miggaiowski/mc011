@@ -49,6 +49,9 @@ public class Interpreter {
 	}
     
     public static void main (String args[]) {
-	    System.out.println(maxargs(prog.prog2));
+        System.out.println(maxargs(prog.prog));
+        System.out.println(maxargs(prog.prog2));
+        System.out.println(maxargs(prog.pequeno));
+        System.out.println(maxargs(prog.grande));
 	}
 }
