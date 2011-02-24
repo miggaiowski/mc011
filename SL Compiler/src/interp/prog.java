@@ -55,18 +55,22 @@ public class prog {
     
     public static Stm pequeno = new PrintStm(new LastExpList(new IdExp("x")));
     
-    public static Stm grande = new PrintStm(
+    public static Stm grande = new CompoundStm(
+        new AssignStm(
+                "a", 
+                new OpExp(new NumExp(5), OpExp.Plus, new NumExp(3))),        
+        new PrintStm(
             new PairExpList(new IdExp("a"),
                     new PairExpList(new IdExp("a"),
                             new PairExpList(new IdExp("a"),
                                     new PairExpList(new IdExp("a"),
                                             new PairExpList(new IdExp("a"),
                                                     new PairExpList(new IdExp("a"),
-                                                            new PairExpList(new IdExp("a"),
+                                                            new PairExpList(new IdExp("e"),
                                                                     new PairExpList(new IdExp("a"),
                                                                             new PairExpList(new IdExp("a"),
                                                                                     new PairExpList(new IdExp("a"),
-                                                                                            new LastExpList(new IdExp("end"))
+                                                                                            new LastExpList(new IdExp("a"))
                                                                                     )
                                                                             )
                                                                     )
@@ -76,8 +80,9 @@ public class prog {
                                     )
                             )
                     )
-            ));
-                    
+            )
+        )
+    );      
 
     public static Stm tricky = new PrintStm(
             new PairExpList(
@@ -101,4 +106,13 @@ public class prog {
                             ), new IdExp("x")
                     ), 
                     new LastExpList(new IdExp("x"))));
+    
+    public static Stm easy = new CompoundStm(
+            new AssignStm(
+                    "a", 
+                    new OpExp(new NumExp(5), OpExp.Plus, new NumExp(3))),
+            new AssignStm(
+                    "b", 
+                    new OpExp(new NumExp(6), OpExp.Div, new NumExp(3))));
+    
 }

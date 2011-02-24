@@ -1,13 +1,14 @@
 package interp;
 
-import java.beans.IntrospectionException;
-
 import grammar.AssignStm;
 import grammar.CompoundStm;
 import grammar.EseqExp;
 import grammar.Exp;
 import grammar.ExpList;
+import grammar.IdExp;
 import grammar.LastExpList;
+import grammar.NumExp;
+import grammar.OpExp;
 import grammar.PairExpList;
 import grammar.PrintStm;
 import grammar.Stm;
@@ -33,7 +34,7 @@ public class Interpreter {
         if (e instanceof EseqExp) {
             return maxargs(((EseqExp) e).stm);
         }
-        return 0; // sure it's always zero? must check for statements
+        return 0; 
     }
     
 	static int maxargs(Stm s){
@@ -49,15 +50,104 @@ public class Interpreter {
 	    return 0;
 	}
 	
+	static IntAndTable interpExp(Exp s, Table t) {
+	    if (s instanceof IdExp) {
+	        IntAndTable iat1 = new IntAndTable(Table.lookup(t, ((IdExp) s).id), t);
+	        return iat1;
+	    }
+	    else if (s instanceof NumExp) {
+	        IntAndTable iat1 = new IntAndTable(((NumExp) s).num, t);
+	        return iat1;
+	    }
+	    else if (s instanceof OpExp) {
+	        IntAndTable iat1 = interpExp(((OpExp) s).left, t);
+	        IntAndTable iat2 = interpExp(((OpExp) s).right, iat1.t);
+	        IntAndTable iat3;
+	        switch (((OpExp) s).oper) {
+	        case OpExp.Plus:
+	            iat3 = new IntAndTable(iat1.i + iat2.i, iat2.t);
+	            break;
+	        case OpExp.Minus:
+                iat3 = new IntAndTable(iat1.i - iat2.i, iat2.t);
+                break;
+	        case OpExp.Times:
+                iat3 = new IntAndTable(iat1.i * iat2.i, iat2.t);
+                break;
+	        case OpExp.Div:
+                iat3 = new IntAndTable(iat1.i / iat2.i, iat2.t);
+                break;
+	        default:
+	            // does not enter here, but the java compiler complains without it
+	            iat3 = new IntAndTable(-1, t); 
+	            break;
+	        }
+	        return iat3;
+	    }
+	    
+	    // To Do: EseqExp
+	    
+	    else {
+	        return new IntAndTable(0, t);
+	    }
+	    
+	        
+	}
+	
+	static Table interpStm(Stm s, Table t) {
+	    if (s instanceof CompoundStm) {
+	        Table t1 = interpStm(((CompoundStm) s).stm1, t);
+	        Table t2 = interpStm(((CompoundStm) s).stm2, t1);
+	        return t2;
+	    }
+	    else if (s instanceof AssignStm) {
+	        // process Expression with Table t and get the integer result
+	        // and a new table of side effects
+            IntAndTable iat1 = interpExp(((AssignStm) s).exp, t);
+	        // New table is the one with the side effects with
+	        // this assignment in front
+	        Table t1 = Table.update(iat1.t, ((AssignStm) s).id, iat1.i);
+	        return t1;
+	    }
+	    else if(s instanceof PrintStm) {
+	        // traverse the expression list and do stuff
+	        IntAndTable iat = new IntAndTable(0, t); // the results from interpExp
+	        ExpList el = ((PrintStm) s).exps;
+	        while (el instanceof PairExpList) {
+	            iat = interpExp(((PairExpList)el).head, iat.t);
+	            System.out.print(iat.i + ", ");
+	            el = ((PairExpList)el).tail;
+	        }
+	        iat = interpExp(((LastExpList)el).head, iat.t);
+	        System.out.println(iat.i);
+	        return iat.t;
+	    }
+	    else
+	        return t; // never gets here.
+	}
+	
 	static void interp(Stm s){
-	    // implement here
+	    Table t = interpStm(s, null);
+	    
+	    // lets print the final state of the Symbols Table.
+	    while (t != null) {
+	        System.out.println(t.id + " : " + t.value);
+	        t = t.tail;
+	    }
 	}
     
     public static void main (String args[]) {
-        System.out.println(maxargs(prog.prog));
-        System.out.println(maxargs(prog.prog2));
-        System.out.println(maxargs(prog.pequeno));
-        System.out.println(maxargs(prog.grande));
-        System.out.println(maxargs(prog.tricky));
+//        System.out.println(maxargs(prog.prog));
+//        System.out.println(maxargs(prog.prog2));
+//        System.out.println(maxargs(prog.pequeno));
+//        System.out.println(maxargs(prog.grande));
+//        System.out.println(maxargs(prog.tricky));
+//        
+        System.out.println("prog.easy:");
+        interp(prog.easy);
+        
+        System.out.println("prog.grande:");
+        interp(prog.grande);
+        
+        
 	}
 }
