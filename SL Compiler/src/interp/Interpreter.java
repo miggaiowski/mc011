@@ -83,14 +83,14 @@ public class Interpreter {
 	        }
 	        return iat3;
 	    }
-	    
-	    // To Do: EseqExp
-	    
+	    else if(s instanceof EseqExp) {
+	        Table t1 = interpStm(((EseqExp) s).stm, t);
+	        IntAndTable iat1 = interpExp(((EseqExp) s).exp, t1);
+	        return iat1;
+	    }  
 	    else {
 	        return new IntAndTable(0, t);
-	    }
-	    
-	        
+	    }     
 	}
 	
 	static Table interpStm(Stm s, Table t) {
