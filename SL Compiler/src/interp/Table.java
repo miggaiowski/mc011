@@ -23,7 +23,7 @@ class Table {
                 return t.value;
             t = t.tail;
         }
-        System.out.println("  Erro: uso da variável *** " + i + " *** antes de sua definição");
+        System.out.println("  Error: using the variable *** " + i + " *** before its definition");
         return -100;
     }
 }

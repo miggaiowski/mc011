@@ -136,17 +136,37 @@ public class Interpreter {
 	}
     
     public static void main (String args[]) {
-//        System.out.println(maxargs(prog.prog));
-//        System.out.println(maxargs(prog.prog2));
-//        System.out.println(maxargs(prog.pequeno));
-//        System.out.println(maxargs(prog.grande));
-//        System.out.println(maxargs(prog.tricky));
-//        
-        System.out.println("prog.easy:");
+    	System.out.println("===== Calculating MaxArgs from the programs =====");
+        System.out.println("maxargs(prog) = " + maxargs(prog.prog));
+        System.out.println("maxargs(prog2) = " + maxargs(prog.prog2));
+        System.out.println("maxargs(small) = " + maxargs(prog.small));
+        System.out.println("maxargs(big) = " + maxargs(prog.big));
+        System.out.println("maxargs(tricky) = " + maxargs(prog.tricky));
+        System.out.println("maxargs(easy) = " + maxargs(prog.easy));
+        System.out.println("maxargs(squares) = " + maxargs(prog.squares));
+        
+        System.out.println("\n===== Interpreting the programs =====");
+        
+        System.out.println("prog:");
+        interp(prog.prog);
+        
+        System.out.println("prog2:");
+        interp(prog.prog2);
+        
+        System.out.println("small:");
+        interp(prog.small);
+        
+        System.out.println("big:");
+        interp(prog.big);
+        
+        System.out.println("tricky:");
+        interp(prog.tricky);
+        
+        System.out.println("easy:");
         interp(prog.easy);
         
-        System.out.println("prog.grande:");
-        interp(prog.grande);
+        System.out.println("squares:");
+        interp(prog.squares);
         
         
 	}

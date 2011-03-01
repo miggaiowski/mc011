@@ -2,7 +2,6 @@ package interp;
 import grammar.AssignStm;
 import grammar.CompoundStm;
 import grammar.EseqExp;
-import grammar.Exp;
 import grammar.IdExp;
 import grammar.LastExpList;
 import grammar.NumExp;
@@ -53,9 +52,9 @@ public class prog {
                 new PrintStm(
                     new LastExpList(new IdExp("b")))));
     
-    public static Stm pequeno = new PrintStm(new LastExpList(new IdExp("x")));
+    public static Stm small = new PrintStm(new LastExpList(new IdExp("x")));
     
-    public static Stm grande = new CompoundStm(
+    public static Stm big = new CompoundStm(
         new AssignStm(
                 "a", 
                 new OpExp(new NumExp(5), OpExp.Plus, new NumExp(3))),        
@@ -115,4 +114,48 @@ public class prog {
                     "b", 
                     new OpExp(new NumExp(6), OpExp.Div, new NumExp(3))));
     
+    public static Stm squares = new CompoundStm(
+                                        new AssignStm(
+                                                "a",
+                                                new OpExp(new NumExp(1),OpExp.Times,new NumExp(1)) ),
+                                        new CompoundStm(
+                                        		new AssignStm(
+                                                        "b",
+                                                        new OpExp(new NumExp(2),OpExp.Times,new NumExp(2)) ), 
+                                        		new CompoundStm(
+                                        				new AssignStm(
+                                                                "c",
+                                                                new OpExp(new NumExp(3),OpExp.Times,new NumExp(3)) ), 
+                                        				new CompoundStm(
+                                        						new AssignStm(
+                                                                        "d",
+                                                                        new OpExp(new NumExp(4),OpExp.Times,new NumExp(4)) ), 
+                                        						new CompoundStm(
+                                        								new AssignStm(
+                                                                                "e",
+                                                                                new OpExp(new NumExp(5),OpExp.Times,new NumExp(5)) ), 
+                                        								new PrintStm(
+                                        										new PairExpList(
+                                        												new IdExp("a"),
+                                        												new PairExpList(
+                                        														new IdExp("b"),
+                                        														new PairExpList(
+                                        																new IdExp("c"),
+                                        																new PairExpList(
+                                        																		new IdExp("d"),
+                                        																		new LastExpList(
+                                        																				new IdExp("e")
+                                        																				)
+                                        																		)
+                                        																)
+                                        														)
+                                        												)
+                                        										)
+                                        								)
+                                        						)
+                                        				)
+                                        		)
+                                        );
 }
+
+    
