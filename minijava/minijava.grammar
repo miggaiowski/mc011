@@ -1,0 +1,107 @@
+Helpers
+  letter = [['a' .. 'z'] + ['A' .. 'Z']];
+  digit = ['0' .. '9'];
+
+Tokens 
+    classn = 'class';
+    extends = 'extends';
+    public = 'public';
+    static = 'static';
+    void = 'void';
+    main = 'main';
+    string = 'String';
+    int = 'int';
+    boolean = 'boolean';
+    if = 'if';
+    else = 'else';
+    while = 'while';
+    length = 'length' ;
+    new = 'new';
+    true = 'true';
+    false = 'false';
+    return = 'return';
+    this = 'this';
+    
+    id = letter (letter | digit | '_')*;
+    number = digit (digit)*;
+    
+    op = '&&' | '<' | '+' | '-' | '*';
+    
+    equal = '=';
+    not = '!';
+    l_bracket = '[';
+    r_bracket = ']';
+    l_brace = '{';
+    r_brace = '}';
+    l_parenthese = '(';
+    r_parenthese = ')';
+    dot = '.';
+    semicolon = ';';
+    comma = ',' ;
+    
+    blank = (' ' | 10 | 13 | 9)*;
+
+    print = 'System.out.println';
+
+Productions
+program = 
+    mainclass classdecl*;
+
+mainclass = 
+    classn [classname]:id l_brace mainmethod r_brace;
+
+mainmethod = 
+    public static void main l_parenthese string l_bracket r_bracket [paramname]:id r_parenthese l_brace statement r_brace;
+
+classdecl = 
+    {simpleclass} classn id l_brace vardecl* methoddecl* r_brace |
+    {extendingclass} classn id extends if l_brace vardecl* methoddecl* r_brace;
+
+vardecl = 
+    type id semicolon;
+
+methoddecl =
+    public type id l_parenthese formallist r_parenthese l_brace vardecl* statement* return exp semicolon r_brace;
+
+formallist = 
+    {declare} type id formalrest* |
+    {empty} blank;
+
+formalrest =
+    comma type id;
+
+type =
+    {intvector} int l_bracket r_bracket |
+    {boolean} boolean |
+    {int} int |
+    {id} id ;
+
+statement =
+    {statements} l_brace statement* r_brace |
+    {ifelse} if l_parenthese exp r_parenthese [ifstatement]:statement else [elsestatement]:statement |
+    {while} while l_parenthese exp r_parenthese statement |
+    {print} print l_parenthese exp r_parenthese semicolon |
+    {attr} id equal exp semicolon |
+    {arrayattr} id l_bracket [arrayindex]:exp r_bracket equal [righthandside]:exp semicolon;
+
+exp = 
+    {op} [left]:exp op [right]:exp |
+    {arrayget} [pointer]:exp l_bracket [offset]:exp r_bracket |
+    {length} exp dot length |
+    {idlist} exp dot id l_parenthese explist r_parenthese |
+    {number} number |
+    {true} true |
+    {false} false |
+    {id} id |
+    {this} this |
+    {newint} new int l_bracket exp r_bracket |
+    {newid} new id l_parenthese r_parenthese |
+    {notexp} not exp |
+    {lparexprpar} l_parenthese exp r_parenthese ;
+
+explist = 
+    {explisthead} exp exprest* |
+    {blank} blank;
+
+exprest = 
+    comma exp;
