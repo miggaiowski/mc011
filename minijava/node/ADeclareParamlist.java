@@ -2,46 +2,47 @@
 
 package node;
 
+import java.util.*;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class AVardecl extends PVardecl
+public final class ADeclareParamlist extends PParamlist
 {
     private PType _type_;
-    private TId _varname_;
-    private TSemicolon _semicolon_;
+    private TId _id_;
+    private final LinkedList<PParamrest> _paramrest_ = new LinkedList<PParamrest>();
 
-    public AVardecl()
+    public ADeclareParamlist()
     {
         // Constructor
     }
 
-    public AVardecl(
+    public ADeclareParamlist(
         @SuppressWarnings("hiding") PType _type_,
-        @SuppressWarnings("hiding") TId _varname_,
-        @SuppressWarnings("hiding") TSemicolon _semicolon_)
+        @SuppressWarnings("hiding") TId _id_,
+        @SuppressWarnings("hiding") List<PParamrest> _paramrest_)
     {
         // Constructor
         setType(_type_);
 
-        setVarname(_varname_);
+        setId(_id_);
 
-        setSemicolon(_semicolon_);
+        setParamrest(_paramrest_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AVardecl(
+        return new ADeclareParamlist(
             cloneNode(this._type_),
-            cloneNode(this._varname_),
-            cloneNode(this._semicolon_));
+            cloneNode(this._id_),
+            cloneList(this._paramrest_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAVardecl(this);
+        ((Analysis) sw).caseADeclareParamlist(this);
     }
 
     public PType getType()
@@ -69,16 +70,16 @@ public final class AVardecl extends PVardecl
         this._type_ = node;
     }
 
-    public TId getVarname()
+    public TId getId()
     {
-        return this._varname_;
+        return this._id_;
     }
 
-    public void setVarname(TId node)
+    public void setId(TId node)
     {
-        if(this._varname_ != null)
+        if(this._id_ != null)
         {
-            this._varname_.parent(null);
+            this._id_.parent(null);
         }
 
         if(node != null)
@@ -91,32 +92,27 @@ public final class AVardecl extends PVardecl
             node.parent(this);
         }
 
-        this._varname_ = node;
+        this._id_ = node;
     }
 
-    public TSemicolon getSemicolon()
+    public LinkedList<PParamrest> getParamrest()
     {
-        return this._semicolon_;
+        return this._paramrest_;
     }
 
-    public void setSemicolon(TSemicolon node)
+    public void setParamrest(List<PParamrest> list)
     {
-        if(this._semicolon_ != null)
+        this._paramrest_.clear();
+        this._paramrest_.addAll(list);
+        for(PParamrest e : list)
         {
-            this._semicolon_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
+            if(e.parent() != null)
             {
-                node.parent().removeChild(node);
+                e.parent().removeChild(e);
             }
 
-            node.parent(this);
+            e.parent(this);
         }
-
-        this._semicolon_ = node;
     }
 
     @Override
@@ -124,8 +120,8 @@ public final class AVardecl extends PVardecl
     {
         return ""
             + toString(this._type_)
-            + toString(this._varname_)
-            + toString(this._semicolon_);
+            + toString(this._id_)
+            + toString(this._paramrest_);
     }
 
     @Override
@@ -138,15 +134,14 @@ public final class AVardecl extends PVardecl
             return;
         }
 
-        if(this._varname_ == child)
+        if(this._id_ == child)
         {
-            this._varname_ = null;
+            this._id_ = null;
             return;
         }
 
-        if(this._semicolon_ == child)
+        if(this._paramrest_.remove(child))
         {
-            this._semicolon_ = null;
             return;
         }
 
@@ -163,16 +158,28 @@ public final class AVardecl extends PVardecl
             return;
         }
 
-        if(this._varname_ == oldChild)
+        if(this._id_ == oldChild)
         {
-            setVarname((TId) newChild);
+            setId((TId) newChild);
             return;
         }
 
-        if(this._semicolon_ == oldChild)
+        for(ListIterator<PParamrest> i = this._paramrest_.listIterator(); i.hasNext();)
         {
-            setSemicolon((TSemicolon) newChild);
-            return;
+            if(i.next() == oldChild)
+            {
+                if(newChild != null)
+                {
+                    i.set((PParamrest) newChild);
+                    newChild.parent(this);
+                    oldChild.parent(null);
+                    return;
+                }
+
+                i.remove();
+                oldChild.parent(null);
+                return;
+            }
         }
 
         throw new RuntimeException("Not a child.");

@@ -10,15 +10,15 @@ public final class AMethoddecl extends PMethoddecl
 {
     private TPublic _public_;
     private PType _type_;
-    private TId _id_;
+    private TId _methodname_;
     private TLParenthese _lParenthese_;
-    private PFormallist _formallist_;
+    private PParamlist _paramlist_;
     private TRParenthese _rParenthese_;
     private TLBrace _lBrace_;
-    private final LinkedList<PVardecl> _vardecl_ = new LinkedList<PVardecl>();
-    private final LinkedList<PStatement> _statement_ = new LinkedList<PStatement>();
+    private final LinkedList<PVardecl> _vars_ = new LinkedList<PVardecl>();
+    private final LinkedList<PStatement> _statements_ = new LinkedList<PStatement>();
     private TReturn _return_;
-    private PExp _exp_;
+    private PExp _returnexpression_;
     private TSemicolon _semicolon_;
     private TRBrace _rBrace_;
 
@@ -30,15 +30,15 @@ public final class AMethoddecl extends PMethoddecl
     public AMethoddecl(
         @SuppressWarnings("hiding") TPublic _public_,
         @SuppressWarnings("hiding") PType _type_,
-        @SuppressWarnings("hiding") TId _id_,
+        @SuppressWarnings("hiding") TId _methodname_,
         @SuppressWarnings("hiding") TLParenthese _lParenthese_,
-        @SuppressWarnings("hiding") PFormallist _formallist_,
+        @SuppressWarnings("hiding") PParamlist _paramlist_,
         @SuppressWarnings("hiding") TRParenthese _rParenthese_,
         @SuppressWarnings("hiding") TLBrace _lBrace_,
-        @SuppressWarnings("hiding") List<PVardecl> _vardecl_,
-        @SuppressWarnings("hiding") List<PStatement> _statement_,
+        @SuppressWarnings("hiding") List<PVardecl> _vars_,
+        @SuppressWarnings("hiding") List<PStatement> _statements_,
         @SuppressWarnings("hiding") TReturn _return_,
-        @SuppressWarnings("hiding") PExp _exp_,
+        @SuppressWarnings("hiding") PExp _returnexpression_,
         @SuppressWarnings("hiding") TSemicolon _semicolon_,
         @SuppressWarnings("hiding") TRBrace _rBrace_)
     {
@@ -47,23 +47,23 @@ public final class AMethoddecl extends PMethoddecl
 
         setType(_type_);
 
-        setId(_id_);
+        setMethodname(_methodname_);
 
         setLParenthese(_lParenthese_);
 
-        setFormallist(_formallist_);
+        setParamlist(_paramlist_);
 
         setRParenthese(_rParenthese_);
 
         setLBrace(_lBrace_);
 
-        setVardecl(_vardecl_);
+        setVars(_vars_);
 
-        setStatement(_statement_);
+        setStatements(_statements_);
 
         setReturn(_return_);
 
-        setExp(_exp_);
+        setReturnexpression(_returnexpression_);
 
         setSemicolon(_semicolon_);
 
@@ -77,15 +77,15 @@ public final class AMethoddecl extends PMethoddecl
         return new AMethoddecl(
             cloneNode(this._public_),
             cloneNode(this._type_),
-            cloneNode(this._id_),
+            cloneNode(this._methodname_),
             cloneNode(this._lParenthese_),
-            cloneNode(this._formallist_),
+            cloneNode(this._paramlist_),
             cloneNode(this._rParenthese_),
             cloneNode(this._lBrace_),
-            cloneList(this._vardecl_),
-            cloneList(this._statement_),
+            cloneList(this._vars_),
+            cloneList(this._statements_),
             cloneNode(this._return_),
-            cloneNode(this._exp_),
+            cloneNode(this._returnexpression_),
             cloneNode(this._semicolon_),
             cloneNode(this._rBrace_));
     }
@@ -145,16 +145,16 @@ public final class AMethoddecl extends PMethoddecl
         this._type_ = node;
     }
 
-    public TId getId()
+    public TId getMethodname()
     {
-        return this._id_;
+        return this._methodname_;
     }
 
-    public void setId(TId node)
+    public void setMethodname(TId node)
     {
-        if(this._id_ != null)
+        if(this._methodname_ != null)
         {
-            this._id_.parent(null);
+            this._methodname_.parent(null);
         }
 
         if(node != null)
@@ -167,7 +167,7 @@ public final class AMethoddecl extends PMethoddecl
             node.parent(this);
         }
 
-        this._id_ = node;
+        this._methodname_ = node;
     }
 
     public TLParenthese getLParenthese()
@@ -195,16 +195,16 @@ public final class AMethoddecl extends PMethoddecl
         this._lParenthese_ = node;
     }
 
-    public PFormallist getFormallist()
+    public PParamlist getParamlist()
     {
-        return this._formallist_;
+        return this._paramlist_;
     }
 
-    public void setFormallist(PFormallist node)
+    public void setParamlist(PParamlist node)
     {
-        if(this._formallist_ != null)
+        if(this._paramlist_ != null)
         {
-            this._formallist_.parent(null);
+            this._paramlist_.parent(null);
         }
 
         if(node != null)
@@ -217,7 +217,7 @@ public final class AMethoddecl extends PMethoddecl
             node.parent(this);
         }
 
-        this._formallist_ = node;
+        this._paramlist_ = node;
     }
 
     public TRParenthese getRParenthese()
@@ -270,15 +270,15 @@ public final class AMethoddecl extends PMethoddecl
         this._lBrace_ = node;
     }
 
-    public LinkedList<PVardecl> getVardecl()
+    public LinkedList<PVardecl> getVars()
     {
-        return this._vardecl_;
+        return this._vars_;
     }
 
-    public void setVardecl(List<PVardecl> list)
+    public void setVars(List<PVardecl> list)
     {
-        this._vardecl_.clear();
-        this._vardecl_.addAll(list);
+        this._vars_.clear();
+        this._vars_.addAll(list);
         for(PVardecl e : list)
         {
             if(e.parent() != null)
@@ -290,15 +290,15 @@ public final class AMethoddecl extends PMethoddecl
         }
     }
 
-    public LinkedList<PStatement> getStatement()
+    public LinkedList<PStatement> getStatements()
     {
-        return this._statement_;
+        return this._statements_;
     }
 
-    public void setStatement(List<PStatement> list)
+    public void setStatements(List<PStatement> list)
     {
-        this._statement_.clear();
-        this._statement_.addAll(list);
+        this._statements_.clear();
+        this._statements_.addAll(list);
         for(PStatement e : list)
         {
             if(e.parent() != null)
@@ -335,16 +335,16 @@ public final class AMethoddecl extends PMethoddecl
         this._return_ = node;
     }
 
-    public PExp getExp()
+    public PExp getReturnexpression()
     {
-        return this._exp_;
+        return this._returnexpression_;
     }
 
-    public void setExp(PExp node)
+    public void setReturnexpression(PExp node)
     {
-        if(this._exp_ != null)
+        if(this._returnexpression_ != null)
         {
-            this._exp_.parent(null);
+            this._returnexpression_.parent(null);
         }
 
         if(node != null)
@@ -357,7 +357,7 @@ public final class AMethoddecl extends PMethoddecl
             node.parent(this);
         }
 
-        this._exp_ = node;
+        this._returnexpression_ = node;
     }
 
     public TSemicolon getSemicolon()
@@ -416,15 +416,15 @@ public final class AMethoddecl extends PMethoddecl
         return ""
             + toString(this._public_)
             + toString(this._type_)
-            + toString(this._id_)
+            + toString(this._methodname_)
             + toString(this._lParenthese_)
-            + toString(this._formallist_)
+            + toString(this._paramlist_)
             + toString(this._rParenthese_)
             + toString(this._lBrace_)
-            + toString(this._vardecl_)
-            + toString(this._statement_)
+            + toString(this._vars_)
+            + toString(this._statements_)
             + toString(this._return_)
-            + toString(this._exp_)
+            + toString(this._returnexpression_)
             + toString(this._semicolon_)
             + toString(this._rBrace_);
     }
@@ -445,9 +445,9 @@ public final class AMethoddecl extends PMethoddecl
             return;
         }
 
-        if(this._id_ == child)
+        if(this._methodname_ == child)
         {
-            this._id_ = null;
+            this._methodname_ = null;
             return;
         }
 
@@ -457,9 +457,9 @@ public final class AMethoddecl extends PMethoddecl
             return;
         }
 
-        if(this._formallist_ == child)
+        if(this._paramlist_ == child)
         {
-            this._formallist_ = null;
+            this._paramlist_ = null;
             return;
         }
 
@@ -475,12 +475,12 @@ public final class AMethoddecl extends PMethoddecl
             return;
         }
 
-        if(this._vardecl_.remove(child))
+        if(this._vars_.remove(child))
         {
             return;
         }
 
-        if(this._statement_.remove(child))
+        if(this._statements_.remove(child))
         {
             return;
         }
@@ -491,9 +491,9 @@ public final class AMethoddecl extends PMethoddecl
             return;
         }
 
-        if(this._exp_ == child)
+        if(this._returnexpression_ == child)
         {
-            this._exp_ = null;
+            this._returnexpression_ = null;
             return;
         }
 
@@ -528,9 +528,9 @@ public final class AMethoddecl extends PMethoddecl
             return;
         }
 
-        if(this._id_ == oldChild)
+        if(this._methodname_ == oldChild)
         {
-            setId((TId) newChild);
+            setMethodname((TId) newChild);
             return;
         }
 
@@ -540,9 +540,9 @@ public final class AMethoddecl extends PMethoddecl
             return;
         }
 
-        if(this._formallist_ == oldChild)
+        if(this._paramlist_ == oldChild)
         {
-            setFormallist((PFormallist) newChild);
+            setParamlist((PParamlist) newChild);
             return;
         }
 
@@ -558,7 +558,7 @@ public final class AMethoddecl extends PMethoddecl
             return;
         }
 
-        for(ListIterator<PVardecl> i = this._vardecl_.listIterator(); i.hasNext();)
+        for(ListIterator<PVardecl> i = this._vars_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {
@@ -576,7 +576,7 @@ public final class AMethoddecl extends PMethoddecl
             }
         }
 
-        for(ListIterator<PStatement> i = this._statement_.listIterator(); i.hasNext();)
+        for(ListIterator<PStatement> i = this._statements_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {
@@ -600,9 +600,9 @@ public final class AMethoddecl extends PMethoddecl
             return;
         }
 
-        if(this._exp_ == oldChild)
+        if(this._returnexpression_ == oldChild)
         {
-            setExp((PExp) newChild);
+            setReturnexpression((PExp) newChild);
             return;
         }
 

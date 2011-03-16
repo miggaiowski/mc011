@@ -5,43 +5,68 @@ package node;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class AVardecl extends PVardecl
+public final class AParamrest extends PParamrest
 {
+    private TComma _comma_;
     private PType _type_;
-    private TId _varname_;
-    private TSemicolon _semicolon_;
+    private TId _id_;
 
-    public AVardecl()
+    public AParamrest()
     {
         // Constructor
     }
 
-    public AVardecl(
+    public AParamrest(
+        @SuppressWarnings("hiding") TComma _comma_,
         @SuppressWarnings("hiding") PType _type_,
-        @SuppressWarnings("hiding") TId _varname_,
-        @SuppressWarnings("hiding") TSemicolon _semicolon_)
+        @SuppressWarnings("hiding") TId _id_)
     {
         // Constructor
+        setComma(_comma_);
+
         setType(_type_);
 
-        setVarname(_varname_);
-
-        setSemicolon(_semicolon_);
+        setId(_id_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AVardecl(
+        return new AParamrest(
+            cloneNode(this._comma_),
             cloneNode(this._type_),
-            cloneNode(this._varname_),
-            cloneNode(this._semicolon_));
+            cloneNode(this._id_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAVardecl(this);
+        ((Analysis) sw).caseAParamrest(this);
+    }
+
+    public TComma getComma()
+    {
+        return this._comma_;
+    }
+
+    public void setComma(TComma node)
+    {
+        if(this._comma_ != null)
+        {
+            this._comma_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._comma_ = node;
     }
 
     public PType getType()
@@ -69,16 +94,16 @@ public final class AVardecl extends PVardecl
         this._type_ = node;
     }
 
-    public TId getVarname()
+    public TId getId()
     {
-        return this._varname_;
+        return this._id_;
     }
 
-    public void setVarname(TId node)
+    public void setId(TId node)
     {
-        if(this._varname_ != null)
+        if(this._id_ != null)
         {
-            this._varname_.parent(null);
+            this._id_.parent(null);
         }
 
         if(node != null)
@@ -91,62 +116,37 @@ public final class AVardecl extends PVardecl
             node.parent(this);
         }
 
-        this._varname_ = node;
-    }
-
-    public TSemicolon getSemicolon()
-    {
-        return this._semicolon_;
-    }
-
-    public void setSemicolon(TSemicolon node)
-    {
-        if(this._semicolon_ != null)
-        {
-            this._semicolon_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._semicolon_ = node;
+        this._id_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
+            + toString(this._comma_)
             + toString(this._type_)
-            + toString(this._varname_)
-            + toString(this._semicolon_);
+            + toString(this._id_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
+        if(this._comma_ == child)
+        {
+            this._comma_ = null;
+            return;
+        }
+
         if(this._type_ == child)
         {
             this._type_ = null;
             return;
         }
 
-        if(this._varname_ == child)
+        if(this._id_ == child)
         {
-            this._varname_ = null;
-            return;
-        }
-
-        if(this._semicolon_ == child)
-        {
-            this._semicolon_ = null;
+            this._id_ = null;
             return;
         }
 
@@ -157,21 +157,21 @@ public final class AVardecl extends PVardecl
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
+        if(this._comma_ == oldChild)
+        {
+            setComma((TComma) newChild);
+            return;
+        }
+
         if(this._type_ == oldChild)
         {
             setType((PType) newChild);
             return;
         }
 
-        if(this._varname_ == oldChild)
+        if(this._id_ == oldChild)
         {
-            setVarname((TId) newChild);
-            return;
-        }
-
-        if(this._semicolon_ == oldChild)
-        {
-            setSemicolon((TSemicolon) newChild);
+            setId((TId) newChild);
             return;
         }
 

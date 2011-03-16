@@ -104,17 +104,17 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseADeclareFormallist(ADeclareFormallist node)
+    public void caseAFirstparameterParamlist(AFirstparameterParamlist node)
     {
         defaultCase(node);
     }
 
-    public void caseAEmptyFormallist(AEmptyFormallist node)
+    public void caseAEmptyParamlist(AEmptyParamlist node)
     {
         defaultCase(node);
     }
 
-    public void caseAFormalrest(AFormalrest node)
+    public void caseAAnotherparameterParamrest(AAnotherparameterParamrest node)
     {
         defaultCase(node);
     }
@@ -169,67 +169,122 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseAOpExp(AOpExp node)
+    public void caseAExp(AExp node)
     {
         defaultCase(node);
     }
 
-    public void caseAArraygetExp(AArraygetExp node)
+    public void caseAAndstmList(AAndstmList node)
     {
         defaultCase(node);
     }
 
-    public void caseALengthExp(ALengthExp node)
+    public void caseAAndstmRest(AAndstmRest node)
     {
         defaultCase(node);
     }
 
-    public void caseAIdlistExp(AIdlistExp node)
+    public void caseALessThan(ALessThan node)
     {
         defaultCase(node);
     }
 
-    public void caseANumberExp(ANumberExp node)
+    public void caseALessThanPlusMinus(ALessThanPlusMinus node)
     {
         defaultCase(node);
     }
 
-    public void caseATrueExp(ATrueExp node)
+    public void caseAPlusMinusList(APlusMinusList node)
     {
         defaultCase(node);
     }
 
-    public void caseAFalseExp(AFalseExp node)
+    public void caseAPlusMinusRest(APlusMinusRest node)
     {
         defaultCase(node);
     }
 
-    public void caseAIdExp(AIdExp node)
+    public void caseATimesList(ATimesList node)
     {
         defaultCase(node);
     }
 
-    public void caseAThisExp(AThisExp node)
+    public void caseATimesRest(ATimesRest node)
     {
         defaultCase(node);
     }
 
-    public void caseANewintExp(ANewintExp node)
+    public void caseANotExpressionPrefixexp(ANotExpressionPrefixexp node)
     {
         defaultCase(node);
     }
 
-    public void caseANewidExp(ANewidExp node)
+    public void caseAExpressionPrefixexp(AExpressionPrefixexp node)
     {
         defaultCase(node);
     }
 
-    public void caseANotexpExp(ANotexpExp node)
+    public void caseANotexp(ANotexp node)
     {
         defaultCase(node);
     }
 
-    public void caseALparexprparExp(ALparexprparExp node)
+    public void caseAPostfixexpList(APostfixexpList node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseAIndexPostfixexpRest(AIndexPostfixexpRest node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseAIdlistPostfixexpRest(AIdlistPostfixexpRest node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseALengthPostfixexpRest(ALengthPostfixexpRest node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseANumberPrimaryExp(ANumberPrimaryExp node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseATruePrimaryExp(ATruePrimaryExp node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseAFalsePrimaryExp(AFalsePrimaryExp node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseAIdPrimaryExp(AIdPrimaryExp node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseAThisPrimaryExp(AThisPrimaryExp node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseANewintPrimaryExp(ANewintPrimaryExp node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseANewidPrimaryExp(ANewidPrimaryExp node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseALparexprparPrimaryExp(ALparexprparPrimaryExp node)
     {
         defaultCase(node);
     }
@@ -349,7 +404,22 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseTOp(TOp node)
+    public void caseTPlusminusop(TPlusminusop node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseTTimesop(TTimesop node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseTAnd(TAnd node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseTLess(TLess node)
     {
         defaultCase(node);
     }

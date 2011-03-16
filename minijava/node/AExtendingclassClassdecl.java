@@ -9,12 +9,12 @@ import analysis.*;
 public final class AExtendingclassClassdecl extends PClassdecl
 {
     private TClassn _classn_;
-    private TId _id_;
+    private TId _classname_;
     private TExtends _extends_;
-    private TIf _if_;
+    private TId _super_;
     private TLBrace _lBrace_;
-    private final LinkedList<PVardecl> _vardecl_ = new LinkedList<PVardecl>();
-    private final LinkedList<PMethoddecl> _methoddecl_ = new LinkedList<PMethoddecl>();
+    private final LinkedList<PVardecl> _vars_ = new LinkedList<PVardecl>();
+    private final LinkedList<PMethoddecl> _methods_ = new LinkedList<PMethoddecl>();
     private TRBrace _rBrace_;
 
     public AExtendingclassClassdecl()
@@ -24,28 +24,28 @@ public final class AExtendingclassClassdecl extends PClassdecl
 
     public AExtendingclassClassdecl(
         @SuppressWarnings("hiding") TClassn _classn_,
-        @SuppressWarnings("hiding") TId _id_,
+        @SuppressWarnings("hiding") TId _classname_,
         @SuppressWarnings("hiding") TExtends _extends_,
-        @SuppressWarnings("hiding") TIf _if_,
+        @SuppressWarnings("hiding") TId _super_,
         @SuppressWarnings("hiding") TLBrace _lBrace_,
-        @SuppressWarnings("hiding") List<PVardecl> _vardecl_,
-        @SuppressWarnings("hiding") List<PMethoddecl> _methoddecl_,
+        @SuppressWarnings("hiding") List<PVardecl> _vars_,
+        @SuppressWarnings("hiding") List<PMethoddecl> _methods_,
         @SuppressWarnings("hiding") TRBrace _rBrace_)
     {
         // Constructor
         setClassn(_classn_);
 
-        setId(_id_);
+        setClassname(_classname_);
 
         setExtends(_extends_);
 
-        setIf(_if_);
+        setSuper(_super_);
 
         setLBrace(_lBrace_);
 
-        setVardecl(_vardecl_);
+        setVars(_vars_);
 
-        setMethoddecl(_methoddecl_);
+        setMethods(_methods_);
 
         setRBrace(_rBrace_);
 
@@ -56,12 +56,12 @@ public final class AExtendingclassClassdecl extends PClassdecl
     {
         return new AExtendingclassClassdecl(
             cloneNode(this._classn_),
-            cloneNode(this._id_),
+            cloneNode(this._classname_),
             cloneNode(this._extends_),
-            cloneNode(this._if_),
+            cloneNode(this._super_),
             cloneNode(this._lBrace_),
-            cloneList(this._vardecl_),
-            cloneList(this._methoddecl_),
+            cloneList(this._vars_),
+            cloneList(this._methods_),
             cloneNode(this._rBrace_));
     }
 
@@ -95,16 +95,16 @@ public final class AExtendingclassClassdecl extends PClassdecl
         this._classn_ = node;
     }
 
-    public TId getId()
+    public TId getClassname()
     {
-        return this._id_;
+        return this._classname_;
     }
 
-    public void setId(TId node)
+    public void setClassname(TId node)
     {
-        if(this._id_ != null)
+        if(this._classname_ != null)
         {
-            this._id_.parent(null);
+            this._classname_.parent(null);
         }
 
         if(node != null)
@@ -117,7 +117,7 @@ public final class AExtendingclassClassdecl extends PClassdecl
             node.parent(this);
         }
 
-        this._id_ = node;
+        this._classname_ = node;
     }
 
     public TExtends getExtends()
@@ -145,16 +145,16 @@ public final class AExtendingclassClassdecl extends PClassdecl
         this._extends_ = node;
     }
 
-    public TIf getIf()
+    public TId getSuper()
     {
-        return this._if_;
+        return this._super_;
     }
 
-    public void setIf(TIf node)
+    public void setSuper(TId node)
     {
-        if(this._if_ != null)
+        if(this._super_ != null)
         {
-            this._if_.parent(null);
+            this._super_.parent(null);
         }
 
         if(node != null)
@@ -167,7 +167,7 @@ public final class AExtendingclassClassdecl extends PClassdecl
             node.parent(this);
         }
 
-        this._if_ = node;
+        this._super_ = node;
     }
 
     public TLBrace getLBrace()
@@ -195,15 +195,15 @@ public final class AExtendingclassClassdecl extends PClassdecl
         this._lBrace_ = node;
     }
 
-    public LinkedList<PVardecl> getVardecl()
+    public LinkedList<PVardecl> getVars()
     {
-        return this._vardecl_;
+        return this._vars_;
     }
 
-    public void setVardecl(List<PVardecl> list)
+    public void setVars(List<PVardecl> list)
     {
-        this._vardecl_.clear();
-        this._vardecl_.addAll(list);
+        this._vars_.clear();
+        this._vars_.addAll(list);
         for(PVardecl e : list)
         {
             if(e.parent() != null)
@@ -215,15 +215,15 @@ public final class AExtendingclassClassdecl extends PClassdecl
         }
     }
 
-    public LinkedList<PMethoddecl> getMethoddecl()
+    public LinkedList<PMethoddecl> getMethods()
     {
-        return this._methoddecl_;
+        return this._methods_;
     }
 
-    public void setMethoddecl(List<PMethoddecl> list)
+    public void setMethods(List<PMethoddecl> list)
     {
-        this._methoddecl_.clear();
-        this._methoddecl_.addAll(list);
+        this._methods_.clear();
+        this._methods_.addAll(list);
         for(PMethoddecl e : list)
         {
             if(e.parent() != null)
@@ -265,12 +265,12 @@ public final class AExtendingclassClassdecl extends PClassdecl
     {
         return ""
             + toString(this._classn_)
-            + toString(this._id_)
+            + toString(this._classname_)
             + toString(this._extends_)
-            + toString(this._if_)
+            + toString(this._super_)
             + toString(this._lBrace_)
-            + toString(this._vardecl_)
-            + toString(this._methoddecl_)
+            + toString(this._vars_)
+            + toString(this._methods_)
             + toString(this._rBrace_);
     }
 
@@ -284,9 +284,9 @@ public final class AExtendingclassClassdecl extends PClassdecl
             return;
         }
 
-        if(this._id_ == child)
+        if(this._classname_ == child)
         {
-            this._id_ = null;
+            this._classname_ = null;
             return;
         }
 
@@ -296,9 +296,9 @@ public final class AExtendingclassClassdecl extends PClassdecl
             return;
         }
 
-        if(this._if_ == child)
+        if(this._super_ == child)
         {
-            this._if_ = null;
+            this._super_ = null;
             return;
         }
 
@@ -308,12 +308,12 @@ public final class AExtendingclassClassdecl extends PClassdecl
             return;
         }
 
-        if(this._vardecl_.remove(child))
+        if(this._vars_.remove(child))
         {
             return;
         }
 
-        if(this._methoddecl_.remove(child))
+        if(this._methods_.remove(child))
         {
             return;
         }
@@ -337,9 +337,9 @@ public final class AExtendingclassClassdecl extends PClassdecl
             return;
         }
 
-        if(this._id_ == oldChild)
+        if(this._classname_ == oldChild)
         {
-            setId((TId) newChild);
+            setClassname((TId) newChild);
             return;
         }
 
@@ -349,9 +349,9 @@ public final class AExtendingclassClassdecl extends PClassdecl
             return;
         }
 
-        if(this._if_ == oldChild)
+        if(this._super_ == oldChild)
         {
-            setIf((TIf) newChild);
+            setSuper((TId) newChild);
             return;
         }
 
@@ -361,7 +361,7 @@ public final class AExtendingclassClassdecl extends PClassdecl
             return;
         }
 
-        for(ListIterator<PVardecl> i = this._vardecl_.listIterator(); i.hasNext();)
+        for(ListIterator<PVardecl> i = this._vars_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {
@@ -379,7 +379,7 @@ public final class AExtendingclassClassdecl extends PClassdecl
             }
         }
 
-        for(ListIterator<PMethoddecl> i = this._methoddecl_.listIterator(); i.hasNext();)
+        for(ListIterator<PMethoddecl> i = this._methods_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {

@@ -25,7 +25,10 @@ Tokens
     id = letter (letter | digit | '_')*;
     number = digit (digit)*;
     
-    op = '&&' | '<' | '+' | '-' | '*';
+    plusminusop = '+' | '-';
+    timesop = '*';
+    and = '&&';
+    less = '<';
     
     equal = '=';
     not = '!';
@@ -45,30 +48,43 @@ Tokens
 
 Productions
 program = 
-    mainclass classdecl*;
+     mainclass classdecl*;
 
 mainclass = 
-    classn [classname]:id l_brace mainmethod r_brace;
+     classn [classname]:id l_brace mainmethod r_brace;
 
-mainmethod = 
-    public static void main l_parenthese string l_bracket r_bracket [paramname]:id r_parenthese l_brace statement r_brace;
+mainmethod =
+     public static void main l_parenthese string l_bracket r_bracket [paramname]:id r_parenthese l_brace statement r_brace;
 
 classdecl = 
-    {simpleclass} classn id l_brace vardecl* methoddecl* r_brace |
-    {extendingclass} classn id extends if l_brace vardecl* methoddecl* r_brace;
-
+     {simpleclass} classn [classname]:id 
+                   l_brace 
+                       [vars]:vardecl* 
+                       [methods]:methoddecl*
+                   r_brace
+   | {extendingclass} classn [classname]:id extends [super]:id 
+                      l_brace
+                          [vars]:vardecl* 
+                          [methods]:methoddecl*
+		      r_brace;
+ 
 vardecl = 
-    type id semicolon;
+    type [varname]:id semicolon;
 
 methoddecl =
-    public type id l_parenthese formallist r_parenthese l_brace vardecl* statement* return exp semicolon r_brace;
+    public type [methodname]:id l_parenthese paramlist r_parenthese 
+        l_brace
+	     [vars]:vardecl* 
+	     [statements]:statement* 
+	     return [returnexpression]:exp semicolon 
+        r_brace;
 
-formallist = 
-    {declare} type id formalrest* |
+paramlist = 
+    {firstparameter} type id paramrest* |
     {empty} blank;
 
-formalrest =
-    comma type id;
+paramrest =
+    {anotherparameter} comma type id;
 
 type =
     {intvector} int l_bracket r_bracket |
@@ -84,20 +100,55 @@ statement =
     {attr} id equal exp semicolon |
     {arrayattr} id l_bracket [arrayindex]:exp r_bracket equal [righthandside]:exp semicolon;
 
-exp = 
-    {op} [left]:exp op [right]:exp |
-    {arrayget} [pointer]:exp l_bracket [offset]:exp r_bracket |
-    {length} exp dot length |
-    {idlist} exp dot id l_parenthese explist r_parenthese |
-    {number} number |
-    {true} true |
-    {false} false |
-    {id} id |
-    {this} this |
-    {newint} new int l_bracket exp r_bracket |
-    {newid} new id l_parenthese r_parenthese |
-    {notexp} not exp |
-    {lparexprpar} l_parenthese exp r_parenthese ;
+exp = andstm_list;
+
+andstm_list =
+    less_than andstm_rest*;
+
+andstm_rest =
+    and less_than;
+
+less_than = 
+    plus_minus_list less_than_plus_minus? ;
+
+less_than_plus_minus = 
+    less plus_minus_list;
+
+plus_minus_list = times_list plus_minus_rest* ;
+
+plus_minus_rest = 
+    plusminusop times_list;
+
+times_list =
+    prefixexp times_rest* ; 
+
+times_rest =
+    timesop prefixexp;
+
+prefixexp =
+      {not_expression} notexp 
+    | {expression} postfixexp_list;
+
+notexp = 
+    not+ postfixexp_list;
+
+postfixexp_list = 
+    primary_exp postfixexp_rest*;
+
+postfixexp_rest = 
+      {index} l_bracket exp r_bracket
+    | {idlist} exp dot id l_parenthese explist r_parenthese
+    | {length} exp dot length ;
+
+primary_exp = 
+      {number} number
+    | {true} true
+    | {false} false
+    | {id} id
+    | {this} this
+    | {newint} new int l_bracket exp r_bracket
+    | {newid} new id l_parenthese r_parenthese
+    | {lparexprpar} l_parenthese exp r_parenthese ;
 
 explist = 
     {explisthead} exp exprest* |
