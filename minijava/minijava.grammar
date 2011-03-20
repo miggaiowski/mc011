@@ -29,6 +29,7 @@ plusminusop = '+' | '-';
 timesop = '*';
 and = '&&';
 less = '<';
+op = '&&' | '<' | '+' | '-' | '*';
 
 equal = '=';
 not = '!';
@@ -46,62 +47,65 @@ blank = (' ' | 10 | 13 | 9)*;
 
 print = 'System.out.println';
 
-Ignored Tokens
-blank;
-
 Productions
 program = 
      mainclass classdecl*;
 
-mainclass = 
-     classn [classname]:id l_brace mainmethod r_brace;
+mainclass {-> mainclass} = 
+     classn [classname]:id l_brace [mainmethod]:mainmethod r_brace {-> New mainclass(classname, mainmethod.mainmethod)};
 
-mainmethod =
-     public static void main l_parenthese string l_bracket r_bracket [paramname]:id r_parenthese l_brace statement r_brace;
+mainmethod {-> mainmethod} =
+     public static void main l_parenthese string l_bracket r_bracket [paramname]:id r_parenthese l_brace [statements]:statement r_brace {-> New mainmethod(paramname, statements.statement)}; 
 
-classdecl = 
+classdecl {-> classdecl} = 
      {simpleclass} classn [classname]:id 
                    l_brace 
                        [vars]:vardecl* 
                        [methods]:methoddecl*
                    r_brace
+     {-> New classdecl(classname, Null, [vars.vardecl], [methods.methoddecl])}
    | {extendingclass} classn [classname]:id extends [super]:id 
                       l_brace
                           [vars]:vardecl* 
                           [methods]:methoddecl*
-		      r_brace;
+		      r_brace 
+     {-> New classdecl(classname, super, [vars.vardecl], [methods.methoddecl])};
  
-vardecl = 
-    type [varname]:id semicolon;
+vardecl {-> vardecl} = 
+    type [varname]:id semicolon {-> New vardecl(type, varname)};
 
-methoddecl =
-    public type [methodname]:id l_parenthese paramlist r_parenthese 
+methoddecl {-> methoddecl} =
+    public type [methodname]:id l_parenthese [parameters]:paramlist r_parenthese 
         l_brace
 	     [vars]:vardecl* 
 	     [statements]:statement* 
 	     return [returnexpression]:exp semicolon 
-        r_brace;
+        r_brace
+    {-> New methoddecl(type, methodname, [parameters.parameter], [vars.vardecl], [statements.statement], returnexpression.exp)};
 
-paramlist = 
-    {firstparameter} type id paramrest* |
-    {empty} blank;
+paramlist {-> parameter*} = 
+      {firstparameter} parameter paramrest* {-> [parameter, paramrest.parameter]}
+    | {empty} blank {-> []};
 
-paramrest =
-    {anotherparameter} comma type id;
+paramrest {-> parameter} =
+    {anotherparameter} comma type id {-> New parameter(type, id)};
+
+parameter {-> parameter} = 
+    type id {-> New parameter(type, id)};
 
 type =
-    {intvector} int l_bracket r_bracket |
-    {boolean} boolean |
-    {int} int |
-    {id} id ;
+      {intvector} int l_bracket r_bracket 
+    | {boolean} boolean 
+    | {int} int 
+    | {id} id ;
 
 statement =
-    {statements} l_brace statement* r_brace |
-    {ifelse} if l_parenthese exp r_parenthese [ifstatement]:statement else [elsestatement]:statement |
-    {while} while l_parenthese exp r_parenthese statement |
-    {print} print l_parenthese exp r_parenthese semicolon |
-    {attr} id equal exp semicolon |
-    {arrayattr} id l_bracket [arrayindex]:exp r_bracket equal [righthandside]:exp semicolon;
+      {statements} l_brace statement* r_brace
+    | {ifelse} if l_parenthese exp r_parenthese [ifstatement]:statement else [elsestatement]:statement 
+    | {while} while l_parenthese exp r_parenthese statement 
+    | {print} print l_parenthese exp r_parenthese semicolon
+    | {attr} id equal exp semicolon 
+    | {arrayattr} id l_bracket [arrayindex]:exp r_bracket equal [righthandside]:exp semicolon;
 
 exp = andstm_list;
 
@@ -162,20 +166,54 @@ exprest =
 
 Abstract Syntax Tree
 mainclass = 
-     [classname]:id mainmethod;
+     [classname]:id [mainmethod]:mainmethod;
 
 mainmethod =
      [paramname]:id [statements]:statement;
 
 classdecl = 
-     {simpleclass} [classname]:id [vars]:vardecl* [methods]:methoddecl*
-   | {extendingclass} [classname]:id [super]:id [vars]:vardecl* [methods]:methoddecl*;
+     [classname]:id [super]:id? [vars]:vardecl* [methods]:methoddecl*;
  
 vardecl = 
     type [varname]:id;
 
 methoddecl =
-    type [methodname]:id paramlist
+    type [methodname]:id [parameters]:parameter*
          [vars]:vardecl*
  	 [statements]:statement* 
 	 [returnexpression]:exp;
+
+parameter = 
+    type id;
+
+type =
+      {intvector} int l_bracket r_bracket 
+    | {boolean} boolean 
+    | {int} int 
+    | {id} id ;
+
+statement =
+    {statements} [statements]:statement*
+  | {ifelse} [ifexp]:exp [ifstatement]:statement [elsestatement]:statement
+  | {while} [whileexp]:exp [statement]:statement
+  | {print} [exp]:exp
+  | {attr} [id]:id [exp]:exp
+  | {arrayattr} [id]:id [arrayindex]:exp [righthandside]:exp;
+
+exp =
+      {op} [left]:exp [op]:op [right]:exp 
+    | {arrayget} [pointer]:exp [offset]:exp 
+    | {length} [exp]:exp 
+    | {idlist} [exp]:exp [id]:id [explist]:explist
+    | {number} [number]:number
+    | {true} true
+    | {false} false
+    | {id} [id]:id
+    | {this} this
+    | {newintarray} [exp]:exp
+    | {newid} [id]:id
+    | {notexp} [exp]:exp
+    | {lparexprpar} [exp]:exp;
+
+explist = 
+    [exps]:exp*;
