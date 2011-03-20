@@ -99,15 +99,24 @@ type =
     | {int} int 
     | {id} id ;
 
-statement =
-      {statements} l_brace statement* r_brace
-    | {ifelse} if l_parenthese exp r_parenthese [ifstatement]:statement else [elsestatement]:statement 
-    | {while} while l_parenthese exp r_parenthese statement 
+statement {-> statement} =
+      {statementlist} l_brace [statementlist]:statement* r_brace 
+      {-> New statement.statementlist([statementlist.statement])}
+    | {ifelse} if l_parenthese [ifexp]:exp r_parenthese 
+      	       	  [ifstatement]:statement 
+	       else 
+	       	  [elsestatement]:statement 
+      {-> New statement.ifelse(ifexp.exp, ifstatement, elsestatement)}
+    | {while} while l_parenthese [whileexp]:exp r_parenthese statement 
+      {-> New statement.while(whileexp.exp, statement)}
     | {print} print l_parenthese exp r_parenthese semicolon
-    | {attr} id equal exp semicolon 
-    | {arrayattr} id l_bracket [arrayindex]:exp r_bracket equal [righthandside]:exp semicolon;
+      {-> New statement.print(exp)}
+    | {attr} id equal exp semicolon
+      {-> New statement.attr(id, exp)} 
+    | {arrayattr} id l_bracket [arrayindex]:exp r_bracket equal [righthandside]:exp semicolon
+      {-> New statement.arrayattr(id, arrayindex.exp, righthandside.exp)};
 
-exp = andstm_list;
+exp {-> exp} = andstm_list;
 
 andstm_list =
     less_than andstm_rest*;
@@ -147,22 +156,22 @@ postfixexp_rest =
     | {idlist} exp dot id l_parenthese explist r_parenthese
     | {length} exp dot length ;
 
-primary_exp = 
-      {number} number
-    | {true} true
-    | {false} false
-    | {id} id
-    | {this} this
-    | {newint} new int l_bracket exp r_bracket
-    | {newid} new id l_parenthese r_parenthese
-    | {lparexprpar} l_parenthese exp r_parenthese ;
+primary_exp {-> exp} = 
+      {number} number {-> New exp.number(number)}
+    | {true} true {-> New exp.true(true)}
+    | {false} false {-> New exp.false(false)}
+    | {id} id {-> New exp.id(id)}
+    | {this} this {-> New exp.this(this)}
+    | {newintarray} new int l_bracket exp r_bracket {-> New exp.newintarray(exp)}
+    | {newid} new id l_parenthese r_parenthese {-> New exp.newid(id)}
+    | {lparexprpar} l_parenthese exp r_parenthese {-> New exp.lparexprpar(exp)};
 
-explist = 
-    {explisthead} exp exprest* |
-    {blank} blank;
+explist {-> explist} = 
+      {explisthead} exp exprest* {-> [exp, exprest.exp]}
+    | {blank} blank {-> []};
 
-exprest = 
-    comma exp;
+exprest {-> exp} = 
+    comma exp {-> New exp(exp)};
 
 Abstract Syntax Tree
 mainclass = 
@@ -193,7 +202,7 @@ type =
     | {id} id ;
 
 statement =
-    {statements} [statements]:statement*
+    {statementlist} [statementlist]:statement*
   | {ifelse} [ifexp]:exp [ifstatement]:statement [elsestatement]:statement
   | {while} [whileexp]:exp [statement]:statement
   | {print} [exp]:exp
