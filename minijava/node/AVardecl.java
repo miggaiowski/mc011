@@ -9,7 +9,6 @@ public final class AVardecl extends PVardecl
 {
     private PType _type_;
     private TId _varname_;
-    private TSemicolon _semicolon_;
 
     public AVardecl()
     {
@@ -18,15 +17,12 @@ public final class AVardecl extends PVardecl
 
     public AVardecl(
         @SuppressWarnings("hiding") PType _type_,
-        @SuppressWarnings("hiding") TId _varname_,
-        @SuppressWarnings("hiding") TSemicolon _semicolon_)
+        @SuppressWarnings("hiding") TId _varname_)
     {
         // Constructor
         setType(_type_);
 
         setVarname(_varname_);
-
-        setSemicolon(_semicolon_);
 
     }
 
@@ -35,8 +31,7 @@ public final class AVardecl extends PVardecl
     {
         return new AVardecl(
             cloneNode(this._type_),
-            cloneNode(this._varname_),
-            cloneNode(this._semicolon_));
+            cloneNode(this._varname_));
     }
 
     public void apply(Switch sw)
@@ -94,38 +89,12 @@ public final class AVardecl extends PVardecl
         this._varname_ = node;
     }
 
-    public TSemicolon getSemicolon()
-    {
-        return this._semicolon_;
-    }
-
-    public void setSemicolon(TSemicolon node)
-    {
-        if(this._semicolon_ != null)
-        {
-            this._semicolon_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._semicolon_ = node;
-    }
-
     @Override
     public String toString()
     {
         return ""
             + toString(this._type_)
-            + toString(this._varname_)
-            + toString(this._semicolon_);
+            + toString(this._varname_);
     }
 
     @Override
@@ -141,12 +110,6 @@ public final class AVardecl extends PVardecl
         if(this._varname_ == child)
         {
             this._varname_ = null;
-            return;
-        }
-
-        if(this._semicolon_ == child)
-        {
-            this._semicolon_ = null;
             return;
         }
 
@@ -166,12 +129,6 @@ public final class AVardecl extends PVardecl
         if(this._varname_ == oldChild)
         {
             setVarname((TId) newChild);
-            return;
-        }
-
-        if(this._semicolon_ == oldChild)
-        {
-            setSemicolon((TSemicolon) newChild);
             return;
         }
 

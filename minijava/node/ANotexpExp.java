@@ -7,7 +7,6 @@ import analysis.*;
 @SuppressWarnings("nls")
 public final class ANotexpExp extends PExp
 {
-    private TNot _not_;
     private PExp _exp_;
 
     public ANotexpExp()
@@ -16,12 +15,9 @@ public final class ANotexpExp extends PExp
     }
 
     public ANotexpExp(
-        @SuppressWarnings("hiding") TNot _not_,
         @SuppressWarnings("hiding") PExp _exp_)
     {
         // Constructor
-        setNot(_not_);
-
         setExp(_exp_);
 
     }
@@ -30,38 +26,12 @@ public final class ANotexpExp extends PExp
     public Object clone()
     {
         return new ANotexpExp(
-            cloneNode(this._not_),
             cloneNode(this._exp_));
     }
 
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseANotexpExp(this);
-    }
-
-    public TNot getNot()
-    {
-        return this._not_;
-    }
-
-    public void setNot(TNot node)
-    {
-        if(this._not_ != null)
-        {
-            this._not_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._not_ = node;
     }
 
     public PExp getExp()
@@ -93,7 +63,6 @@ public final class ANotexpExp extends PExp
     public String toString()
     {
         return ""
-            + toString(this._not_)
             + toString(this._exp_);
     }
 
@@ -101,12 +70,6 @@ public final class ANotexpExp extends PExp
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._not_ == child)
-        {
-            this._not_ = null;
-            return;
-        }
-
         if(this._exp_ == child)
         {
             this._exp_ = null;
@@ -120,12 +83,6 @@ public final class ANotexpExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._not_ == oldChild)
-        {
-            setNot((TNot) newChild);
-            return;
-        }
-
         if(this._exp_ == oldChild)
         {
             setExp((PExp) newChild);

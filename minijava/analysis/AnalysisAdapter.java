@@ -84,12 +84,7 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseASimpleclassClassdecl(ASimpleclassClassdecl node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAExtendingclassClassdecl(AExtendingclassClassdecl node)
+    public void caseAClassdecl(AClassdecl node)
     {
         defaultCase(node);
     }
@@ -104,17 +99,7 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseAFirstparameterParamlist(AFirstparameterParamlist node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAEmptyParamlist(AEmptyParamlist node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAAnotherparameterParamrest(AAnotherparameterParamrest node)
+    public void caseAParameter(AParameter node)
     {
         defaultCase(node);
     }
@@ -139,7 +124,7 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseAStatementsStatement(AStatementsStatement node)
+    public void caseAStatementlistStatement(AStatementlistStatement node)
     {
         defaultCase(node);
     }
@@ -169,137 +154,92 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseAExp(AExp node)
+    public void caseAAndExp(AAndExp node)
     {
         defaultCase(node);
     }
 
-    public void caseAAndstmList(AAndstmList node)
+    public void caseALessExp(ALessExp node)
     {
         defaultCase(node);
     }
 
-    public void caseAAndstmRest(AAndstmRest node)
+    public void caseAMulExp(AMulExp node)
     {
         defaultCase(node);
     }
 
-    public void caseALessThan(ALessThan node)
+    public void caseAAddExp(AAddExp node)
     {
         defaultCase(node);
     }
 
-    public void caseALessThanPlusMinus(ALessThanPlusMinus node)
+    public void caseASubExp(ASubExp node)
     {
         defaultCase(node);
     }
 
-    public void caseAPlusMinusList(APlusMinusList node)
+    public void caseAIndexExp(AIndexExp node)
     {
         defaultCase(node);
     }
 
-    public void caseAPlusMinusRest(APlusMinusRest node)
+    public void caseALengthExp(ALengthExp node)
     {
         defaultCase(node);
     }
 
-    public void caseATimesList(ATimesList node)
+    public void caseAIdlistExp(AIdlistExp node)
     {
         defaultCase(node);
     }
 
-    public void caseATimesRest(ATimesRest node)
+    public void caseANumberExp(ANumberExp node)
     {
         defaultCase(node);
     }
 
-    public void caseANotExpressionPrefixexp(ANotExpressionPrefixexp node)
+    public void caseATrueExp(ATrueExp node)
     {
         defaultCase(node);
     }
 
-    public void caseAExpressionPrefixexp(AExpressionPrefixexp node)
+    public void caseAFalseExp(AFalseExp node)
     {
         defaultCase(node);
     }
 
-    public void caseANotexp(ANotexp node)
+    public void caseAIdExp(AIdExp node)
     {
         defaultCase(node);
     }
 
-    public void caseAPostfixexpList(APostfixexpList node)
+    public void caseAThisExp(AThisExp node)
     {
         defaultCase(node);
     }
 
-    public void caseAIndexPostfixexpRest(AIndexPostfixexpRest node)
+    public void caseANewintarrayExp(ANewintarrayExp node)
     {
         defaultCase(node);
     }
 
-    public void caseAIdlistPostfixexpRest(AIdlistPostfixexpRest node)
+    public void caseANewidExp(ANewidExp node)
     {
         defaultCase(node);
     }
 
-    public void caseALengthPostfixexpRest(ALengthPostfixexpRest node)
+    public void caseANotexpExp(ANotexpExp node)
     {
         defaultCase(node);
     }
 
-    public void caseANumberPrimaryExp(ANumberPrimaryExp node)
+    public void caseALparexprparExp(ALparexprparExp node)
     {
         defaultCase(node);
     }
 
-    public void caseATruePrimaryExp(ATruePrimaryExp node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAFalsePrimaryExp(AFalsePrimaryExp node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAIdPrimaryExp(AIdPrimaryExp node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAThisPrimaryExp(AThisPrimaryExp node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseANewintPrimaryExp(ANewintPrimaryExp node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseANewidPrimaryExp(ANewidPrimaryExp node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseALparexprparPrimaryExp(ALparexprparPrimaryExp node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAExplistheadExplist(AExplistheadExplist node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseABlankExplist(ABlankExplist node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAExprest(AExprest node)
+    public void caseAPreposExp(APreposExp node)
     {
         defaultCase(node);
     }
@@ -404,7 +344,12 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseTPlusminusop(TPlusminusop node)
+    public void caseTPlusop(TPlusop node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseTMinusop(TMinusop node)
     {
         defaultCase(node);
     }
@@ -420,6 +365,11 @@ public class AnalysisAdapter implements Analysis
     }
 
     public void caseTLess(TLess node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseTOp(TOp node)
     {
         defaultCase(node);
     }

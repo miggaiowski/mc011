@@ -2,17 +2,14 @@
 
 package node;
 
+import java.util.*;
 import analysis.*;
 
 @SuppressWarnings("nls")
 public final class AIdlistExp extends PExp
 {
-    private PExp _exp_;
-    private TDot _dot_;
     private TId _id_;
-    private TLParenthese _lParenthese_;
-    private PExplist _explist_;
-    private TRParenthese _rParenthese_;
+    private final LinkedList<PExp> _explist_ = new LinkedList<PExp>();
 
     public AIdlistExp()
     {
@@ -20,25 +17,13 @@ public final class AIdlistExp extends PExp
     }
 
     public AIdlistExp(
-        @SuppressWarnings("hiding") PExp _exp_,
-        @SuppressWarnings("hiding") TDot _dot_,
         @SuppressWarnings("hiding") TId _id_,
-        @SuppressWarnings("hiding") TLParenthese _lParenthese_,
-        @SuppressWarnings("hiding") PExplist _explist_,
-        @SuppressWarnings("hiding") TRParenthese _rParenthese_)
+        @SuppressWarnings("hiding") List<PExp> _explist_)
     {
         // Constructor
-        setExp(_exp_);
-
-        setDot(_dot_);
-
         setId(_id_);
 
-        setLParenthese(_lParenthese_);
-
         setExplist(_explist_);
-
-        setRParenthese(_rParenthese_);
 
     }
 
@@ -46,67 +31,13 @@ public final class AIdlistExp extends PExp
     public Object clone()
     {
         return new AIdlistExp(
-            cloneNode(this._exp_),
-            cloneNode(this._dot_),
             cloneNode(this._id_),
-            cloneNode(this._lParenthese_),
-            cloneNode(this._explist_),
-            cloneNode(this._rParenthese_));
+            cloneList(this._explist_));
     }
 
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseAIdlistExp(this);
-    }
-
-    public PExp getExp()
-    {
-        return this._exp_;
-    }
-
-    public void setExp(PExp node)
-    {
-        if(this._exp_ != null)
-        {
-            this._exp_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._exp_ = node;
-    }
-
-    public TDot getDot()
-    {
-        return this._dot_;
-    }
-
-    public void setDot(TDot node)
-    {
-        if(this._dot_ != null)
-        {
-            this._dot_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._dot_ = node;
     }
 
     public TId getId()
@@ -134,130 +65,46 @@ public final class AIdlistExp extends PExp
         this._id_ = node;
     }
 
-    public TLParenthese getLParenthese()
-    {
-        return this._lParenthese_;
-    }
-
-    public void setLParenthese(TLParenthese node)
-    {
-        if(this._lParenthese_ != null)
-        {
-            this._lParenthese_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._lParenthese_ = node;
-    }
-
-    public PExplist getExplist()
+    public LinkedList<PExp> getExplist()
     {
         return this._explist_;
     }
 
-    public void setExplist(PExplist node)
+    public void setExplist(List<PExp> list)
     {
-        if(this._explist_ != null)
+        this._explist_.clear();
+        this._explist_.addAll(list);
+        for(PExp e : list)
         {
-            this._explist_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
+            if(e.parent() != null)
             {
-                node.parent().removeChild(node);
+                e.parent().removeChild(e);
             }
 
-            node.parent(this);
+            e.parent(this);
         }
-
-        this._explist_ = node;
-    }
-
-    public TRParenthese getRParenthese()
-    {
-        return this._rParenthese_;
-    }
-
-    public void setRParenthese(TRParenthese node)
-    {
-        if(this._rParenthese_ != null)
-        {
-            this._rParenthese_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._rParenthese_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._exp_)
-            + toString(this._dot_)
             + toString(this._id_)
-            + toString(this._lParenthese_)
-            + toString(this._explist_)
-            + toString(this._rParenthese_);
+            + toString(this._explist_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._exp_ == child)
-        {
-            this._exp_ = null;
-            return;
-        }
-
-        if(this._dot_ == child)
-        {
-            this._dot_ = null;
-            return;
-        }
-
         if(this._id_ == child)
         {
             this._id_ = null;
             return;
         }
 
-        if(this._lParenthese_ == child)
+        if(this._explist_.remove(child))
         {
-            this._lParenthese_ = null;
-            return;
-        }
-
-        if(this._explist_ == child)
-        {
-            this._explist_ = null;
-            return;
-        }
-
-        if(this._rParenthese_ == child)
-        {
-            this._rParenthese_ = null;
             return;
         }
 
@@ -268,40 +115,28 @@ public final class AIdlistExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._exp_ == oldChild)
-        {
-            setExp((PExp) newChild);
-            return;
-        }
-
-        if(this._dot_ == oldChild)
-        {
-            setDot((TDot) newChild);
-            return;
-        }
-
         if(this._id_ == oldChild)
         {
             setId((TId) newChild);
             return;
         }
 
-        if(this._lParenthese_ == oldChild)
+        for(ListIterator<PExp> i = this._explist_.listIterator(); i.hasNext();)
         {
-            setLParenthese((TLParenthese) newChild);
-            return;
-        }
+            if(i.next() == oldChild)
+            {
+                if(newChild != null)
+                {
+                    i.set((PExp) newChild);
+                    newChild.parent(this);
+                    oldChild.parent(null);
+                    return;
+                }
 
-        if(this._explist_ == oldChild)
-        {
-            setExplist((PExplist) newChild);
-            return;
-        }
-
-        if(this._rParenthese_ == oldChild)
-        {
-            setRParenthese((TRParenthese) newChild);
-            return;
+                i.remove();
+                oldChild.parent(null);
+                return;
+            }
         }
 
         throw new RuntimeException("Not a child.");

@@ -79,25 +79,13 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAMainclass(AMainclass node)
     {
         inAMainclass(node);
-        if(node.getRBrace() != null)
-        {
-            node.getRBrace().apply(this);
-        }
         if(node.getMainmethod() != null)
         {
             node.getMainmethod().apply(this);
         }
-        if(node.getLBrace() != null)
-        {
-            node.getLBrace().apply(this);
-        }
         if(node.getClassname() != null)
         {
             node.getClassname().apply(this);
-        }
-        if(node.getClassn() != null)
-        {
-            node.getClassn().apply(this);
         }
         outAMainclass(node);
     }
@@ -116,79 +104,31 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAMainmethod(AMainmethod node)
     {
         inAMainmethod(node);
-        if(node.getRBrace() != null)
+        if(node.getStatements() != null)
         {
-            node.getRBrace().apply(this);
-        }
-        if(node.getStatement() != null)
-        {
-            node.getStatement().apply(this);
-        }
-        if(node.getLBrace() != null)
-        {
-            node.getLBrace().apply(this);
-        }
-        if(node.getRParenthese() != null)
-        {
-            node.getRParenthese().apply(this);
+            node.getStatements().apply(this);
         }
         if(node.getParamname() != null)
         {
             node.getParamname().apply(this);
         }
-        if(node.getRBracket() != null)
-        {
-            node.getRBracket().apply(this);
-        }
-        if(node.getLBracket() != null)
-        {
-            node.getLBracket().apply(this);
-        }
-        if(node.getString() != null)
-        {
-            node.getString().apply(this);
-        }
-        if(node.getLParenthese() != null)
-        {
-            node.getLParenthese().apply(this);
-        }
-        if(node.getMain() != null)
-        {
-            node.getMain().apply(this);
-        }
-        if(node.getVoid() != null)
-        {
-            node.getVoid().apply(this);
-        }
-        if(node.getStatic() != null)
-        {
-            node.getStatic().apply(this);
-        }
-        if(node.getPublic() != null)
-        {
-            node.getPublic().apply(this);
-        }
         outAMainmethod(node);
     }
 
-    public void inASimpleclassClassdecl(ASimpleclassClassdecl node)
+    public void inAClassdecl(AClassdecl node)
     {
         defaultIn(node);
     }
 
-    public void outASimpleclassClassdecl(ASimpleclassClassdecl node)
+    public void outAClassdecl(AClassdecl node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseASimpleclassClassdecl(ASimpleclassClassdecl node)
+    public void caseAClassdecl(AClassdecl node)
     {
-        inASimpleclassClassdecl(node);
-        if(node.getRBrace() != null)
-        {
-            node.getRBrace().apply(this);
-        }
+        inAClassdecl(node);
         {
             List<PMethoddecl> copy = new ArrayList<PMethoddecl>(node.getMethods());
             Collections.reverse(copy);
@@ -204,77 +144,16 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
             {
                 e.apply(this);
             }
-        }
-        if(node.getLBrace() != null)
-        {
-            node.getLBrace().apply(this);
-        }
-        if(node.getClassname() != null)
-        {
-            node.getClassname().apply(this);
-        }
-        if(node.getClassn() != null)
-        {
-            node.getClassn().apply(this);
-        }
-        outASimpleclassClassdecl(node);
-    }
-
-    public void inAExtendingclassClassdecl(AExtendingclassClassdecl node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAExtendingclassClassdecl(AExtendingclassClassdecl node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAExtendingclassClassdecl(AExtendingclassClassdecl node)
-    {
-        inAExtendingclassClassdecl(node);
-        if(node.getRBrace() != null)
-        {
-            node.getRBrace().apply(this);
-        }
-        {
-            List<PMethoddecl> copy = new ArrayList<PMethoddecl>(node.getMethods());
-            Collections.reverse(copy);
-            for(PMethoddecl e : copy)
-            {
-                e.apply(this);
-            }
-        }
-        {
-            List<PVardecl> copy = new ArrayList<PVardecl>(node.getVars());
-            Collections.reverse(copy);
-            for(PVardecl e : copy)
-            {
-                e.apply(this);
-            }
-        }
-        if(node.getLBrace() != null)
-        {
-            node.getLBrace().apply(this);
         }
         if(node.getSuper() != null)
         {
             node.getSuper().apply(this);
         }
-        if(node.getExtends() != null)
-        {
-            node.getExtends().apply(this);
-        }
         if(node.getClassname() != null)
         {
             node.getClassname().apply(this);
         }
-        if(node.getClassn() != null)
-        {
-            node.getClassn().apply(this);
-        }
-        outAExtendingclassClassdecl(node);
+        outAClassdecl(node);
     }
 
     public void inAVardecl(AVardecl node)
@@ -291,10 +170,6 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAVardecl(AVardecl node)
     {
         inAVardecl(node);
-        if(node.getSemicolon() != null)
-        {
-            node.getSemicolon().apply(this);
-        }
         if(node.getVarname() != null)
         {
             node.getVarname().apply(this);
@@ -320,21 +195,9 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAMethoddecl(AMethoddecl node)
     {
         inAMethoddecl(node);
-        if(node.getRBrace() != null)
-        {
-            node.getRBrace().apply(this);
-        }
-        if(node.getSemicolon() != null)
-        {
-            node.getSemicolon().apply(this);
-        }
         if(node.getReturnexpression() != null)
         {
             node.getReturnexpression().apply(this);
-        }
-        if(node.getReturn() != null)
-        {
-            node.getReturn().apply(this);
         }
         {
             List<PStatement> copy = new ArrayList<PStatement>(node.getStatements());
@@ -352,21 +215,13 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
                 e.apply(this);
             }
         }
-        if(node.getLBrace() != null)
         {
-            node.getLBrace().apply(this);
-        }
-        if(node.getRParenthese() != null)
-        {
-            node.getRParenthese().apply(this);
-        }
-        if(node.getParamlist() != null)
-        {
-            node.getParamlist().apply(this);
-        }
-        if(node.getLParenthese() != null)
-        {
-            node.getLParenthese().apply(this);
+            List<PParameter> copy = new ArrayList<PParameter>(node.getParameters());
+            Collections.reverse(copy);
+            for(PParameter e : copy)
+            {
+                e.apply(this);
+            }
         }
         if(node.getMethodname() != null)
         {
@@ -376,35 +231,23 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         {
             node.getType().apply(this);
         }
-        if(node.getPublic() != null)
-        {
-            node.getPublic().apply(this);
-        }
         outAMethoddecl(node);
     }
 
-    public void inAFirstparameterParamlist(AFirstparameterParamlist node)
+    public void inAParameter(AParameter node)
     {
         defaultIn(node);
     }
 
-    public void outAFirstparameterParamlist(AFirstparameterParamlist node)
+    public void outAParameter(AParameter node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAFirstparameterParamlist(AFirstparameterParamlist node)
+    public void caseAParameter(AParameter node)
     {
-        inAFirstparameterParamlist(node);
-        {
-            List<PParamrest> copy = new ArrayList<PParamrest>(node.getParamrest());
-            Collections.reverse(copy);
-            for(PParamrest e : copy)
-            {
-                e.apply(this);
-            }
-        }
+        inAParameter(node);
         if(node.getId() != null)
         {
             node.getId().apply(this);
@@ -413,57 +256,7 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         {
             node.getType().apply(this);
         }
-        outAFirstparameterParamlist(node);
-    }
-
-    public void inAEmptyParamlist(AEmptyParamlist node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAEmptyParamlist(AEmptyParamlist node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAEmptyParamlist(AEmptyParamlist node)
-    {
-        inAEmptyParamlist(node);
-        if(node.getBlank() != null)
-        {
-            node.getBlank().apply(this);
-        }
-        outAEmptyParamlist(node);
-    }
-
-    public void inAAnotherparameterParamrest(AAnotherparameterParamrest node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAAnotherparameterParamrest(AAnotherparameterParamrest node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAAnotherparameterParamrest(AAnotherparameterParamrest node)
-    {
-        inAAnotherparameterParamrest(node);
-        if(node.getId() != null)
-        {
-            node.getId().apply(this);
-        }
-        if(node.getType() != null)
-        {
-            node.getType().apply(this);
-        }
-        if(node.getComma() != null)
-        {
-            node.getComma().apply(this);
-        }
-        outAAnotherparameterParamrest(node);
+        outAParameter(node);
     }
 
     public void inAIntvectorType(AIntvectorType node)
@@ -480,18 +273,6 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAIntvectorType(AIntvectorType node)
     {
         inAIntvectorType(node);
-        if(node.getRBracket() != null)
-        {
-            node.getRBracket().apply(this);
-        }
-        if(node.getLBracket() != null)
-        {
-            node.getLBracket().apply(this);
-        }
-        if(node.getInt() != null)
-        {
-            node.getInt().apply(this);
-        }
         outAIntvectorType(node);
     }
 
@@ -509,10 +290,6 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseABooleanType(ABooleanType node)
     {
         inABooleanType(node);
-        if(node.getBoolean() != null)
-        {
-            node.getBoolean().apply(this);
-        }
         outABooleanType(node);
     }
 
@@ -530,10 +307,6 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAIntType(AIntType node)
     {
         inAIntType(node);
-        if(node.getInt() != null)
-        {
-            node.getInt().apply(this);
-        }
         outAIntType(node);
     }
 
@@ -558,37 +331,29 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         outAIdType(node);
     }
 
-    public void inAStatementsStatement(AStatementsStatement node)
+    public void inAStatementlistStatement(AStatementlistStatement node)
     {
         defaultIn(node);
     }
 
-    public void outAStatementsStatement(AStatementsStatement node)
+    public void outAStatementlistStatement(AStatementlistStatement node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAStatementsStatement(AStatementsStatement node)
+    public void caseAStatementlistStatement(AStatementlistStatement node)
     {
-        inAStatementsStatement(node);
-        if(node.getRBrace() != null)
+        inAStatementlistStatement(node);
         {
-            node.getRBrace().apply(this);
-        }
-        {
-            List<PStatement> copy = new ArrayList<PStatement>(node.getStatement());
+            List<PStatement> copy = new ArrayList<PStatement>(node.getStatementlist());
             Collections.reverse(copy);
             for(PStatement e : copy)
             {
                 e.apply(this);
             }
         }
-        if(node.getLBrace() != null)
-        {
-            node.getLBrace().apply(this);
-        }
-        outAStatementsStatement(node);
+        outAStatementlistStatement(node);
     }
 
     public void inAIfelseStatement(AIfelseStatement node)
@@ -609,29 +374,13 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         {
             node.getElsestatement().apply(this);
         }
-        if(node.getElse() != null)
-        {
-            node.getElse().apply(this);
-        }
         if(node.getIfstatement() != null)
         {
             node.getIfstatement().apply(this);
         }
-        if(node.getRParenthese() != null)
+        if(node.getIfexp() != null)
         {
-            node.getRParenthese().apply(this);
-        }
-        if(node.getExp() != null)
-        {
-            node.getExp().apply(this);
-        }
-        if(node.getLParenthese() != null)
-        {
-            node.getLParenthese().apply(this);
-        }
-        if(node.getIf() != null)
-        {
-            node.getIf().apply(this);
+            node.getIfexp().apply(this);
         }
         outAIfelseStatement(node);
     }
@@ -654,21 +403,9 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         {
             node.getStatement().apply(this);
         }
-        if(node.getRParenthese() != null)
+        if(node.getWhileexp() != null)
         {
-            node.getRParenthese().apply(this);
-        }
-        if(node.getExp() != null)
-        {
-            node.getExp().apply(this);
-        }
-        if(node.getLParenthese() != null)
-        {
-            node.getLParenthese().apply(this);
-        }
-        if(node.getWhile() != null)
-        {
-            node.getWhile().apply(this);
+            node.getWhileexp().apply(this);
         }
         outAWhileStatement(node);
     }
@@ -687,25 +424,9 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAPrintStatement(APrintStatement node)
     {
         inAPrintStatement(node);
-        if(node.getSemicolon() != null)
-        {
-            node.getSemicolon().apply(this);
-        }
-        if(node.getRParenthese() != null)
-        {
-            node.getRParenthese().apply(this);
-        }
         if(node.getExp() != null)
         {
             node.getExp().apply(this);
-        }
-        if(node.getLParenthese() != null)
-        {
-            node.getLParenthese().apply(this);
-        }
-        if(node.getPrint() != null)
-        {
-            node.getPrint().apply(this);
         }
         outAPrintStatement(node);
     }
@@ -724,17 +445,9 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAAttrStatement(AAttrStatement node)
     {
         inAAttrStatement(node);
-        if(node.getSemicolon() != null)
-        {
-            node.getSemicolon().apply(this);
-        }
         if(node.getExp() != null)
         {
             node.getExp().apply(this);
-        }
-        if(node.getEqual() != null)
-        {
-            node.getEqual().apply(this);
         }
         if(node.getId() != null)
         {
@@ -757,29 +470,13 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAArrayattrStatement(AArrayattrStatement node)
     {
         inAArrayattrStatement(node);
-        if(node.getSemicolon() != null)
-        {
-            node.getSemicolon().apply(this);
-        }
         if(node.getRighthandside() != null)
         {
             node.getRighthandside().apply(this);
         }
-        if(node.getEqual() != null)
-        {
-            node.getEqual().apply(this);
-        }
-        if(node.getRBracket() != null)
-        {
-            node.getRBracket().apply(this);
-        }
         if(node.getArrayindex() != null)
         {
             node.getArrayindex().apply(this);
-        }
-        if(node.getLBracket() != null)
-        {
-            node.getLBracket().apply(this);
         }
         if(node.getId() != null)
         {
@@ -788,714 +485,405 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         outAArrayattrStatement(node);
     }
 
-    public void inAExp(AExp node)
+    public void inAAndExp(AAndExp node)
     {
         defaultIn(node);
     }
 
-    public void outAExp(AExp node)
+    public void outAAndExp(AAndExp node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAExp(AExp node)
+    public void caseAAndExp(AAndExp node)
     {
-        inAExp(node);
-        if(node.getAndstmList() != null)
+        inAAndExp(node);
         {
-            node.getAndstmList().apply(this);
-        }
-        outAExp(node);
-    }
-
-    public void inAAndstmList(AAndstmList node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAAndstmList(AAndstmList node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAAndstmList(AAndstmList node)
-    {
-        inAAndstmList(node);
-        {
-            List<PAndstmRest> copy = new ArrayList<PAndstmRest>(node.getAndstmRest());
+            List<PExp> copy = new ArrayList<PExp>(node.getAndexps());
             Collections.reverse(copy);
-            for(PAndstmRest e : copy)
+            for(PExp e : copy)
             {
                 e.apply(this);
             }
         }
-        if(node.getLessThan() != null)
-        {
-            node.getLessThan().apply(this);
-        }
-        outAAndstmList(node);
+        outAAndExp(node);
     }
 
-    public void inAAndstmRest(AAndstmRest node)
+    public void inALessExp(ALessExp node)
     {
         defaultIn(node);
     }
 
-    public void outAAndstmRest(AAndstmRest node)
+    public void outALessExp(ALessExp node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAAndstmRest(AAndstmRest node)
+    public void caseALessExp(ALessExp node)
     {
-        inAAndstmRest(node);
-        if(node.getLessThan() != null)
+        inALessExp(node);
         {
-            node.getLessThan().apply(this);
-        }
-        if(node.getAnd() != null)
-        {
-            node.getAnd().apply(this);
-        }
-        outAAndstmRest(node);
-    }
-
-    public void inALessThan(ALessThan node)
-    {
-        defaultIn(node);
-    }
-
-    public void outALessThan(ALessThan node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseALessThan(ALessThan node)
-    {
-        inALessThan(node);
-        if(node.getLessThanPlusMinus() != null)
-        {
-            node.getLessThanPlusMinus().apply(this);
-        }
-        if(node.getPlusMinusList() != null)
-        {
-            node.getPlusMinusList().apply(this);
-        }
-        outALessThan(node);
-    }
-
-    public void inALessThanPlusMinus(ALessThanPlusMinus node)
-    {
-        defaultIn(node);
-    }
-
-    public void outALessThanPlusMinus(ALessThanPlusMinus node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseALessThanPlusMinus(ALessThanPlusMinus node)
-    {
-        inALessThanPlusMinus(node);
-        if(node.getPlusMinusList() != null)
-        {
-            node.getPlusMinusList().apply(this);
-        }
-        if(node.getLess() != null)
-        {
-            node.getLess().apply(this);
-        }
-        outALessThanPlusMinus(node);
-    }
-
-    public void inAPlusMinusList(APlusMinusList node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAPlusMinusList(APlusMinusList node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAPlusMinusList(APlusMinusList node)
-    {
-        inAPlusMinusList(node);
-        {
-            List<PPlusMinusRest> copy = new ArrayList<PPlusMinusRest>(node.getPlusMinusRest());
+            List<PExp> copy = new ArrayList<PExp>(node.getLessexps());
             Collections.reverse(copy);
-            for(PPlusMinusRest e : copy)
+            for(PExp e : copy)
             {
                 e.apply(this);
             }
         }
-        if(node.getTimesList() != null)
-        {
-            node.getTimesList().apply(this);
-        }
-        outAPlusMinusList(node);
+        outALessExp(node);
     }
 
-    public void inAPlusMinusRest(APlusMinusRest node)
+    public void inAMulExp(AMulExp node)
     {
         defaultIn(node);
     }
 
-    public void outAPlusMinusRest(APlusMinusRest node)
+    public void outAMulExp(AMulExp node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAPlusMinusRest(APlusMinusRest node)
+    public void caseAMulExp(AMulExp node)
     {
-        inAPlusMinusRest(node);
-        if(node.getTimesList() != null)
+        inAMulExp(node);
         {
-            node.getTimesList().apply(this);
-        }
-        if(node.getPlusminusop() != null)
-        {
-            node.getPlusminusop().apply(this);
-        }
-        outAPlusMinusRest(node);
-    }
-
-    public void inATimesList(ATimesList node)
-    {
-        defaultIn(node);
-    }
-
-    public void outATimesList(ATimesList node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseATimesList(ATimesList node)
-    {
-        inATimesList(node);
-        {
-            List<PTimesRest> copy = new ArrayList<PTimesRest>(node.getTimesRest());
+            List<PExp> copy = new ArrayList<PExp>(node.getFactor());
             Collections.reverse(copy);
-            for(PTimesRest e : copy)
+            for(PExp e : copy)
             {
                 e.apply(this);
             }
         }
-        if(node.getPrefixexp() != null)
-        {
-            node.getPrefixexp().apply(this);
-        }
-        outATimesList(node);
+        outAMulExp(node);
     }
 
-    public void inATimesRest(ATimesRest node)
+    public void inAAddExp(AAddExp node)
     {
         defaultIn(node);
     }
 
-    public void outATimesRest(ATimesRest node)
+    public void outAAddExp(AAddExp node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseATimesRest(ATimesRest node)
+    public void caseAAddExp(AAddExp node)
     {
-        inATimesRest(node);
-        if(node.getPrefixexp() != null)
+        inAAddExp(node);
         {
-            node.getPrefixexp().apply(this);
-        }
-        if(node.getTimesop() != null)
-        {
-            node.getTimesop().apply(this);
-        }
-        outATimesRest(node);
-    }
-
-    public void inANotExpressionPrefixexp(ANotExpressionPrefixexp node)
-    {
-        defaultIn(node);
-    }
-
-    public void outANotExpressionPrefixexp(ANotExpressionPrefixexp node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseANotExpressionPrefixexp(ANotExpressionPrefixexp node)
-    {
-        inANotExpressionPrefixexp(node);
-        if(node.getNotexp() != null)
-        {
-            node.getNotexp().apply(this);
-        }
-        outANotExpressionPrefixexp(node);
-    }
-
-    public void inAExpressionPrefixexp(AExpressionPrefixexp node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAExpressionPrefixexp(AExpressionPrefixexp node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAExpressionPrefixexp(AExpressionPrefixexp node)
-    {
-        inAExpressionPrefixexp(node);
-        if(node.getPostfixexpList() != null)
-        {
-            node.getPostfixexpList().apply(this);
-        }
-        outAExpressionPrefixexp(node);
-    }
-
-    public void inANotexp(ANotexp node)
-    {
-        defaultIn(node);
-    }
-
-    public void outANotexp(ANotexp node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseANotexp(ANotexp node)
-    {
-        inANotexp(node);
-        if(node.getPostfixexpList() != null)
-        {
-            node.getPostfixexpList().apply(this);
-        }
-        {
-            List<TNot> copy = new ArrayList<TNot>(node.getNot());
+            List<PExp> copy = new ArrayList<PExp>(node.getTerms());
             Collections.reverse(copy);
-            for(TNot e : copy)
+            for(PExp e : copy)
             {
                 e.apply(this);
             }
         }
-        outANotexp(node);
+        outAAddExp(node);
     }
 
-    public void inAPostfixexpList(APostfixexpList node)
+    public void inASubExp(ASubExp node)
     {
         defaultIn(node);
     }
 
-    public void outAPostfixexpList(APostfixexpList node)
+    public void outASubExp(ASubExp node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAPostfixexpList(APostfixexpList node)
+    public void caseASubExp(ASubExp node)
     {
-        inAPostfixexpList(node);
+        inASubExp(node);
         {
-            List<PPostfixexpRest> copy = new ArrayList<PPostfixexpRest>(node.getPostfixexpRest());
+            List<PExp> copy = new ArrayList<PExp>(node.getTerms());
             Collections.reverse(copy);
-            for(PPostfixexpRest e : copy)
+            for(PExp e : copy)
             {
                 e.apply(this);
             }
         }
-        if(node.getPrimaryExp() != null)
-        {
-            node.getPrimaryExp().apply(this);
-        }
-        outAPostfixexpList(node);
+        outASubExp(node);
     }
 
-    public void inAIndexPostfixexpRest(AIndexPostfixexpRest node)
+    public void inAIndexExp(AIndexExp node)
     {
         defaultIn(node);
     }
 
-    public void outAIndexPostfixexpRest(AIndexPostfixexpRest node)
+    public void outAIndexExp(AIndexExp node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAIndexPostfixexpRest(AIndexPostfixexpRest node)
+    public void caseAIndexExp(AIndexExp node)
     {
-        inAIndexPostfixexpRest(node);
-        if(node.getRBracket() != null)
+        inAIndexExp(node);
+        if(node.getOffset() != null)
         {
-            node.getRBracket().apply(this);
+            node.getOffset().apply(this);
         }
-        if(node.getExp() != null)
+        if(node.getPointer() != null)
         {
-            node.getExp().apply(this);
+            node.getPointer().apply(this);
         }
-        if(node.getLBracket() != null)
-        {
-            node.getLBracket().apply(this);
-        }
-        outAIndexPostfixexpRest(node);
+        outAIndexExp(node);
     }
 
-    public void inAIdlistPostfixexpRest(AIdlistPostfixexpRest node)
+    public void inALengthExp(ALengthExp node)
     {
         defaultIn(node);
     }
 
-    public void outAIdlistPostfixexpRest(AIdlistPostfixexpRest node)
+    public void outALengthExp(ALengthExp node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAIdlistPostfixexpRest(AIdlistPostfixexpRest node)
+    public void caseALengthExp(ALengthExp node)
     {
-        inAIdlistPostfixexpRest(node);
-        if(node.getRParenthese() != null)
+        inALengthExp(node);
+        outALengthExp(node);
+    }
+
+    public void inAIdlistExp(AIdlistExp node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAIdlistExp(AIdlistExp node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAIdlistExp(AIdlistExp node)
+    {
+        inAIdlistExp(node);
         {
-            node.getRParenthese().apply(this);
-        }
-        if(node.getExplist() != null)
-        {
-            node.getExplist().apply(this);
-        }
-        if(node.getLParenthese() != null)
-        {
-            node.getLParenthese().apply(this);
+            List<PExp> copy = new ArrayList<PExp>(node.getExplist());
+            Collections.reverse(copy);
+            for(PExp e : copy)
+            {
+                e.apply(this);
+            }
         }
         if(node.getId() != null)
         {
             node.getId().apply(this);
         }
-        if(node.getDot() != null)
-        {
-            node.getDot().apply(this);
-        }
-        if(node.getExp() != null)
-        {
-            node.getExp().apply(this);
-        }
-        outAIdlistPostfixexpRest(node);
+        outAIdlistExp(node);
     }
 
-    public void inALengthPostfixexpRest(ALengthPostfixexpRest node)
+    public void inANumberExp(ANumberExp node)
     {
         defaultIn(node);
     }
 
-    public void outALengthPostfixexpRest(ALengthPostfixexpRest node)
+    public void outANumberExp(ANumberExp node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseALengthPostfixexpRest(ALengthPostfixexpRest node)
+    public void caseANumberExp(ANumberExp node)
     {
-        inALengthPostfixexpRest(node);
-        if(node.getLength() != null)
-        {
-            node.getLength().apply(this);
-        }
-        if(node.getDot() != null)
-        {
-            node.getDot().apply(this);
-        }
-        if(node.getExp() != null)
-        {
-            node.getExp().apply(this);
-        }
-        outALengthPostfixexpRest(node);
-    }
-
-    public void inANumberPrimaryExp(ANumberPrimaryExp node)
-    {
-        defaultIn(node);
-    }
-
-    public void outANumberPrimaryExp(ANumberPrimaryExp node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseANumberPrimaryExp(ANumberPrimaryExp node)
-    {
-        inANumberPrimaryExp(node);
+        inANumberExp(node);
         if(node.getNumber() != null)
         {
             node.getNumber().apply(this);
         }
-        outANumberPrimaryExp(node);
+        outANumberExp(node);
     }
 
-    public void inATruePrimaryExp(ATruePrimaryExp node)
+    public void inATrueExp(ATrueExp node)
     {
         defaultIn(node);
     }
 
-    public void outATruePrimaryExp(ATruePrimaryExp node)
+    public void outATrueExp(ATrueExp node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseATruePrimaryExp(ATruePrimaryExp node)
+    public void caseATrueExp(ATrueExp node)
     {
-        inATruePrimaryExp(node);
-        if(node.getTrue() != null)
-        {
-            node.getTrue().apply(this);
-        }
-        outATruePrimaryExp(node);
+        inATrueExp(node);
+        outATrueExp(node);
     }
 
-    public void inAFalsePrimaryExp(AFalsePrimaryExp node)
+    public void inAFalseExp(AFalseExp node)
     {
         defaultIn(node);
     }
 
-    public void outAFalsePrimaryExp(AFalsePrimaryExp node)
+    public void outAFalseExp(AFalseExp node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAFalsePrimaryExp(AFalsePrimaryExp node)
+    public void caseAFalseExp(AFalseExp node)
     {
-        inAFalsePrimaryExp(node);
-        if(node.getFalse() != null)
-        {
-            node.getFalse().apply(this);
-        }
-        outAFalsePrimaryExp(node);
+        inAFalseExp(node);
+        outAFalseExp(node);
     }
 
-    public void inAIdPrimaryExp(AIdPrimaryExp node)
+    public void inAIdExp(AIdExp node)
     {
         defaultIn(node);
     }
 
-    public void outAIdPrimaryExp(AIdPrimaryExp node)
+    public void outAIdExp(AIdExp node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAIdPrimaryExp(AIdPrimaryExp node)
+    public void caseAIdExp(AIdExp node)
     {
-        inAIdPrimaryExp(node);
+        inAIdExp(node);
         if(node.getId() != null)
         {
             node.getId().apply(this);
         }
-        outAIdPrimaryExp(node);
+        outAIdExp(node);
     }
 
-    public void inAThisPrimaryExp(AThisPrimaryExp node)
+    public void inAThisExp(AThisExp node)
     {
         defaultIn(node);
     }
 
-    public void outAThisPrimaryExp(AThisPrimaryExp node)
+    public void outAThisExp(AThisExp node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAThisPrimaryExp(AThisPrimaryExp node)
+    public void caseAThisExp(AThisExp node)
     {
-        inAThisPrimaryExp(node);
-        if(node.getThis() != null)
-        {
-            node.getThis().apply(this);
-        }
-        outAThisPrimaryExp(node);
+        inAThisExp(node);
+        outAThisExp(node);
     }
 
-    public void inANewintPrimaryExp(ANewintPrimaryExp node)
+    public void inANewintarrayExp(ANewintarrayExp node)
     {
         defaultIn(node);
     }
 
-    public void outANewintPrimaryExp(ANewintPrimaryExp node)
+    public void outANewintarrayExp(ANewintarrayExp node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseANewintPrimaryExp(ANewintPrimaryExp node)
+    public void caseANewintarrayExp(ANewintarrayExp node)
     {
-        inANewintPrimaryExp(node);
-        if(node.getRBracket() != null)
-        {
-            node.getRBracket().apply(this);
-        }
+        inANewintarrayExp(node);
         if(node.getExp() != null)
         {
             node.getExp().apply(this);
         }
-        if(node.getLBracket() != null)
-        {
-            node.getLBracket().apply(this);
-        }
-        if(node.getInt() != null)
-        {
-            node.getInt().apply(this);
-        }
-        if(node.getNew() != null)
-        {
-            node.getNew().apply(this);
-        }
-        outANewintPrimaryExp(node);
+        outANewintarrayExp(node);
     }
 
-    public void inANewidPrimaryExp(ANewidPrimaryExp node)
+    public void inANewidExp(ANewidExp node)
     {
         defaultIn(node);
     }
 
-    public void outANewidPrimaryExp(ANewidPrimaryExp node)
+    public void outANewidExp(ANewidExp node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseANewidPrimaryExp(ANewidPrimaryExp node)
+    public void caseANewidExp(ANewidExp node)
     {
-        inANewidPrimaryExp(node);
-        if(node.getRParenthese() != null)
-        {
-            node.getRParenthese().apply(this);
-        }
-        if(node.getLParenthese() != null)
-        {
-            node.getLParenthese().apply(this);
-        }
+        inANewidExp(node);
         if(node.getId() != null)
         {
             node.getId().apply(this);
         }
-        if(node.getNew() != null)
-        {
-            node.getNew().apply(this);
-        }
-        outANewidPrimaryExp(node);
+        outANewidExp(node);
     }
 
-    public void inALparexprparPrimaryExp(ALparexprparPrimaryExp node)
+    public void inANotexpExp(ANotexpExp node)
     {
         defaultIn(node);
     }
 
-    public void outALparexprparPrimaryExp(ALparexprparPrimaryExp node)
+    public void outANotexpExp(ANotexpExp node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseALparexprparPrimaryExp(ALparexprparPrimaryExp node)
+    public void caseANotexpExp(ANotexpExp node)
     {
-        inALparexprparPrimaryExp(node);
-        if(node.getRParenthese() != null)
-        {
-            node.getRParenthese().apply(this);
-        }
+        inANotexpExp(node);
         if(node.getExp() != null)
         {
             node.getExp().apply(this);
         }
-        if(node.getLParenthese() != null)
-        {
-            node.getLParenthese().apply(this);
-        }
-        outALparexprparPrimaryExp(node);
+        outANotexpExp(node);
     }
 
-    public void inAExplistheadExplist(AExplistheadExplist node)
+    public void inALparexprparExp(ALparexprparExp node)
     {
         defaultIn(node);
     }
 
-    public void outAExplistheadExplist(AExplistheadExplist node)
+    public void outALparexprparExp(ALparexprparExp node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAExplistheadExplist(AExplistheadExplist node)
+    public void caseALparexprparExp(ALparexprparExp node)
     {
-        inAExplistheadExplist(node);
+        inALparexprparExp(node);
+        if(node.getExp() != null)
         {
-            List<PExprest> copy = new ArrayList<PExprest>(node.getExprest());
+            node.getExp().apply(this);
+        }
+        outALparexprparExp(node);
+    }
+
+    public void inAPreposExp(APreposExp node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAPreposExp(APreposExp node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAPreposExp(APreposExp node)
+    {
+        inAPreposExp(node);
+        {
+            List<PExp> copy = new ArrayList<PExp>(node.getPosfixs());
             Collections.reverse(copy);
-            for(PExprest e : copy)
+            for(PExp e : copy)
             {
                 e.apply(this);
             }
         }
-        if(node.getExp() != null)
+        if(node.getPrefix() != null)
         {
-            node.getExp().apply(this);
+            node.getPrefix().apply(this);
         }
-        outAExplistheadExplist(node);
-    }
-
-    public void inABlankExplist(ABlankExplist node)
-    {
-        defaultIn(node);
-    }
-
-    public void outABlankExplist(ABlankExplist node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseABlankExplist(ABlankExplist node)
-    {
-        inABlankExplist(node);
-        if(node.getBlank() != null)
-        {
-            node.getBlank().apply(this);
-        }
-        outABlankExplist(node);
-    }
-
-    public void inAExprest(AExprest node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAExprest(AExprest node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAExprest(AExprest node)
-    {
-        inAExprest(node);
-        if(node.getExp() != null)
-        {
-            node.getExp().apply(this);
-        }
-        if(node.getComma() != null)
-        {
-            node.getComma().apply(this);
-        }
-        outAExprest(node);
+        outAPreposExp(node);
     }
 }

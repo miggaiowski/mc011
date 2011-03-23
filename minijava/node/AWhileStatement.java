@@ -7,10 +7,7 @@ import analysis.*;
 @SuppressWarnings("nls")
 public final class AWhileStatement extends PStatement
 {
-    private TWhile _while_;
-    private TLParenthese _lParenthese_;
-    private PExp _exp_;
-    private TRParenthese _rParenthese_;
+    private PExp _whileexp_;
     private PStatement _statement_;
 
     public AWhileStatement()
@@ -19,20 +16,11 @@ public final class AWhileStatement extends PStatement
     }
 
     public AWhileStatement(
-        @SuppressWarnings("hiding") TWhile _while_,
-        @SuppressWarnings("hiding") TLParenthese _lParenthese_,
-        @SuppressWarnings("hiding") PExp _exp_,
-        @SuppressWarnings("hiding") TRParenthese _rParenthese_,
+        @SuppressWarnings("hiding") PExp _whileexp_,
         @SuppressWarnings("hiding") PStatement _statement_)
     {
         // Constructor
-        setWhile(_while_);
-
-        setLParenthese(_lParenthese_);
-
-        setExp(_exp_);
-
-        setRParenthese(_rParenthese_);
+        setWhileexp(_whileexp_);
 
         setStatement(_statement_);
 
@@ -42,10 +30,7 @@ public final class AWhileStatement extends PStatement
     public Object clone()
     {
         return new AWhileStatement(
-            cloneNode(this._while_),
-            cloneNode(this._lParenthese_),
-            cloneNode(this._exp_),
-            cloneNode(this._rParenthese_),
+            cloneNode(this._whileexp_),
             cloneNode(this._statement_));
     }
 
@@ -54,16 +39,16 @@ public final class AWhileStatement extends PStatement
         ((Analysis) sw).caseAWhileStatement(this);
     }
 
-    public TWhile getWhile()
+    public PExp getWhileexp()
     {
-        return this._while_;
+        return this._whileexp_;
     }
 
-    public void setWhile(TWhile node)
+    public void setWhileexp(PExp node)
     {
-        if(this._while_ != null)
+        if(this._whileexp_ != null)
         {
-            this._while_.parent(null);
+            this._whileexp_.parent(null);
         }
 
         if(node != null)
@@ -76,82 +61,7 @@ public final class AWhileStatement extends PStatement
             node.parent(this);
         }
 
-        this._while_ = node;
-    }
-
-    public TLParenthese getLParenthese()
-    {
-        return this._lParenthese_;
-    }
-
-    public void setLParenthese(TLParenthese node)
-    {
-        if(this._lParenthese_ != null)
-        {
-            this._lParenthese_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._lParenthese_ = node;
-    }
-
-    public PExp getExp()
-    {
-        return this._exp_;
-    }
-
-    public void setExp(PExp node)
-    {
-        if(this._exp_ != null)
-        {
-            this._exp_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._exp_ = node;
-    }
-
-    public TRParenthese getRParenthese()
-    {
-        return this._rParenthese_;
-    }
-
-    public void setRParenthese(TRParenthese node)
-    {
-        if(this._rParenthese_ != null)
-        {
-            this._rParenthese_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._rParenthese_ = node;
+        this._whileexp_ = node;
     }
 
     public PStatement getStatement()
@@ -183,10 +93,7 @@ public final class AWhileStatement extends PStatement
     public String toString()
     {
         return ""
-            + toString(this._while_)
-            + toString(this._lParenthese_)
-            + toString(this._exp_)
-            + toString(this._rParenthese_)
+            + toString(this._whileexp_)
             + toString(this._statement_);
     }
 
@@ -194,27 +101,9 @@ public final class AWhileStatement extends PStatement
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._while_ == child)
+        if(this._whileexp_ == child)
         {
-            this._while_ = null;
-            return;
-        }
-
-        if(this._lParenthese_ == child)
-        {
-            this._lParenthese_ = null;
-            return;
-        }
-
-        if(this._exp_ == child)
-        {
-            this._exp_ = null;
-            return;
-        }
-
-        if(this._rParenthese_ == child)
-        {
-            this._rParenthese_ = null;
+            this._whileexp_ = null;
             return;
         }
 
@@ -231,27 +120,9 @@ public final class AWhileStatement extends PStatement
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._while_ == oldChild)
+        if(this._whileexp_ == oldChild)
         {
-            setWhile((TWhile) newChild);
-            return;
-        }
-
-        if(this._lParenthese_ == oldChild)
-        {
-            setLParenthese((TLParenthese) newChild);
-            return;
-        }
-
-        if(this._exp_ == oldChild)
-        {
-            setExp((PExp) newChild);
-            return;
-        }
-
-        if(this._rParenthese_ == oldChild)
-        {
-            setRParenthese((TRParenthese) newChild);
+            setWhileexp((PExp) newChild);
             return;
         }
 

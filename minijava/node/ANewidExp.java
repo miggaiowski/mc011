@@ -7,10 +7,7 @@ import analysis.*;
 @SuppressWarnings("nls")
 public final class ANewidExp extends PExp
 {
-    private TNew _new_;
     private TId _id_;
-    private TLParenthese _lParenthese_;
-    private TRParenthese _rParenthese_;
 
     public ANewidExp()
     {
@@ -18,19 +15,10 @@ public final class ANewidExp extends PExp
     }
 
     public ANewidExp(
-        @SuppressWarnings("hiding") TNew _new_,
-        @SuppressWarnings("hiding") TId _id_,
-        @SuppressWarnings("hiding") TLParenthese _lParenthese_,
-        @SuppressWarnings("hiding") TRParenthese _rParenthese_)
+        @SuppressWarnings("hiding") TId _id_)
     {
         // Constructor
-        setNew(_new_);
-
         setId(_id_);
-
-        setLParenthese(_lParenthese_);
-
-        setRParenthese(_rParenthese_);
 
     }
 
@@ -38,40 +26,12 @@ public final class ANewidExp extends PExp
     public Object clone()
     {
         return new ANewidExp(
-            cloneNode(this._new_),
-            cloneNode(this._id_),
-            cloneNode(this._lParenthese_),
-            cloneNode(this._rParenthese_));
+            cloneNode(this._id_));
     }
 
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseANewidExp(this);
-    }
-
-    public TNew getNew()
-    {
-        return this._new_;
-    }
-
-    public void setNew(TNew node)
-    {
-        if(this._new_ != null)
-        {
-            this._new_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._new_ = node;
     }
 
     public TId getId()
@@ -99,91 +59,20 @@ public final class ANewidExp extends PExp
         this._id_ = node;
     }
 
-    public TLParenthese getLParenthese()
-    {
-        return this._lParenthese_;
-    }
-
-    public void setLParenthese(TLParenthese node)
-    {
-        if(this._lParenthese_ != null)
-        {
-            this._lParenthese_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._lParenthese_ = node;
-    }
-
-    public TRParenthese getRParenthese()
-    {
-        return this._rParenthese_;
-    }
-
-    public void setRParenthese(TRParenthese node)
-    {
-        if(this._rParenthese_ != null)
-        {
-            this._rParenthese_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._rParenthese_ = node;
-    }
-
     @Override
     public String toString()
     {
         return ""
-            + toString(this._new_)
-            + toString(this._id_)
-            + toString(this._lParenthese_)
-            + toString(this._rParenthese_);
+            + toString(this._id_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._new_ == child)
-        {
-            this._new_ = null;
-            return;
-        }
-
         if(this._id_ == child)
         {
             this._id_ = null;
-            return;
-        }
-
-        if(this._lParenthese_ == child)
-        {
-            this._lParenthese_ = null;
-            return;
-        }
-
-        if(this._rParenthese_ == child)
-        {
-            this._rParenthese_ = null;
             return;
         }
 
@@ -194,27 +83,9 @@ public final class ANewidExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._new_ == oldChild)
-        {
-            setNew((TNew) newChild);
-            return;
-        }
-
         if(this._id_ == oldChild)
         {
             setId((TId) newChild);
-            return;
-        }
-
-        if(this._lParenthese_ == oldChild)
-        {
-            setLParenthese((TLParenthese) newChild);
-            return;
-        }
-
-        if(this._rParenthese_ == oldChild)
-        {
-            setRParenthese((TRParenthese) newChild);
             return;
         }
 

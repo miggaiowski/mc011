@@ -7,9 +7,7 @@ import analysis.*;
 @SuppressWarnings("nls")
 public final class ALparexprparExp extends PExp
 {
-    private TLParenthese _lParenthese_;
     private PExp _exp_;
-    private TRParenthese _rParenthese_;
 
     public ALparexprparExp()
     {
@@ -17,16 +15,10 @@ public final class ALparexprparExp extends PExp
     }
 
     public ALparexprparExp(
-        @SuppressWarnings("hiding") TLParenthese _lParenthese_,
-        @SuppressWarnings("hiding") PExp _exp_,
-        @SuppressWarnings("hiding") TRParenthese _rParenthese_)
+        @SuppressWarnings("hiding") PExp _exp_)
     {
         // Constructor
-        setLParenthese(_lParenthese_);
-
         setExp(_exp_);
-
-        setRParenthese(_rParenthese_);
 
     }
 
@@ -34,39 +26,12 @@ public final class ALparexprparExp extends PExp
     public Object clone()
     {
         return new ALparexprparExp(
-            cloneNode(this._lParenthese_),
-            cloneNode(this._exp_),
-            cloneNode(this._rParenthese_));
+            cloneNode(this._exp_));
     }
 
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseALparexprparExp(this);
-    }
-
-    public TLParenthese getLParenthese()
-    {
-        return this._lParenthese_;
-    }
-
-    public void setLParenthese(TLParenthese node)
-    {
-        if(this._lParenthese_ != null)
-        {
-            this._lParenthese_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._lParenthese_ = node;
     }
 
     public PExp getExp()
@@ -94,59 +59,20 @@ public final class ALparexprparExp extends PExp
         this._exp_ = node;
     }
 
-    public TRParenthese getRParenthese()
-    {
-        return this._rParenthese_;
-    }
-
-    public void setRParenthese(TRParenthese node)
-    {
-        if(this._rParenthese_ != null)
-        {
-            this._rParenthese_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._rParenthese_ = node;
-    }
-
     @Override
     public String toString()
     {
         return ""
-            + toString(this._lParenthese_)
-            + toString(this._exp_)
-            + toString(this._rParenthese_);
+            + toString(this._exp_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._lParenthese_ == child)
-        {
-            this._lParenthese_ = null;
-            return;
-        }
-
         if(this._exp_ == child)
         {
             this._exp_ = null;
-            return;
-        }
-
-        if(this._rParenthese_ == child)
-        {
-            this._rParenthese_ = null;
             return;
         }
 
@@ -157,21 +83,9 @@ public final class ALparexprparExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._lParenthese_ == oldChild)
-        {
-            setLParenthese((TLParenthese) newChild);
-            return;
-        }
-
         if(this._exp_ == oldChild)
         {
             setExp((PExp) newChild);
-            return;
-        }
-
-        if(this._rParenthese_ == oldChild)
-        {
-            setRParenthese((TRParenthese) newChild);
             return;
         }
 

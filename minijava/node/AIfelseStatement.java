@@ -7,12 +7,8 @@ import analysis.*;
 @SuppressWarnings("nls")
 public final class AIfelseStatement extends PStatement
 {
-    private TIf _if_;
-    private TLParenthese _lParenthese_;
-    private PExp _exp_;
-    private TRParenthese _rParenthese_;
+    private PExp _ifexp_;
     private PStatement _ifstatement_;
-    private TElse _else_;
     private PStatement _elsestatement_;
 
     public AIfelseStatement()
@@ -21,26 +17,14 @@ public final class AIfelseStatement extends PStatement
     }
 
     public AIfelseStatement(
-        @SuppressWarnings("hiding") TIf _if_,
-        @SuppressWarnings("hiding") TLParenthese _lParenthese_,
-        @SuppressWarnings("hiding") PExp _exp_,
-        @SuppressWarnings("hiding") TRParenthese _rParenthese_,
+        @SuppressWarnings("hiding") PExp _ifexp_,
         @SuppressWarnings("hiding") PStatement _ifstatement_,
-        @SuppressWarnings("hiding") TElse _else_,
         @SuppressWarnings("hiding") PStatement _elsestatement_)
     {
         // Constructor
-        setIf(_if_);
-
-        setLParenthese(_lParenthese_);
-
-        setExp(_exp_);
-
-        setRParenthese(_rParenthese_);
+        setIfexp(_ifexp_);
 
         setIfstatement(_ifstatement_);
-
-        setElse(_else_);
 
         setElsestatement(_elsestatement_);
 
@@ -50,12 +34,8 @@ public final class AIfelseStatement extends PStatement
     public Object clone()
     {
         return new AIfelseStatement(
-            cloneNode(this._if_),
-            cloneNode(this._lParenthese_),
-            cloneNode(this._exp_),
-            cloneNode(this._rParenthese_),
+            cloneNode(this._ifexp_),
             cloneNode(this._ifstatement_),
-            cloneNode(this._else_),
             cloneNode(this._elsestatement_));
     }
 
@@ -64,16 +44,16 @@ public final class AIfelseStatement extends PStatement
         ((Analysis) sw).caseAIfelseStatement(this);
     }
 
-    public TIf getIf()
+    public PExp getIfexp()
     {
-        return this._if_;
+        return this._ifexp_;
     }
 
-    public void setIf(TIf node)
+    public void setIfexp(PExp node)
     {
-        if(this._if_ != null)
+        if(this._ifexp_ != null)
         {
-            this._if_.parent(null);
+            this._ifexp_.parent(null);
         }
 
         if(node != null)
@@ -86,82 +66,7 @@ public final class AIfelseStatement extends PStatement
             node.parent(this);
         }
 
-        this._if_ = node;
-    }
-
-    public TLParenthese getLParenthese()
-    {
-        return this._lParenthese_;
-    }
-
-    public void setLParenthese(TLParenthese node)
-    {
-        if(this._lParenthese_ != null)
-        {
-            this._lParenthese_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._lParenthese_ = node;
-    }
-
-    public PExp getExp()
-    {
-        return this._exp_;
-    }
-
-    public void setExp(PExp node)
-    {
-        if(this._exp_ != null)
-        {
-            this._exp_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._exp_ = node;
-    }
-
-    public TRParenthese getRParenthese()
-    {
-        return this._rParenthese_;
-    }
-
-    public void setRParenthese(TRParenthese node)
-    {
-        if(this._rParenthese_ != null)
-        {
-            this._rParenthese_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._rParenthese_ = node;
+        this._ifexp_ = node;
     }
 
     public PStatement getIfstatement()
@@ -187,31 +92,6 @@ public final class AIfelseStatement extends PStatement
         }
 
         this._ifstatement_ = node;
-    }
-
-    public TElse getElse()
-    {
-        return this._else_;
-    }
-
-    public void setElse(TElse node)
-    {
-        if(this._else_ != null)
-        {
-            this._else_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._else_ = node;
     }
 
     public PStatement getElsestatement()
@@ -243,12 +123,8 @@ public final class AIfelseStatement extends PStatement
     public String toString()
     {
         return ""
-            + toString(this._if_)
-            + toString(this._lParenthese_)
-            + toString(this._exp_)
-            + toString(this._rParenthese_)
+            + toString(this._ifexp_)
             + toString(this._ifstatement_)
-            + toString(this._else_)
             + toString(this._elsestatement_);
     }
 
@@ -256,39 +132,15 @@ public final class AIfelseStatement extends PStatement
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._if_ == child)
+        if(this._ifexp_ == child)
         {
-            this._if_ = null;
-            return;
-        }
-
-        if(this._lParenthese_ == child)
-        {
-            this._lParenthese_ = null;
-            return;
-        }
-
-        if(this._exp_ == child)
-        {
-            this._exp_ = null;
-            return;
-        }
-
-        if(this._rParenthese_ == child)
-        {
-            this._rParenthese_ = null;
+            this._ifexp_ = null;
             return;
         }
 
         if(this._ifstatement_ == child)
         {
             this._ifstatement_ = null;
-            return;
-        }
-
-        if(this._else_ == child)
-        {
-            this._else_ = null;
             return;
         }
 
@@ -305,39 +157,15 @@ public final class AIfelseStatement extends PStatement
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._if_ == oldChild)
+        if(this._ifexp_ == oldChild)
         {
-            setIf((TIf) newChild);
-            return;
-        }
-
-        if(this._lParenthese_ == oldChild)
-        {
-            setLParenthese((TLParenthese) newChild);
-            return;
-        }
-
-        if(this._exp_ == oldChild)
-        {
-            setExp((PExp) newChild);
-            return;
-        }
-
-        if(this._rParenthese_ == oldChild)
-        {
-            setRParenthese((TRParenthese) newChild);
+            setIfexp((PExp) newChild);
             return;
         }
 
         if(this._ifstatement_ == oldChild)
         {
             setIfstatement((PStatement) newChild);
-            return;
-        }
-
-        if(this._else_ == oldChild)
-        {
-            setElse((TElse) newChild);
             return;
         }
 

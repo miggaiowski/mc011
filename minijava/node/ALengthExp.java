@@ -7,36 +7,16 @@ import analysis.*;
 @SuppressWarnings("nls")
 public final class ALengthExp extends PExp
 {
-    private PExp _exp_;
-    private TDot _dot_;
-    private TLength _length_;
 
     public ALengthExp()
     {
         // Constructor
     }
 
-    public ALengthExp(
-        @SuppressWarnings("hiding") PExp _exp_,
-        @SuppressWarnings("hiding") TDot _dot_,
-        @SuppressWarnings("hiding") TLength _length_)
-    {
-        // Constructor
-        setExp(_exp_);
-
-        setDot(_dot_);
-
-        setLength(_length_);
-
-    }
-
     @Override
     public Object clone()
     {
-        return new ALengthExp(
-            cloneNode(this._exp_),
-            cloneNode(this._dot_),
-            cloneNode(this._length_));
+        return new ALengthExp();
     }
 
     public void apply(Switch sw)
@@ -44,112 +24,16 @@ public final class ALengthExp extends PExp
         ((Analysis) sw).caseALengthExp(this);
     }
 
-    public PExp getExp()
-    {
-        return this._exp_;
-    }
-
-    public void setExp(PExp node)
-    {
-        if(this._exp_ != null)
-        {
-            this._exp_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._exp_ = node;
-    }
-
-    public TDot getDot()
-    {
-        return this._dot_;
-    }
-
-    public void setDot(TDot node)
-    {
-        if(this._dot_ != null)
-        {
-            this._dot_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._dot_ = node;
-    }
-
-    public TLength getLength()
-    {
-        return this._length_;
-    }
-
-    public void setLength(TLength node)
-    {
-        if(this._length_ != null)
-        {
-            this._length_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._length_ = node;
-    }
-
     @Override
     public String toString()
     {
-        return ""
-            + toString(this._exp_)
-            + toString(this._dot_)
-            + toString(this._length_);
+        return "";
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._exp_ == child)
-        {
-            this._exp_ = null;
-            return;
-        }
-
-        if(this._dot_ == child)
-        {
-            this._dot_ = null;
-            return;
-        }
-
-        if(this._length_ == child)
-        {
-            this._length_ = null;
-            return;
-        }
-
         throw new RuntimeException("Not a child.");
     }
 
@@ -157,24 +41,6 @@ public final class ALengthExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._exp_ == oldChild)
-        {
-            setExp((PExp) newChild);
-            return;
-        }
-
-        if(this._dot_ == oldChild)
-        {
-            setDot((TDot) newChild);
-            return;
-        }
-
-        if(this._length_ == oldChild)
-        {
-            setLength((TLength) newChild);
-            return;
-        }
-
         throw new RuntimeException("Not a child.");
     }
 }

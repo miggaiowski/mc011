@@ -8,12 +8,8 @@ import analysis.*;
 public final class AArrayattrStatement extends PStatement
 {
     private TId _id_;
-    private TLBracket _lBracket_;
     private PExp _arrayindex_;
-    private TRBracket _rBracket_;
-    private TEqual _equal_;
     private PExp _righthandside_;
-    private TSemicolon _semicolon_;
 
     public AArrayattrStatement()
     {
@@ -22,27 +18,15 @@ public final class AArrayattrStatement extends PStatement
 
     public AArrayattrStatement(
         @SuppressWarnings("hiding") TId _id_,
-        @SuppressWarnings("hiding") TLBracket _lBracket_,
         @SuppressWarnings("hiding") PExp _arrayindex_,
-        @SuppressWarnings("hiding") TRBracket _rBracket_,
-        @SuppressWarnings("hiding") TEqual _equal_,
-        @SuppressWarnings("hiding") PExp _righthandside_,
-        @SuppressWarnings("hiding") TSemicolon _semicolon_)
+        @SuppressWarnings("hiding") PExp _righthandside_)
     {
         // Constructor
         setId(_id_);
 
-        setLBracket(_lBracket_);
-
         setArrayindex(_arrayindex_);
 
-        setRBracket(_rBracket_);
-
-        setEqual(_equal_);
-
         setRighthandside(_righthandside_);
-
-        setSemicolon(_semicolon_);
 
     }
 
@@ -51,12 +35,8 @@ public final class AArrayattrStatement extends PStatement
     {
         return new AArrayattrStatement(
             cloneNode(this._id_),
-            cloneNode(this._lBracket_),
             cloneNode(this._arrayindex_),
-            cloneNode(this._rBracket_),
-            cloneNode(this._equal_),
-            cloneNode(this._righthandside_),
-            cloneNode(this._semicolon_));
+            cloneNode(this._righthandside_));
     }
 
     public void apply(Switch sw)
@@ -89,31 +69,6 @@ public final class AArrayattrStatement extends PStatement
         this._id_ = node;
     }
 
-    public TLBracket getLBracket()
-    {
-        return this._lBracket_;
-    }
-
-    public void setLBracket(TLBracket node)
-    {
-        if(this._lBracket_ != null)
-        {
-            this._lBracket_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._lBracket_ = node;
-    }
-
     public PExp getArrayindex()
     {
         return this._arrayindex_;
@@ -137,56 +92,6 @@ public final class AArrayattrStatement extends PStatement
         }
 
         this._arrayindex_ = node;
-    }
-
-    public TRBracket getRBracket()
-    {
-        return this._rBracket_;
-    }
-
-    public void setRBracket(TRBracket node)
-    {
-        if(this._rBracket_ != null)
-        {
-            this._rBracket_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._rBracket_ = node;
-    }
-
-    public TEqual getEqual()
-    {
-        return this._equal_;
-    }
-
-    public void setEqual(TEqual node)
-    {
-        if(this._equal_ != null)
-        {
-            this._equal_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._equal_ = node;
     }
 
     public PExp getRighthandside()
@@ -214,42 +119,13 @@ public final class AArrayattrStatement extends PStatement
         this._righthandside_ = node;
     }
 
-    public TSemicolon getSemicolon()
-    {
-        return this._semicolon_;
-    }
-
-    public void setSemicolon(TSemicolon node)
-    {
-        if(this._semicolon_ != null)
-        {
-            this._semicolon_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._semicolon_ = node;
-    }
-
     @Override
     public String toString()
     {
         return ""
             + toString(this._id_)
-            + toString(this._lBracket_)
             + toString(this._arrayindex_)
-            + toString(this._rBracket_)
-            + toString(this._equal_)
-            + toString(this._righthandside_)
-            + toString(this._semicolon_);
+            + toString(this._righthandside_);
     }
 
     @Override
@@ -262,39 +138,15 @@ public final class AArrayattrStatement extends PStatement
             return;
         }
 
-        if(this._lBracket_ == child)
-        {
-            this._lBracket_ = null;
-            return;
-        }
-
         if(this._arrayindex_ == child)
         {
             this._arrayindex_ = null;
             return;
         }
 
-        if(this._rBracket_ == child)
-        {
-            this._rBracket_ = null;
-            return;
-        }
-
-        if(this._equal_ == child)
-        {
-            this._equal_ = null;
-            return;
-        }
-
         if(this._righthandside_ == child)
         {
             this._righthandside_ = null;
-            return;
-        }
-
-        if(this._semicolon_ == child)
-        {
-            this._semicolon_ = null;
             return;
         }
 
@@ -311,39 +163,15 @@ public final class AArrayattrStatement extends PStatement
             return;
         }
 
-        if(this._lBracket_ == oldChild)
-        {
-            setLBracket((TLBracket) newChild);
-            return;
-        }
-
         if(this._arrayindex_ == oldChild)
         {
             setArrayindex((PExp) newChild);
             return;
         }
 
-        if(this._rBracket_ == oldChild)
-        {
-            setRBracket((TRBracket) newChild);
-            return;
-        }
-
-        if(this._equal_ == oldChild)
-        {
-            setEqual((TEqual) newChild);
-            return;
-        }
-
         if(this._righthandside_ == oldChild)
         {
             setRighthandside((PExp) newChild);
-            return;
-        }
-
-        if(this._semicolon_ == oldChild)
-        {
-            setSemicolon((TSemicolon) newChild);
             return;
         }
 

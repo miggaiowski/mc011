@@ -48,6 +48,9 @@ blank = (' ' | 10 | 13 | 9)*;
 
 print = 'System.out.println';
 
+Ignored Tokens
+blank;
+
 Productions
 program = 
      mainclass classdecl*;
@@ -170,8 +173,8 @@ postfixexp_list {-> exp} =
 
 postfixexp_rest {-> exp} = 
       {index} l_bracket exp r_bracket {-> exp.exp}
-    | {idlist} exp dot id l_parenthese explist r_parenthese {-> New exp.idlist(exp, id, [explist.exp])}
-    | {length} exp dot length {-> New exp.length(exp)};
+    | {idlist} dot id l_parenthese explist r_parenthese {-> New exp.idlist(id, [explist.exp])}
+    | {length} dot length {-> New exp.length()};
 
 primary_exp {-> exp} = 
       {number} number {-> New exp.number(number)}
@@ -235,8 +238,8 @@ exp =
     | {add} [terms]:exp*
     | {sub} [terms]:exp*
     | {index} [pointer]:exp [offset]:exp 
-    | {length} [exp]:exp 
-    | {idlist} [exp]:exp [id]:id [explist]:exp*
+    | {length}
+    | {idlist} [id]:id [explist]:exp*
     | {number} [number]:number
     | {true}
     | {false}

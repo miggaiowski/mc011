@@ -7,26 +7,16 @@ import analysis.*;
 @SuppressWarnings("nls")
 public final class AThisExp extends PExp
 {
-    private TThis _this_;
 
     public AThisExp()
     {
         // Constructor
     }
 
-    public AThisExp(
-        @SuppressWarnings("hiding") TThis _this_)
-    {
-        // Constructor
-        setThis(_this_);
-
-    }
-
     @Override
     public Object clone()
     {
-        return new AThisExp(
-            cloneNode(this._this_));
+        return new AThisExp();
     }
 
     public void apply(Switch sw)
@@ -34,48 +24,16 @@ public final class AThisExp extends PExp
         ((Analysis) sw).caseAThisExp(this);
     }
 
-    public TThis getThis()
-    {
-        return this._this_;
-    }
-
-    public void setThis(TThis node)
-    {
-        if(this._this_ != null)
-        {
-            this._this_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._this_ = node;
-    }
-
     @Override
     public String toString()
     {
-        return ""
-            + toString(this._this_);
+        return "";
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._this_ == child)
-        {
-            this._this_ = null;
-            return;
-        }
-
         throw new RuntimeException("Not a child.");
     }
 
@@ -83,12 +41,6 @@ public final class AThisExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._this_ == oldChild)
-        {
-            setThis((TThis) newChild);
-            return;
-        }
-
         throw new RuntimeException("Not a child.");
     }
 }
