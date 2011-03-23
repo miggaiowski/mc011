@@ -25,7 +25,8 @@ this = 'this';
 id = letter (letter | digit | '_')*;
 number = digit (digit)*;
 
-plusminusop = '+' | '-';
+plusop = '+';
+minusop = '-';
 timesop = '*';
 and = '&&';
 less = '<';
@@ -52,10 +53,14 @@ program =
      mainclass classdecl*;
 
 mainclass {-> mainclass} = 
-     classn [classname]:id l_brace [mainmethod]:mainmethod r_brace {-> New mainclass(classname, mainmethod.mainmethod)};
+     classn [classname]:id l_brace [mainmethod]:mainmethod r_brace 
+     {-> New mainclass(classname, mainmethod.mainmethod)};
 
 mainmethod {-> mainmethod} =
-     public static void main l_parenthese string l_bracket r_bracket [paramname]:id r_parenthese l_brace [statements]:statement r_brace {-> New mainmethod(paramname, statements.statement)}; 
+     public static void main l_parenthese string l_bracket r_bracket [paramname]:id r_parenthese l_brace 
+        [statements]:statement 
+     r_brace 
+     {-> New mainmethod(paramname, statements.statement)}; 
 
 classdecl {-> classdecl} = 
      {simpleclass} classn [classname]:id 
@@ -85,7 +90,7 @@ methoddecl {-> methoddecl} =
 
 paramlist {-> parameter*} = 
       {firstparameter} parameter paramrest* {-> [parameter, paramrest.parameter]}
-    | {empty} blank {-> []};
+    | {empty} {-> []};
 
 paramrest {-> parameter} =
     {anotherparameter} comma type id {-> New parameter(type, id)};
@@ -93,11 +98,11 @@ paramrest {-> parameter} =
 parameter {-> parameter} = 
     type id {-> New parameter(type, id)};
 
-type =
-      {intvector} int l_bracket r_bracket 
-    | {boolean} boolean 
-    | {int} int 
-    | {id} id ;
+type {-> type} = 
+      {intvector} int l_bracket r_bracket {-> New type.intvector()}
+    | {boolean} boolean {-> New type.boolean()}
+    | {int} int {-> New type.int()}
+    | {id} id {-> New type.id(id)};
 
 statement {-> statement} =
       {statementlist} l_brace [statementlist]:statement* r_brace 
@@ -116,64 +121,78 @@ statement {-> statement} =
     | {arrayattr} id l_bracket [arrayindex]:exp r_bracket equal [righthandside]:exp semicolon
       {-> New statement.arrayattr(id, arrayindex.exp, righthandside.exp)};
 
-exp {-> exp} = andstm_list;
+exp {-> exp} = 
+    andstm_list {-> New exp.and([andstm_list.exp])};
 
-andstm_list =
-    less_than andstm_rest*;
+andstm_list {-> exp*} =
+    less_than andstm_rest* {-> [andstm_rest.exp]};
 
-andstm_rest =
-    and less_than;
+andstm_rest {-> exp} =
+    and less_than {-> less_than.exp};
 
-less_than = 
-    plus_minus_list less_than_plus_minus? ;
+less_than {-> exp} = 
+    plus_minus_list less_than_plus_minus? {-> New exp.less([less_than_plus_minus.exp])};
 
-less_than_plus_minus = 
-    less plus_minus_list;
+less_than_plus_minus {-> exp} = 
+    less plus_minus_list {-> plus_minus_list.exp};
 
-plus_minus_list = times_list plus_minus_rest* ;
+plus_minus_list {-> exp} = 
+      {plus_list} plus_list {-> plus_list.exp}
+    | {minus_list} minus_list {-> minus_list.exp};
 
-plus_minus_rest = 
-    plusminusop times_list;
+plus_list {-> exp} = 
+    times_list plus_rest* {-> New exp.add([plus_rest.exp])};
 
-times_list =
-    prefixexp times_rest* ; 
+plus_rest {-> exp} = 
+    plusop times_list {-> times_list.exp};
 
-times_rest =
-    timesop prefixexp;
+minus_list {-> exp} = 
+    times_list minus_rest* {-> New exp.sub([minus_rest.exp])};
 
-prefixexp =
-      {not_expression} notexp 
-    | {expression} postfixexp_list;
+minus_rest {-> exp} = 
+    minusop times_list {-> times_list.exp};
 
-notexp = 
-    not+ postfixexp_list;
+times_list {-> exp} =
+    prefixexp times_rest* {-> New exp.mul([times_rest.exp])}; 
 
-postfixexp_list = 
-    primary_exp postfixexp_rest*;
+times_rest {-> exp} =
+    timesop prefixexp {-> prefixexp.exp};
 
-postfixexp_rest = 
-      {index} l_bracket exp r_bracket
-    | {idlist} exp dot id l_parenthese explist r_parenthese
-    | {length} exp dot length ;
+prefixexp {-> exp} =
+      {not_expression} notexp {-> notexp.exp}
+    | {expression} postfixexp_list {-> postfixexp_list.exp};
+
+notexp {-> exp} = 
+    not postfixexp_list {-> New exp.notexp(postfixexp_list.exp)};
+
+postfixexp_list {-> exp} = 
+    primary_exp postfixexp_rest* {-> New exp.prepos(primary_exp.exp, [postfixexp_rest.exp])};
+
+postfixexp_rest {-> exp} = 
+      {index} l_bracket exp r_bracket {-> exp.exp}
+    | {idlist} exp dot id l_parenthese explist r_parenthese {-> New exp.idlist(exp, id, [explist.exp])}
+    | {length} exp dot length {-> New exp.length(exp)};
 
 primary_exp {-> exp} = 
       {number} number {-> New exp.number(number)}
-    | {true} true {-> New exp.true(true)}
-    | {false} false {-> New exp.false(false)}
+    | {true} true {-> New exp.true()}
+    | {false} false {-> New exp.false()}
     | {id} id {-> New exp.id(id)}
-    | {this} this {-> New exp.this(this)}
+    | {this} this {-> New exp.this()}
     | {newintarray} new int l_bracket exp r_bracket {-> New exp.newintarray(exp)}
     | {newid} new id l_parenthese r_parenthese {-> New exp.newid(id)}
     | {lparexprpar} l_parenthese exp r_parenthese {-> New exp.lparexprpar(exp)};
 
-explist {-> explist} = 
+explist {-> exp*} = 
       {explisthead} exp exprest* {-> [exp, exprest.exp]}
-    | {blank} blank {-> []};
+    | {blank} {-> []};
 
 exprest {-> exp} = 
-    comma exp {-> New exp(exp)};
+    comma exp {-> exp};
 
 Abstract Syntax Tree
+program = 
+     mainclass classdecl*;	
 mainclass = 
      [classname]:id [mainmethod]:mainmethod;
 
@@ -196,9 +215,9 @@ parameter =
     type id;
 
 type =
-      {intvector} int l_bracket r_bracket 
-    | {boolean} boolean 
-    | {int} int 
+      {intvector} 
+    | {boolean} 
+    | {int} 
     | {id} id ;
 
 statement =
@@ -210,19 +229,23 @@ statement =
   | {arrayattr} [id]:id [arrayindex]:exp [righthandside]:exp;
 
 exp =
-      {op} [left]:exp [op]:op [right]:exp 
-    | {arrayget} [pointer]:exp [offset]:exp 
+      {and} [andexps]:exp*
+    | {less} [lessexps]:exp*
+    | {mul} [factor]:exp*
+    | {add} [terms]:exp*
+    | {sub} [terms]:exp*
+    | {index} [pointer]:exp [offset]:exp 
     | {length} [exp]:exp 
-    | {idlist} [exp]:exp [id]:id [explist]:explist
+    | {idlist} [exp]:exp [id]:id [explist]:exp*
     | {number} [number]:number
-    | {true} true
-    | {false} false
+    | {true}
+    | {false}
     | {id} [id]:id
-    | {this} this
+    | {this} 
     | {newintarray} [exp]:exp
     | {newid} [id]:id
     | {notexp} [exp]:exp
-    | {lparexprpar} [exp]:exp;
+    | {lparexprpar} [exp]:exp
+    | {prepos} [prefix]:exp [posfixs]:exp*;
 
-explist = 
-    [exps]:exp*;
+
