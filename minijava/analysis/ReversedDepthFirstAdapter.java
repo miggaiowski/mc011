@@ -525,7 +525,7 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     {
         inALessExp(node);
         {
-            List<PExp> copy = new ArrayList<PExp>(node.getLessexps());
+            List<PExp> copy = new ArrayList<PExp>(node.getExps());
             Collections.reverse(copy);
             for(PExp e : copy)
             {

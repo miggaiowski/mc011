@@ -8,7 +8,7 @@ import analysis.*;
 @SuppressWarnings("nls")
 public final class ALessExp extends PExp
 {
-    private final LinkedList<PExp> _lessexps_ = new LinkedList<PExp>();
+    private final LinkedList<PExp> _exps_ = new LinkedList<PExp>();
 
     public ALessExp()
     {
@@ -16,10 +16,10 @@ public final class ALessExp extends PExp
     }
 
     public ALessExp(
-        @SuppressWarnings("hiding") List<PExp> _lessexps_)
+        @SuppressWarnings("hiding") List<PExp> _exps_)
     {
         // Constructor
-        setLessexps(_lessexps_);
+        setExps(_exps_);
 
     }
 
@@ -27,7 +27,7 @@ public final class ALessExp extends PExp
     public Object clone()
     {
         return new ALessExp(
-            cloneList(this._lessexps_));
+            cloneList(this._exps_));
     }
 
     public void apply(Switch sw)
@@ -35,15 +35,15 @@ public final class ALessExp extends PExp
         ((Analysis) sw).caseALessExp(this);
     }
 
-    public LinkedList<PExp> getLessexps()
+    public LinkedList<PExp> getExps()
     {
-        return this._lessexps_;
+        return this._exps_;
     }
 
-    public void setLessexps(List<PExp> list)
+    public void setExps(List<PExp> list)
     {
-        this._lessexps_.clear();
-        this._lessexps_.addAll(list);
+        this._exps_.clear();
+        this._exps_.addAll(list);
         for(PExp e : list)
         {
             if(e.parent() != null)
@@ -59,14 +59,14 @@ public final class ALessExp extends PExp
     public String toString()
     {
         return ""
-            + toString(this._lessexps_);
+            + toString(this._exps_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._lessexps_.remove(child))
+        if(this._exps_.remove(child))
         {
             return;
         }
@@ -78,7 +78,7 @@ public final class ALessExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        for(ListIterator<PExp> i = this._lessexps_.listIterator(); i.hasNext();)
+        for(ListIterator<PExp> i = this._exps_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {
