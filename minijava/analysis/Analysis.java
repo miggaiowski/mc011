@@ -36,7 +36,7 @@ public interface Analysis extends Switch
     void caseASubExp(ASubExp node);
     void caseAIndexExp(AIndexExp node);
     void caseALengthExp(ALengthExp node);
-    void caseAIdlistExp(AIdlistExp node);
+    void caseAMethodcallExp(AMethodcallExp node);
     void caseANumberExp(ANumberExp node);
     void caseATrueExp(ATrueExp node);
     void caseAFalseExp(AFalseExp node);

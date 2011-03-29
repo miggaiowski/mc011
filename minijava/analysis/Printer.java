@@ -5,7 +5,7 @@ package analysis;
 import java.util.*;
 import node.*;
 
-public class ReversedDepthFirstAdapter extends AnalysisAdapter
+public class Printer extends AnalysisAdapter
 {
     public void inStart(Start node)
     {
@@ -19,7 +19,8 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
 
     public void defaultIn(@SuppressWarnings("unused") Node node)
     {
-        // Do nothing
+        String className[] = node.getClass().toString().split("\\.");
+        System.out.print(className[className.length - 1] + " "); // this prints the name of the token
     }
 
     public void defaultOut(@SuppressWarnings("unused") Node node)
@@ -31,8 +32,8 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseStart(Start node)
     {
         inStart(node);
-        node.getEOF().apply(this);
         node.getPProgram().apply(this);
+        node.getEOF().apply(this);
         outStart(node);
     }
 
@@ -50,17 +51,16 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAProgram(AProgram node)
     {
         inAProgram(node);
+        if(node.getMainclass() != null)
+        {
+            node.getMainclass().apply(this);
+        }
         {
             List<PClassdecl> copy = new ArrayList<PClassdecl>(node.getClassdecl());
-            Collections.reverse(copy);
             for(PClassdecl e : copy)
             {
                 e.apply(this);
             }
-        }
-        if(node.getMainclass() != null)
-        {
-            node.getMainclass().apply(this);
         }
         outAProgram(node);
     }
@@ -79,13 +79,13 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAMainclass(AMainclass node)
     {
         inAMainclass(node);
-        if(node.getMainmethod() != null)
-        {
-            node.getMainmethod().apply(this);
-        }
         if(node.getClassname() != null)
         {
             node.getClassname().apply(this);
+        }
+        if(node.getMainmethod() != null)
+        {
+            node.getMainmethod().apply(this);
         }
         outAMainclass(node);
     }
@@ -104,13 +104,13 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAMainmethod(AMainmethod node)
     {
         inAMainmethod(node);
-        if(node.getStatements() != null)
-        {
-            node.getStatements().apply(this);
-        }
         if(node.getParamname() != null)
         {
             node.getParamname().apply(this);
+        }
+        if(node.getStatements() != null)
+        {
+            node.getStatements().apply(this);
         }
         outAMainmethod(node);
     }
@@ -129,29 +129,27 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAClassdecl(AClassdecl node)
     {
         inAClassdecl(node);
+        if(node.getClassname() != null)
         {
-            List<PMethoddecl> copy = new ArrayList<PMethoddecl>(node.getMethods());
-            Collections.reverse(copy);
-            for(PMethoddecl e : copy)
-            {
-                e.apply(this);
-            }
-        }
-        {
-            List<PVardecl> copy = new ArrayList<PVardecl>(node.getVars());
-            Collections.reverse(copy);
-            for(PVardecl e : copy)
-            {
-                e.apply(this);
-            }
+            node.getClassname().apply(this);
         }
         if(node.getSuper() != null)
         {
             node.getSuper().apply(this);
         }
-        if(node.getClassname() != null)
         {
-            node.getClassname().apply(this);
+            List<PVardecl> copy = new ArrayList<PVardecl>(node.getVars());
+            for(PVardecl e : copy)
+            {
+                e.apply(this);
+            }
+        }
+        {
+            List<PMethoddecl> copy = new ArrayList<PMethoddecl>(node.getMethods());
+            for(PMethoddecl e : copy)
+            {
+                e.apply(this);
+            }
         }
         outAClassdecl(node);
     }
@@ -170,13 +168,13 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAVardecl(AVardecl node)
     {
         inAVardecl(node);
-        if(node.getVarname() != null)
-        {
-            node.getVarname().apply(this);
-        }
         if(node.getType() != null)
         {
             node.getType().apply(this);
+        }
+        if(node.getVarname() != null)
+        {
+            node.getVarname().apply(this);
         }
         outAVardecl(node);
     }
@@ -195,41 +193,38 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAMethoddecl(AMethoddecl node)
     {
         inAMethoddecl(node);
-        if(node.getReturnexpression() != null)
+        if(node.getType() != null)
         {
-            node.getReturnexpression().apply(this);
+            node.getType().apply(this);
+        }
+        if(node.getMethodname() != null)
+        {
+            node.getMethodname().apply(this);
         }
         {
-            List<PStatement> copy = new ArrayList<PStatement>(node.getStatements());
-            Collections.reverse(copy);
-            for(PStatement e : copy)
+            List<PParameter> copy = new ArrayList<PParameter>(node.getParameters());
+            for(PParameter e : copy)
             {
                 e.apply(this);
             }
         }
         {
             List<PVardecl> copy = new ArrayList<PVardecl>(node.getVars());
-            Collections.reverse(copy);
             for(PVardecl e : copy)
             {
                 e.apply(this);
             }
         }
         {
-            List<PParameter> copy = new ArrayList<PParameter>(node.getParameters());
-            Collections.reverse(copy);
-            for(PParameter e : copy)
+            List<PStatement> copy = new ArrayList<PStatement>(node.getStatements());
+            for(PStatement e : copy)
             {
                 e.apply(this);
             }
         }
-        if(node.getMethodname() != null)
+        if(node.getReturnexpression() != null)
         {
-            node.getMethodname().apply(this);
-        }
-        if(node.getType() != null)
-        {
-            node.getType().apply(this);
+            node.getReturnexpression().apply(this);
         }
         outAMethoddecl(node);
     }
@@ -248,13 +243,13 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAParameter(AParameter node)
     {
         inAParameter(node);
-        if(node.getId() != null)
-        {
-            node.getId().apply(this);
-        }
         if(node.getType() != null)
         {
             node.getType().apply(this);
+        }
+        if(node.getId() != null)
+        {
+            node.getId().apply(this);
         }
         outAParameter(node);
     }
@@ -347,7 +342,6 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         inAStatementlistStatement(node);
         {
             List<PStatement> copy = new ArrayList<PStatement>(node.getStatementlist());
-            Collections.reverse(copy);
             for(PStatement e : copy)
             {
                 e.apply(this);
@@ -370,17 +364,17 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAIfelseStatement(AIfelseStatement node)
     {
         inAIfelseStatement(node);
-        if(node.getElsestatement() != null)
+        if(node.getIfexp() != null)
         {
-            node.getElsestatement().apply(this);
+            node.getIfexp().apply(this);
         }
         if(node.getIfstatement() != null)
         {
             node.getIfstatement().apply(this);
         }
-        if(node.getIfexp() != null)
+        if(node.getElsestatement() != null)
         {
-            node.getIfexp().apply(this);
+            node.getElsestatement().apply(this);
         }
         outAIfelseStatement(node);
     }
@@ -399,13 +393,13 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAWhileStatement(AWhileStatement node)
     {
         inAWhileStatement(node);
-        if(node.getStatement() != null)
-        {
-            node.getStatement().apply(this);
-        }
         if(node.getWhileexp() != null)
         {
             node.getWhileexp().apply(this);
+        }
+        if(node.getStatement() != null)
+        {
+            node.getStatement().apply(this);
         }
         outAWhileStatement(node);
     }
@@ -445,13 +439,13 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAAttrStatement(AAttrStatement node)
     {
         inAAttrStatement(node);
-        if(node.getExp() != null)
-        {
-            node.getExp().apply(this);
-        }
         if(node.getId() != null)
         {
             node.getId().apply(this);
+        }
+        if(node.getExp() != null)
+        {
+            node.getExp().apply(this);
         }
         outAAttrStatement(node);
     }
@@ -470,17 +464,17 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAArrayattrStatement(AArrayattrStatement node)
     {
         inAArrayattrStatement(node);
-        if(node.getRighthandside() != null)
+        if(node.getId() != null)
         {
-            node.getRighthandside().apply(this);
+            node.getId().apply(this);
         }
         if(node.getArrayindex() != null)
         {
             node.getArrayindex().apply(this);
         }
-        if(node.getId() != null)
+        if(node.getRighthandside() != null)
         {
-            node.getId().apply(this);
+            node.getRighthandside().apply(this);
         }
         outAArrayattrStatement(node);
     }
@@ -501,7 +495,6 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         inAAndExp(node);
         {
             List<PExp> copy = new ArrayList<PExp>(node.getAndexps());
-            Collections.reverse(copy);
             for(PExp e : copy)
             {
                 e.apply(this);
@@ -526,7 +519,6 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         inALessExp(node);
         {
             List<PExp> copy = new ArrayList<PExp>(node.getLessexps());
-            Collections.reverse(copy);
             for(PExp e : copy)
             {
                 e.apply(this);
@@ -551,7 +543,6 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         inAMulExp(node);
         {
             List<PExp> copy = new ArrayList<PExp>(node.getFactor());
-            Collections.reverse(copy);
             for(PExp e : copy)
             {
                 e.apply(this);
@@ -576,7 +567,6 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         inAAddExp(node);
         {
             List<PExp> copy = new ArrayList<PExp>(node.getTerms());
-            Collections.reverse(copy);
             for(PExp e : copy)
             {
                 e.apply(this);
@@ -601,7 +591,6 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         inASubExp(node);
         {
             List<PExp> copy = new ArrayList<PExp>(node.getTerms());
-            Collections.reverse(copy);
             for(PExp e : copy)
             {
                 e.apply(this);
@@ -624,13 +613,13 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAIndexExp(AIndexExp node)
     {
         inAIndexExp(node);
-        if(node.getOffset() != null)
-        {
-            node.getOffset().apply(this);
-        }
         if(node.getPointer() != null)
         {
             node.getPointer().apply(this);
+        }
+        if(node.getOffset() != null)
+        {
+            node.getOffset().apply(this);
         }
         outAIndexExp(node);
     }
@@ -666,17 +655,16 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAMethodcallExp(AMethodcallExp node)
     {
         inAMethodcallExp(node);
+        if(node.getId() != null)
+        {
+            node.getId().apply(this);
+        }
         {
             List<PExp> copy = new ArrayList<PExp>(node.getExplist());
-            Collections.reverse(copy);
             for(PExp e : copy)
             {
                 e.apply(this);
             }
-        }
-        if(node.getId() != null)
-        {
-            node.getId().apply(this);
         }
         outAMethodcallExp(node);
     }
@@ -872,17 +860,16 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAPreposExp(APreposExp node)
     {
         inAPreposExp(node);
+        if(node.getPrefix() != null)
+        {
+            node.getPrefix().apply(this);
+        }
         {
             List<PExp> copy = new ArrayList<PExp>(node.getPosfixs());
-            Collections.reverse(copy);
             for(PExp e : copy)
             {
                 e.apply(this);
             }
-        }
-        if(node.getPrefix() != null)
-        {
-            node.getPrefix().apply(this);
         }
         outAPreposExp(node);
     }

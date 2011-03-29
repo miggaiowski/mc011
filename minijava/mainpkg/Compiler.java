@@ -2,6 +2,9 @@ package mainpkg;
 import java.io.InputStreamReader;
 import java.io.PushbackReader;
 
+import analysis.DepthFirstAdapter;
+import analysis.Printer;
+
 import lexer.Lexer;
 import node.Start;
 import parser.Parser;
@@ -27,7 +30,9 @@ public class Compiler
 			 new Parser(lexer);          
 
 			// Parse the input.                                  
-			Start tree = p.parse();                
+			Start tree = p.parse(); 
+			Printer printer = new Printer();
+			tree.apply(printer);
 
 //			String className[];     
 //			Token token;

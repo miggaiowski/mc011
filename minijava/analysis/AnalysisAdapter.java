@@ -189,7 +189,7 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseAIdlistExp(AIdlistExp node)
+    public void caseAMethodcallExp(AMethodcallExp node)
     {
         defaultCase(node);
     }

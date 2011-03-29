@@ -640,20 +640,20 @@ public class DepthFirstAdapter extends AnalysisAdapter
         outALengthExp(node);
     }
 
-    public void inAIdlistExp(AIdlistExp node)
+    public void inAMethodcallExp(AMethodcallExp node)
     {
         defaultIn(node);
     }
 
-    public void outAIdlistExp(AIdlistExp node)
+    public void outAMethodcallExp(AMethodcallExp node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAIdlistExp(AIdlistExp node)
+    public void caseAMethodcallExp(AMethodcallExp node)
     {
-        inAIdlistExp(node);
+        inAMethodcallExp(node);
         if(node.getId() != null)
         {
             node.getId().apply(this);
@@ -665,7 +665,7 @@ public class DepthFirstAdapter extends AnalysisAdapter
                 e.apply(this);
             }
         }
-        outAIdlistExp(node);
+        outAMethodcallExp(node);
     }
 
     public void inANumberExp(ANumberExp node)
