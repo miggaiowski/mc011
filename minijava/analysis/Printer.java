@@ -2,8 +2,52 @@
 
 package analysis;
 
-import java.util.*;
-import node.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import node.AAddExp;
+import node.AAndExp;
+import node.AArrayattrStatement;
+import node.AAttrStatement;
+import node.ABooleanType;
+import node.AClassdecl;
+import node.AFalseExp;
+import node.AIdExp;
+import node.AIdType;
+import node.AIfelseStatement;
+import node.AIndexExp;
+import node.AIntType;
+import node.AIntvectorType;
+import node.ALengthExp;
+import node.ALessExp;
+import node.ALparexprparExp;
+import node.AMainclass;
+import node.AMainmethod;
+import node.AMethodcallExp;
+import node.AMethoddecl;
+import node.AMulExp;
+import node.ANewidExp;
+import node.ANewintarrayExp;
+import node.ANotexpExp;
+import node.ANumberExp;
+import node.AParameter;
+import node.APreposExp;
+import node.APrintStatement;
+import node.AProgram;
+import node.AStatementlistStatement;
+import node.ASubExp;
+import node.AThisExp;
+import node.ATrueExp;
+import node.AVardecl;
+import node.AWhileStatement;
+import node.Node;
+import node.PClassdecl;
+import node.PExp;
+import node.PMethoddecl;
+import node.PParameter;
+import node.PStatement;
+import node.PVardecl;
+import node.Start;
 
 public class Printer extends AnalysisAdapter
 {
