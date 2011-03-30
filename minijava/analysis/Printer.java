@@ -61,11 +61,11 @@ public class Printer extends AnalysisAdapter
         defaultOut(node);
     }
 
-    public void defaultIn(@SuppressWarnings("unused") Node node)
+   public void defaultIn(@SuppressWarnings("unused") Node node)
     {
-        String className[] = node.getClass().toString().split("\\.");
-        System.out.print(className[className.length - 1] + " "); // this prints the name of the token
-    }
+	   String className[] = node.getClass().toString().split("\\.");
+	   System.out.print(className[className.length - 1] + " "); // this prints the name of the token		   
+    }	
 
     public void defaultOut(@SuppressWarnings("unused") Node node)
     {
@@ -525,7 +525,10 @@ public class Printer extends AnalysisAdapter
 
     public void inAAndExp(AAndExp node)
     {
-        defaultIn(node);
+    	if (node.getAndexps().size() > 1) {
+    		String className[] = node.getClass().toString().split("\\.");
+    		System.out.print(className[className.length - 1] + " "); // this prints the name of the token
+    	}		
     }
 
     public void outAAndExp(AAndExp node)
@@ -549,7 +552,10 @@ public class Printer extends AnalysisAdapter
 
     public void inALessExp(ALessExp node)
     {
-        defaultIn(node);
+    	if (node.getExps().size() > 1) {
+    		String className[] = node.getClass().toString().split("\\.");
+    		System.out.print(className[className.length - 1] + " "); // this prints the name of the token
+    	}		
     }
 
     public void outALessExp(ALessExp node)
@@ -560,12 +566,17 @@ public class Printer extends AnalysisAdapter
     @Override
     public void caseALessExp(ALessExp node)
     {
-        inALessExp(node);
+    	inALessExp(node);
         {
+        	Boolean printed = false;
             List<PExp> copy = new ArrayList<PExp>(node.getExps());
             for(PExp e : copy)
             {
-                e.apply(this);
+            	e.apply(this);
+            	if (node.getExps().size() > 1 && !printed) {
+            		System.out.println(" <<< ");
+            		printed = true;
+                }
             }
         }
         outALessExp(node);
@@ -573,7 +584,10 @@ public class Printer extends AnalysisAdapter
 
     public void inAMulExp(AMulExp node)
     {
-        defaultIn(node);
+       	if (node.getFactor().size() > 1) {
+    		String className[] = node.getClass().toString().split("\\.");
+    		System.out.print(className[className.length - 1] + " "); // this prints the name of the token
+    	}		
     }
 
     public void outAMulExp(AMulExp node)
@@ -597,7 +611,10 @@ public class Printer extends AnalysisAdapter
 
     public void inAAddExp(AAddExp node)
     {
-        defaultIn(node);
+       	if (node.getTerms().size() > 1) {
+    		String className[] = node.getClass().toString().split("\\.");
+    		System.out.print(className[className.length - 1] + " "); // this prints the name of the token
+    	}		
     }
 
     public void outAAddExp(AAddExp node)
@@ -621,7 +638,10 @@ public class Printer extends AnalysisAdapter
 
     public void inASubExp(ASubExp node)
     {
-        defaultIn(node);
+       	if (node.getTerms().size() > 1) {
+    		String className[] = node.getClass().toString().split("\\.");
+    		System.out.print(className[className.length - 1] + " "); // this prints the name of the token
+    	}		
     }
 
     public void outASubExp(ASubExp node)
@@ -892,7 +912,10 @@ public class Printer extends AnalysisAdapter
 
     public void inAPreposExp(APreposExp node)
     {
-        defaultIn(node);
+       	if (node.getPosfixs().size() > 0) {
+    		String className[] = node.getClass().toString().split("\\.");
+    		System.out.print(className[className.length - 1] + " "); // this prints the name of the token
+    	}		
     }
 
     public void outAPreposExp(APreposExp node)

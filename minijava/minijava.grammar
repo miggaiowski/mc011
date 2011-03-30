@@ -80,7 +80,7 @@ classdecl {-> classdecl} =
      {-> New classdecl(classname, super, [vars.vardecl], [methods.methoddecl])};
  
 vardecl {-> vardecl} = 
-    type [varname]:id semicolon {-> New vardecl(type, varname)};
+    type [varname]:id semicolon {-> New vardecl(type.type, varname)};
 
 methoddecl {-> methoddecl} =
     public type [methodname]:id l_parenthese [parameters]:paramlist r_parenthese 
@@ -99,7 +99,7 @@ paramrest {-> parameter} =
     {anotherparameter} comma type id {-> New parameter(type, id)};
 
 parameter {-> parameter} = 
-    type id {-> New parameter(type, id)};
+    type id {-> New parameter(type.type, id)};
 
 type {-> type} = 
       {intvector} int l_bracket r_bracket {-> New type.intvector()}
@@ -143,13 +143,13 @@ exp {-> exp} =
 
 
 andstm_list {-> exp*} =
-    less_than andstm_rest* {-> [andstm_rest.exp]};
+    less_than andstm_rest* {-> [less_than.exp, andstm_rest.exp]};
 
 andstm_rest {-> exp*} =
-    and less_than {-> [less_than.exp]};
+    and less_than {-> [less_than.exp]} ;
 
 less_than {-> exp} = 
-    plus_minus_list less_than_plus_minus* {-> New exp.less([less_than_plus_minus.exp])};
+    plus_minus_list less_than_plus_minus? {-> New exp.less([plus_minus_list.exp, less_than_plus_minus.exp])};
 
 less_than_plus_minus {-> exp} = 
     less plus_minus_list {-> plus_minus_list.exp};
@@ -159,19 +159,19 @@ plus_minus_list {-> exp} =
     | {minus_list} minus_list {-> minus_list.exp};
 
 plus_list {-> exp} = 
-    times_list plus_rest* {-> New exp.add([plus_rest.exp])};
+    times_list plus_rest* {-> New exp.add([times_list.exp, plus_rest.exp])};
 
 plus_rest {-> exp} = 
     plusop times_list {-> times_list.exp};
 
 minus_list {-> exp} = 
-    times_list minus_rest* {-> New exp.sub([minus_rest.exp])};
+    times_list minus_rest* {-> New exp.sub([times_list.exp, minus_rest.exp])};
 
 minus_rest {-> exp} = 
     minusop times_list {-> times_list.exp};
 
 times_list {-> exp} =
-    prefixexp times_rest* {-> New exp.mul([times_rest.exp])}; 
+    prefixexp times_rest* {-> New exp.mul([prefixexp.exp, times_rest.exp])}; 
 
 times_rest {-> exp} =
     timesop prefixexp {-> prefixexp.exp};
@@ -267,3 +267,10 @@ exp =
     | {prepos} [prefix]:exp [posfixs]:exp*;
 
 
+
+
+   // public void defaultIn(@SuppressWarnings("unused") Node node)
+   //  {
+   // 		String className[] = node.getClass().toString().split("\\.");
+   // 		System.out.print(className[className.length - 1] + " "); // this prints the name of the token
+   //  }
