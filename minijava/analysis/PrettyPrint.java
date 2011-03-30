@@ -29,6 +29,7 @@ import node.ANewidExp;
 import node.ANewintarrayExp;
 import node.ANotexpExp;
 import node.ANumberExp;
+import node.AParameter;
 import node.APreposExp;
 import node.APrintStatement;
 import node.AStatementlistStatement;
@@ -42,6 +43,7 @@ import node.PMethoddecl;
 import node.PParameter;
 import node.PStatement;
 import node.PVardecl;
+import node.TId;
 
 public class PrettyPrint extends DepthFirstAdapter
 {
@@ -154,6 +156,21 @@ public class PrettyPrint extends DepthFirstAdapter
     {
         print(node.getVarname().getText());
     }
+
+    public void caseAParameter(AParameter node)
+    {
+        inAParameter(node);
+        if(node.getType() != null)
+        {
+            node.getType().apply(this);
+        }
+        if(node.getId() != null)
+        {
+            print(node.getId().getText());
+        }
+        outAParameter(node);
+    }
+
 
     public void caseAMethoddecl(AMethoddecl node)
     {

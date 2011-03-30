@@ -1,6 +1,12 @@
-Package postfix;
+Package sll;
 
-Tokens number = ['0' .. '9']+;
+Helpers
+ letter = [['a' .. 'z'] + ['A' .. 'Z']];
+ digit = ['0' .. '9'];
+ letter_or_digit = [letter + digit];
+
+Tokens 
+ number = ['0' .. '9']+;
  plus = '+';
  minus = '-';
  mult = '*';
@@ -8,10 +14,8 @@ Tokens number = ['0' .. '9']+;
  l_par = '(';
  r_par = ')';
  semicolon = ';';
- letter = [['a' .. 'z'] + ['A' .. 'Z']];
- digit = ['0' .. '9'] ;
- letter_or_digit = [letter | digit];
- id = letter letter_or_digit*
+ comma = ',';
+ id = letter letter_or_digit*;
  assign = ':=';
  print = 'print';
  blank = (' ' | 13 | 10)+;
@@ -21,24 +25,21 @@ Ignored Tokens
 
 Productions
 stm = 
- {CompoundStm} stm semicolon stm |
- {AssignStm} id assign exp |
- {PrintStm} print l_par expList r_par;
+/* {compound} [stm1]:stm semicolon [stm2]:stm | */
+ {assign} id assign exp;
+/* {print} print l_par explist r_par; */
 
-Arrumar daqui pra baixo
-/*
-expr =
-  {factor} factor |
-  {plus} expr plus factor |
-  {minus} expr minus factor;
+binop = 
+ {plus} plus |
+ {minus} minus;
 
-factor =
- {term} term |
- {mult} factor mult term |
- {div} factor div term |
- {mod} factor mod term;
+exp = 
+ {id} id |
+ {num} number |
+ {op} [exp1]:exp binop [exp2]:exp;
+/* {eseq} l_par stm comma exp r_par;*/
 
-term =
- {number} number |
- {expr} l_par expr r_par; 
-*/
+explist =
+ {pair} exp comma explist |
+ {last} exp;
+
