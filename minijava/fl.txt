@@ -1,0 +1,9 @@
+testes/large/BinarySearch.java
+testes/large/BinaryTree.java
+testes/large/BubbleSort.java
+testes/large/Factorial.java
+testes/large/Heranca.java
+testes/large/LinearSearch.java
+testes/large/LinkedList.java
+testes/large/QuickSort.java
+testes/large/TreeVisitor.java
