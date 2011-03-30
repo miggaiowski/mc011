@@ -179,7 +179,7 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseAIndexExp(AIndexExp node)
+    public void caseAArraygetExp(AArraygetExp node)
     {
         defaultCase(node);
     }
@@ -435,6 +435,11 @@ public class AnalysisAdapter implements Analysis
     }
 
     public void caseTPrint(TPrint node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseTComment(TComment node)
     {
         defaultCase(node);
     }

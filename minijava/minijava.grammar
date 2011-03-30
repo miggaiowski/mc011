@@ -195,7 +195,7 @@ postfixexp_list {-> exp} =
     primary_exp postfixexp_rest* {-> New exp.prepos(primary_exp.exp, [postfixexp_rest.exp])};
 
 postfixexp_rest {-> exp} = 
-      {index} l_bracket exp r_bracket {-> exp.exp}
+      {index} l_bracket exp r_bracket {-> New exp.arrayget(exp.exp)}
     | {methodcall} dot id l_parenthese explist r_parenthese {-> New exp.methodcall(id, [explist.exp])}
     | {length} dot length {-> New exp.length()};
 
@@ -260,7 +260,7 @@ exp =
     | {mul} [factor]:exp*
     | {add} [terms]:exp*
     | {sub} [terms]:exp*
-    | {index} [pointer]:exp [offset]:exp 
+    | {arrayget} [index]:exp 
     | {length}
     | {methodcall} [id]:id [explist]:exp*
     | {number} [number]:number

@@ -2300,7 +2300,13 @@ public class Parser
         @SuppressWarnings("unused") ArrayList nodeArrayList2 = pop();
         @SuppressWarnings("unused") ArrayList nodeArrayList1 = pop();
         PExp pexpNode1;
-        pexpNode1 = (PExp)nodeArrayList2.get(0);
+        {
+            // Block
+        PExp pexpNode2;
+        pexpNode2 = (PExp)nodeArrayList2.get(0);
+
+        pexpNode1 = new AArraygetExp(pexpNode2);
+        }
 	nodeList.add(pexpNode1);
         return nodeList;
     }

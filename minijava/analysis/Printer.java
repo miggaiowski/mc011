@@ -15,7 +15,6 @@ import node.AFalseExp;
 import node.AIdExp;
 import node.AIdType;
 import node.AIfelseStatement;
-import node.AIndexExp;
 import node.AIntType;
 import node.AIntvectorType;
 import node.ALengthExp;
@@ -48,6 +47,7 @@ import node.PParameter;
 import node.PStatement;
 import node.PVardecl;
 import node.Start;
+import node.TId;
 
 public class Printer extends AnalysisAdapter
 {
@@ -493,6 +493,10 @@ public class Printer extends AnalysisAdapter
         }
         outAAttrStatement(node);
     }
+    
+    public void caseTId(TId id) {
+        System.out.println(id.toString());        
+    }
 
     public void inAArrayattrStatement(AArrayattrStatement node)
     {
@@ -573,10 +577,6 @@ public class Printer extends AnalysisAdapter
             for(PExp e : copy)
             {
             	e.apply(this);
-            	if (node.getExps().size() > 1 && !printed) {
-            		System.out.println(" <<< ");
-            		printed = true;
-                }
             }
         }
         outALessExp(node);
@@ -661,31 +661,6 @@ public class Printer extends AnalysisAdapter
             }
         }
         outASubExp(node);
-    }
-
-    public void inAIndexExp(AIndexExp node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAIndexExp(AIndexExp node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAIndexExp(AIndexExp node)
-    {
-        inAIndexExp(node);
-        if(node.getPointer() != null)
-        {
-            node.getPointer().apply(this);
-        }
-        if(node.getOffset() != null)
-        {
-            node.getOffset().apply(this);
-        }
-        outAIndexExp(node);
     }
 
     public void inALengthExp(ALengthExp node)
@@ -791,6 +766,7 @@ public class Printer extends AnalysisAdapter
     public void inAIdExp(AIdExp node)
     {
         defaultIn(node);
+        System.out.println(node.getId().toString());
     }
 
     public void outAIdExp(AIdExp node)

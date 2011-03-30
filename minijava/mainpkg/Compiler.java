@@ -3,6 +3,7 @@ import java.io.InputStreamReader;
 import java.io.PushbackReader;
 
 import analysis.DepthFirstAdapter;
+import analysis.PrettyPrint;
 import analysis.Printer;
 
 import lexer.Lexer;
@@ -32,8 +33,8 @@ public class Compiler
 			// Parse the input.                                  
 			Start tree = p.parse(); 
 			Printer printer = new Printer();
-			tree.apply(printer);
-			
+			PrettyPrint pp = new PrettyPrint();
+			tree.apply(pp);
 //			String className[];     
 //			Token token;
 //			token = lexer.next();

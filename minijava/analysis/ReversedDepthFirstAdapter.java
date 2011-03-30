@@ -610,29 +610,25 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         outASubExp(node);
     }
 
-    public void inAIndexExp(AIndexExp node)
+    public void inAArraygetExp(AArraygetExp node)
     {
         defaultIn(node);
     }
 
-    public void outAIndexExp(AIndexExp node)
+    public void outAArraygetExp(AArraygetExp node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAIndexExp(AIndexExp node)
+    public void caseAArraygetExp(AArraygetExp node)
     {
-        inAIndexExp(node);
-        if(node.getOffset() != null)
+        inAArraygetExp(node);
+        if(node.getIndex() != null)
         {
-            node.getOffset().apply(this);
+            node.getIndex().apply(this);
         }
-        if(node.getPointer() != null)
-        {
-            node.getPointer().apply(this);
-        }
-        outAIndexExp(node);
+        outAArraygetExp(node);
     }
 
     public void inALengthExp(ALengthExp node)

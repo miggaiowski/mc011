@@ -34,7 +34,7 @@ public interface Analysis extends Switch
     void caseAMulExp(AMulExp node);
     void caseAAddExp(AAddExp node);
     void caseASubExp(ASubExp node);
-    void caseAIndexExp(AIndexExp node);
+    void caseAArraygetExp(AArraygetExp node);
     void caseALengthExp(ALengthExp node);
     void caseAMethodcallExp(AMethodcallExp node);
     void caseANumberExp(ANumberExp node);
@@ -87,5 +87,6 @@ public interface Analysis extends Switch
     void caseTComma(TComma node);
     void caseTBlank(TBlank node);
     void caseTPrint(TPrint node);
+    void caseTComment(TComment node);
     void caseEOF(EOF node);
 }
