@@ -562,7 +562,7 @@ public class Printer extends AnalysisAdapter
     {
         inALessExp(node);
         {
-            List<PExp> copy = new ArrayList<PExp>(node.getLessexps());
+            List<PExp> copy = new ArrayList<PExp>(node.getExps());
             for(PExp e : copy)
             {
                 e.apply(this);

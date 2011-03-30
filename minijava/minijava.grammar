@@ -125,41 +125,34 @@ statement {-> statement} =
       {-> New statement.arrayattr(id, arrayindex.exp, righthandside.exp)};
 
 exp {-> exp} = 
-        {and} andstm_list {-> New exp.and([andstm_list.exp])}
-      | {less} less_than {-> New exp.less([less_than.exp])}
-      | {plus} plus_list {-> New exp.add([plus_list.exp])}
-      | {minus} minus_list {-> New exp.sub([minus_list.exp])}
-      | {times} times_list {-> New exp.mul([times_list.exp])}
-      | {not} notexp {-> New exp.notexp(notexp.exp)}
-      | {prepos} primary_exp postfixexp_rest* {-> New exp.prepos(primary_exp.exp, [postfixexp_rest.exp])}
-      |	{number} number {-> New exp.number(number)}
-      | {true} true {-> New exp.true()}
-      | {false} false {-> New exp.false()}
-      | {id} id {-> New exp.id(id)}
-      | {this} this {-> New exp.this()}
-      | {newintarray} new int l_bracket exp r_bracket {-> New exp.newintarray(exp)}
-      | {newid} new id l_parenthese r_parenthese {-> New exp.newid(id)}
-      | {lparexprpar} l_parenthese exp r_parenthese {-> New exp.lparexprpar(exp)};
+        {and} andstm_list {-> New exp.and([andstm_list.exp])};
+      // | {less} less_than {-> New exp.less([less_than.exp])}
+      // | {plus} plus_list {-> New exp.add([plus_list.exp])}
+      // | {minus} minus_list {-> New exp.sub([minus_list.exp])}
+      // | {times} times_list {-> New exp.mul([times_list.exp])}
+      // | {not} notexp {-> New exp.notexp(notexp.exp)}
+      // | {prepos} primary_exp postfixexp_rest* {-> New exp.prepos(primary_exp.exp, [postfixexp_rest.exp])}
+      // |	{number} number {-> New exp.number(number)}
+      // | {true} true {-> New exp.true()}
+      // | {false} false {-> New exp.false()}
+      // | {id} id {-> New exp.id(id)}
+      // | {this} this {-> New exp.this()}
+      // | {newintarray} new int l_bracket exp r_bracket {-> New exp.newintarray(exp)}
+      // | {newid} new id l_parenthese r_parenthese {-> New exp.newid(id)}
+      // | {lparexprpar} l_parenthese exp r_parenthese {-> New exp.lparexprpar(exp)};
 
 
 andstm_list {-> exp*} =
-    less_than andstm_rest+ {-> [andstm_rest.exp]};
+    less_than andstm_rest* {-> [andstm_rest.exp]};
 
-andstm_rest {-> exp} =
-    and less_than {-> less_than.exp};
-
-// less_than {-> exp} = 
-//     plus_minus_list less_than_plus_minus {-> New exp.less([less_than_plus_minus.exp])};
-
-// less_than_plus_minus {-> exp} = 
-//     less plus_minus_list {-> plus_minus_list.exp};
+andstm_rest {-> exp*} =
+      {f}and less_than {-> [less_than.exp]};
 
 less_than {-> exp} = 
-      {plusminus}[exp1]:plus_minus_list less [exp2]:plus_minus_list {-> New exp.less([exp1.exp, exp2.exp])};
+    {plusminusarg} plus_minus_list less_than_plus_minus* {-> New exp.less([less_than_plus_minus.exp])};
 
-// less_than_plus_minus {-> exp} = 
-//     less plus_minus_list {-> plus_minus_list.exp};
-
+less_than_plus_minus {-> exp} = 
+    less plus_minus_list {-> plus_minus_list.exp};
 
 plus_minus_list {-> exp} = 
       {plus_list} plus_list {-> plus_list.exp}
@@ -178,7 +171,7 @@ minus_rest {-> exp} =
     minusop times_list {-> times_list.exp};
 
 times_list {-> exp} =
-    prefixexp times_rest+ {-> New exp.mul([times_rest.exp])}; 
+    prefixexp times_rest* {-> New exp.mul([times_rest.exp])}; 
 
 times_rest {-> exp} =
     timesop prefixexp {-> prefixexp.exp};
