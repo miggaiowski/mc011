@@ -101,7 +101,6 @@ public class PrettyPrint extends DepthFirstAdapter
         println(" {");
         beginNest();
         //        node.getMainmethod().apply(this);
-        beginNest();
     }
 
     public void outAMainclass(AMainclass node)
@@ -119,7 +118,6 @@ public class PrettyPrint extends DepthFirstAdapter
     public void outAMainmethod(AMainmethod node) {
         endNest();
         println( "}");
-        endNest();
     }
 
 
