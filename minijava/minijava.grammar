@@ -134,21 +134,6 @@ statement {-> statement} =
 
 exp {-> exp} = 
         {and} andstm_list {-> New exp.and([andstm_list.exp])};
-      // | {less} less_than {-> New exp.less([less_than.exp])}
-      // | {plus} plus_list {-> New exp.add([plus_list.exp])}
-      // | {minus} minus_list {-> New exp.sub([minus_list.exp])}
-      // | {times} times_list {-> New exp.mul([times_list.exp])}
-      // | {not} notexp {-> New exp.notexp(notexp.exp)}
-      // | {prepos} primary_exp postfixexp_rest* {-> New exp.prepos(primary_exp.exp, [postfixexp_rest.exp])}
-      // |	{number} number {-> New exp.number(number)}
-      // | {true} true {-> New exp.true()}
-      // | {false} false {-> New exp.false()}
-      // | {id} id {-> New exp.id(id)}
-      // | {this} this {-> New exp.this()}
-      // | {newintarray} new int l_bracket exp r_bracket {-> New exp.newintarray(exp)}
-      // | {newid} new id l_parenthese r_parenthese {-> New exp.newid(id)}
-      // | {lparexprpar} l_parenthese exp r_parenthese {-> New exp.lparexprpar(exp)};
-
 
 andstm_list {-> exp*} =
     less_than andstm_rest* {-> [less_than.exp, andstm_rest.exp]};
@@ -273,12 +258,3 @@ exp =
     | {notexp} [exp]:exp
     | {lparexprpar} [exp]:exp
     | {prepos} [prefix]:exp [posfixs]:exp*;
-
-
-
-
-   // public void defaultIn(@SuppressWarnings("unused") Node node)
-   //  {
-   // 		String className[] = node.getClass().toString().split("\\.");
-   // 		System.out.print(className[className.length - 1] + " "); // this prints the name of the token
-   //  }
