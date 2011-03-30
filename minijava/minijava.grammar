@@ -146,10 +146,10 @@ andstm_list {-> exp*} =
     less_than andstm_rest* {-> [andstm_rest.exp]};
 
 andstm_rest {-> exp*} =
-      {f}and less_than {-> [less_than.exp]};
+    and less_than {-> [less_than.exp]};
 
 less_than {-> exp} = 
-    {plusminusarg} plus_minus_list less_than_plus_minus* {-> New exp.less([less_than_plus_minus.exp])};
+    plus_minus_list less_than_plus_minus* {-> New exp.less([less_than_plus_minus.exp])};
 
 less_than_plus_minus {-> exp} = 
     less plus_minus_list {-> plus_minus_list.exp};
