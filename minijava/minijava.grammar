@@ -1,6 +1,10 @@
 Helpers
 letter = [['a' .. 'z'] + ['A' .. 'Z']];
 digit = ['0' .. '9'];
+all = [1 .. 127];
+all_but_newline = [all - 10];
+not_star = [all - '*'];
+not_star_slash = [not_star - '/'];
 
 Tokens 
 classn = 'class';
@@ -48,7 +52,11 @@ blank = (' ' | 10 | 13 | 9)*;
 
 print = 'System.out.println';
 
+comment = '//' all_but_newline* 10 
+       |  '/*' not_star* '*'+ (not_star_slash not_star* '*'+)* '/';
+
 Ignored Tokens
+comment,
 blank;
 
 Productions
