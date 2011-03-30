@@ -100,7 +100,7 @@ public class PrettyPrint extends DepthFirstAdapter
         print("class " + node.getClassname().getText());
         println(" {");
         beginNest();
-//        node.getMainmethod().apply(this);
+        //        node.getMainmethod().apply(this);
         beginNest();
     }
 
@@ -122,7 +122,7 @@ public class PrettyPrint extends DepthFirstAdapter
         endNest();
     }
 
-    
+
     public void caseAClassdecl(AClassdecl node)
     {
         inAClassdecl(node);
@@ -339,7 +339,7 @@ public class PrettyPrint extends DepthFirstAdapter
     public void caseAAndExp(AAndExp node)
     {
         inAAndExp(node);
-       
+
         if (node.getAndexps().size() > 1) {
             for (int i = 0; i < node.getAndexps().size(); i++) {
                 node.getAndexps().get(i).apply(this);
@@ -356,7 +356,7 @@ public class PrettyPrint extends DepthFirstAdapter
     public void caseALessExp(ALessExp node)
     {
         inALessExp(node);
-        
+
         if (node.getExps().size() > 1) {
             for (int i = 0; i < node.getExps().size(); i++) {
                 node.getExps().get(i).apply(this);
@@ -370,10 +370,10 @@ public class PrettyPrint extends DepthFirstAdapter
         outALessExp(node);
     }
 
-    public void caseAddExp(AAddExp node)
+    public void caseAAddExp(AAddExp node)
     {
         inAAddExp(node);
-        
+
         if (node.getTerms().size() > 1) {
             for (int i = 0; i < node.getTerms().size(); i++) {
                 node.getTerms().get(i).apply(this);
@@ -390,7 +390,7 @@ public class PrettyPrint extends DepthFirstAdapter
     public void caseASubExp(ASubExp node)
     {
         inASubExp(node);
-        
+
         if (node.getTerms().size() > 1) {
             for (int i = 0; i < node.getTerms().size(); i++) {
                 node.getTerms().get(i).apply(this);
@@ -400,7 +400,7 @@ public class PrettyPrint extends DepthFirstAdapter
         }
         else
             node.getTerms().get(0).apply(this);
-        
+
         outASubExp(node);
     }
 
@@ -418,17 +418,14 @@ public class PrettyPrint extends DepthFirstAdapter
         }
         else
             node.getFactor().get(0).apply(this);
-        
+
         outAMulExp(node);
     }
 
-public void caseAArraygetExp(AArraygetExp node)
-    {
+    public void caseAArraygetExp(AArraygetExp node) {
+
         inAArraygetExp(node);
-        if(node.getIndex() != null)
-        {
-            node.getIndex().apply(this);
-        }
+
         print( "[" );
         if(node.getIndex() != null)
         {
@@ -444,7 +441,7 @@ public void caseAArraygetExp(AArraygetExp node)
         print(".length");
         outALengthExp(node);
     }
-    
+
     public void caseAMethodcallExp(AMethodcallExp node)
     {
         inAMethodcallExp(node);
@@ -458,24 +455,22 @@ public void caseAArraygetExp(AArraygetExp node)
         print(")");
         outAMethodcallExp(node);
     }
-    
+
     public void caseAPreposExp(APreposExp node)
     {
         inAPreposExp(node);
-        if(node.getPrefix() != null)
-        {
+        
+        if(node.getPrefix() != null) {
             node.getPrefix().apply(this);
         }
-        {
-            List<PExp> copy = new ArrayList<PExp>(node.getPosfixs());
-            for(PExp e : copy)
-            {
-                e.apply(this);
-            }
+        List<PExp> copy = new ArrayList<PExp>(node.getPosfixs());
+        for(PExp e : copy) {
+            e.apply(this);
         }
+        
         outAPreposExp(node);
     }
-    
+
     public void inANotexpExp(ANotexpExp node)
     {
         print( "!" );
