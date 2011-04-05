@@ -1,0 +1,4 @@
+Rode o script 'compile.sh' para gerar os arquivos do Sablecc e compilar todos os arquivos '.java' 
+Rode o script pp.sh <pasta> para rodar os testes em <pasta>/in, salvando a saida em <pasta>/out
+
+
