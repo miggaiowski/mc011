@@ -9,5 +9,5 @@ for i in `find ./node/ -name *.java`; do echo $i; javac $i; done
 for i in `find ./mainpkg/ -name *.java`; do echo $i; javac $i; done
 echo "--- Compiling finished."
 echo "--- Type 'java mainpkg/Compiler' to run the application"
-echo "--- Type './pp.sh <directory>' to execute all tests" 
+echo "--- Type './pp.sh <path/to/directory>' to execute all tests" 
 #FIM DO SCRIPT#
