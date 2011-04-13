@@ -5,45 +5,45 @@ package node;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class ANotexpExp extends PExp
+public final class ANewObjectExp extends PExp
 {
-    private PExp _exp_;
+    private TId _id_;
 
-    public ANotexpExp()
+    public ANewObjectExp()
     {
         // Constructor
     }
 
-    public ANotexpExp(
-        @SuppressWarnings("hiding") PExp _exp_)
+    public ANewObjectExp(
+        @SuppressWarnings("hiding") TId _id_)
     {
         // Constructor
-        setExp(_exp_);
+        setId(_id_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new ANotexpExp(
-            cloneNode(this._exp_));
+        return new ANewObjectExp(
+            cloneNode(this._id_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseANotexpExp(this);
+        ((Analysis) sw).caseANewObjectExp(this);
     }
 
-    public PExp getExp()
+    public TId getId()
     {
-        return this._exp_;
+        return this._id_;
     }
 
-    public void setExp(PExp node)
+    public void setId(TId node)
     {
-        if(this._exp_ != null)
+        if(this._id_ != null)
         {
-            this._exp_.parent(null);
+            this._id_.parent(null);
         }
 
         if(node != null)
@@ -56,23 +56,23 @@ public final class ANotexpExp extends PExp
             node.parent(this);
         }
 
-        this._exp_ = node;
+        this._id_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._exp_);
+            + toString(this._id_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._exp_ == child)
+        if(this._id_ == child)
         {
-            this._exp_ = null;
+            this._id_ = null;
             return;
         }
 
@@ -83,9 +83,9 @@ public final class ANotexpExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._exp_ == oldChild)
+        if(this._id_ == oldChild)
         {
-            setExp((PExp) newChild);
+            setId((TId) newChild);
             return;
         }
 

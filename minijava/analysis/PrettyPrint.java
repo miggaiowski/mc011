@@ -6,39 +6,14 @@ import node.*;
 
 public class PrettyPrint extends DepthFirstAdapter
 {
-	PrintStream out;
-
 	private int ident;
+
+	PrintStream out;
 	private boolean printSpace;
 
-	private void beginNest()
+	public PrettyPrint()
 	{
-		ident += 4;
-	}
-
-	private void endNest()
-	{
-		ident -= 4;
-	}
-
-	private void print(String s)
-	{
-		if ( printSpace )
-			for (int i = 0; i < ident; i++ )
-				out.print(" ");
-		out.print(s);
-
-		printSpace = false;
-	}
-
-	private void println(String s)
-	{
-		if ( printSpace )
-			for (int i = 0; i < ident; i++ )
-				out.print(" ");
-		out.println(s);
-
-		printSpace = true;
+		this(System.out);
 	}
 
 	public PrettyPrint(PrintStream p)
@@ -49,54 +24,74 @@ public class PrettyPrint extends DepthFirstAdapter
 		printSpace = true;
 	}
 
-	public PrettyPrint()
+	private void beginNest()
 	{
-		this(System.out);
+		ident += 4;
 	}
 
-	public void inAMainClass(AMainClass node)
+	public void caseAAndExp(AAndExp node)
 	{
-		print("class " + node.getClassName().getText());
-		println(" {");
-		beginNest();
-
-		print( "public static void main(String[] " + node.getMainArgName().getText());
-		println( ") {");
-		beginNest();
-	}
-
-	public void outAMainClass(AMainClass node)
-	{
-		endNest();
-		println("}");
-		endNest();
-		println("}");
-	}
-
-	public void caseASimpleClassDecl(ASimpleClassDecl node)
-	{
-		inASimpleClassDecl(node);
-		print("class " + node.getClassName().getText());
-		println( " {" );
-		beginNest();
+		inAAndExp(node);
+		if(node.getLeft() != null)
 		{
-			List<PVarDecl> copy = new ArrayList<PVarDecl>(node.getVarDecl());
-			for(PVarDecl e : copy)
-			{
-				e.apply(this);
-				println(";");
-			}
+			node.getLeft().apply(this);
 		}
+		print( " && ");
+		if(node.getRight() != null)
 		{
-			List<PMethodDecl> copy = new ArrayList<PMethodDecl>(node.getMethodDecl());
-			for(PMethodDecl e : copy)
-			{
-				e.apply(this);
-			}
+			node.getRight().apply(this);
 		}
-		endNest();
-		println("}");
-		outASimpleClassDecl(node);
+		outAAndExp(node);
+	}
+
+	public void caseAArrayAssignStatement(AArrayAssignStatement node)
+	{
+		inAArrayAssignStatement(node);
+		print(node.getId().getText() + "[" );
+		if(node.getArrayindex() != null)
+		{
+			node.getArrayindex().apply(this);
+		}
+		print( "] = " );
+		if(node.getValue() != null)
+		{
+			node.getValue().apply(this);
+		}
+		println( ";" );
+		outAArrayAssignStatement(node);
+	}
+
+	public void caseAAssignStatement(AAssignStatement node)
+	{
+		inAAssignStatement(node);
+		print(node.getId().getText() + " = " );
+		if(node.getExp() != null)
+		{
+			node.getExp().apply(this);
+		}
+		println( ";" );
+		outAAssignStatement(node);
+	}
+
+	public void caseACallExp(ACallExp node)
+	{
+		inACallExp(node);
+		if(node.getObject() != null)
+		{
+			node.getObject().apply(this);
+		}
+		print("." + node.getMethodName().getText() + "(");
+		List<PExp> copy = new ArrayList<PExp>(node.getArgs());
+		if(copy.size()>0){
+			for(int i = 0; i<copy.size()-1; i++)
+			{
+				copy.get(i).apply(this);
+				print(", ");
+			}
+			copy.get(copy.size()-1).apply(this);
+		}
+		print(")");
+		outACallExp(node);
 	}
 
 	public void caseAExtendsClassDecl(AExtendsClassDecl node)
@@ -126,9 +121,69 @@ public class PrettyPrint extends DepthFirstAdapter
 		outAExtendsClassDecl(node);
 	}
 
-	public void outAVarDecl(AVarDecl node)
+	public void caseAIfStatement(AIfStatement node) {
+		inAIfStatement(node);
+		print( "if (" );
+		if (node.getIfexp() != null) {
+			node.getIfexp().apply(this);
+		}
+		println(") {");
+		beginNest();
+		if(node.getIfstatement() != null) {
+			node.getIfstatement().apply(this);
+		}
+		endNest();
+		println("}");
+		println("else {");
+		beginNest();
+		if(node.getElsestatement() != null) {
+			node.getElsestatement().apply(this);
+		}
+		endNest();
+		println("}");
+		outAIfStatement(node);
+	}
+
+	public void caseALengthExp(AArrayLengthExp node)
 	{
-		print(node.getVarName().getText());
+		inAArrayLengthExp(node);
+		if(node.getExp() != null)
+		{
+			node.getExp().apply(this);
+		}
+		print(".length");
+		outAArrayLengthExp(node);
+	}
+
+	public void caseALessThanExp(ALessThanExp node)
+	{
+		inALessThanExp(node);
+		if(node.getLeft() != null)
+		{
+			node.getLeft().apply(this);
+		}
+		print( " < ");
+		if(node.getRight() != null)
+		{
+			node.getRight().apply(this);
+		}
+		outALessThanExp(node);
+	}
+
+	public void caseALookupExp(AArrayLookupExp node)
+	{
+		inAArrayLookupExp(node);
+		if(node.getExp() != null)
+		{
+			node.getExp().apply(this);
+		}
+		print( "[" );
+		if(node.getIndex() != null)
+		{
+			node.getIndex().apply(this);
+		}
+		print( "]" );
+		outAArrayLookupExp(node);
 	}
 
 	public void caseAMethodDecl(AMethodDecl node)
@@ -181,138 +236,19 @@ public class PrettyPrint extends DepthFirstAdapter
 		outAMethodDecl(node);
 	}
 
-	public void inAIntArrayType(AIntArrayType node)
+	public void caseAMinusExp(AMinusExp node)
 	{
-		print("int[] ");
-	}
-
-	public void inABooleanType(ABooleanType node)
-	{
-		print("boolean ");
-	}
-
-	public void inAIntType(AIntegerType node)
-	{
-		print("int ");
-	}
-
-	public void inAIdType(AIdentifierType node)
-	{
-		print(node.getId().getText() + " ");
-	}
-
-	public void inABlockStatement(ABlockStatement node)
-	{
-		println("{");
-		beginNest();
-	}
-
-	public void outABlockStatement(ABlockStatement node)
-	{
-		endNest();
-		println("}");
-	}
-
-	public void caseAIfStatement(AIfStatement node) {
-		inAIfStatement(node);
-		print( "if (" );
-		if (node.getIfexp() != null) {
-			node.getIfexp().apply(this);
-		}
-		print(") ");
-		if(node.getIfstatement() != null) {
-			node.getIfstatement().apply(this);
-		}
-		if(node.getElsestatement() != null) {
-			print("else ");
-			node.getElsestatement().apply(this);
-		}
-		outAIfStatement(node);
-	}
-
-	public void caseAWhileStatement(AWhileStatement node)
-	{
-		inAWhileStatement(node);
-		print( "while(" );
-		if(node.getCondition() != null)
-		{
-			node.getCondition().apply(this);
-		}
-		print( ") " );
-		if(node.getBody() != null)
-		{
-			node.getBody().apply(this);
-		}
-		outAWhileStatement(node);
-	}
-
-	public void inAPrintStatement(APrintStatement node)
-	{
-		print( "System.out.println(" );
-	}
-
-	public void outAPrintStatement(APrintStatement node)
-	{
-		println( ");" );
-	}
-
-	public void caseAAssignStatement(AAssignStatement node)
-	{
-		inAAssignStatement(node);
-		print(node.getVar().getText() + " = " );
-		if(node.getValue() != null)
-		{
-			node.getValue().apply(this);
-		}
-		println( ";" );
-		outAAssignStatement(node);
-	}
-
-	public void caseAArrayAssignStatement(AArrayAssignStatement node)
-	{
-		inAArrayAssignStatement(node);
-		print(node.getVar().getText() + "[" );
-		if(node.getIndex() != null)
-		{
-			node.getIndex().apply(this);
-		}
-		print( "] = " );
-		if(node.getValue() != null)
-		{
-			node.getValue().apply(this);
-		}
-		println( ";" );
-		outAArrayAssignStatement(node);
-	}
-
-	public void caseAAndExp(AAndExp node)
-	{
-		inAAndExp(node);
+		inAMinusExp(node);
 		if(node.getLeft() != null)
 		{
 			node.getLeft().apply(this);
 		}
-		print( " && ");
+		print( " - ");
 		if(node.getRight() != null)
 		{
 			node.getRight().apply(this);
 		}
-		outAAndExp(node);
-	}
-
-	public void caseALessExp(ALessExp node)
-	{
-		inALessExp(node);
-		if(node.getLeft() != null)
-		{
-			node.getLeft().apply(this);
-		}
-		print( " < ");
-		if(node.getRight() != null)
-		{
-			node.getRight().apply(this);
-		}
-		outALessExp(node);
+		outAMinusExp(node);
 	}
 
 	public void caseAPlusExp(APlusExp node)
@@ -330,19 +266,30 @@ public class PrettyPrint extends DepthFirstAdapter
 		outAPlusExp(node);
 	}
 
-	public void caseAMinusExp(AMinusExp node)
+	public void caseASimpleClassDecl(ASimpleClassDecl node)
 	{
-		inAMinusExp(node);
-		if(node.getLeft() != null)
+		inASimpleClassDecl(node);
+		print("class " + node.getClassName().getText());
+		println( " {" );
+		beginNest();
 		{
-			node.getLeft().apply(this);
+			List<PVarDecl> copy = new ArrayList<PVarDecl>(node.getVarDecl());
+			for(PVarDecl e : copy)
+			{
+				e.apply(this);
+				println(";");
+			}
 		}
-		print( " - ");
-		if(node.getRight() != null)
 		{
-			node.getRight().apply(this);
+			List<PMethodDecl> copy = new ArrayList<PMethodDecl>(node.getMethodDecl());
+			for(PMethodDecl e : copy)
+			{
+				e.apply(this);
+			}
 		}
-		outAMinusExp(node);
+		endNest();
+		println("}");
+		outASimpleClassDecl(node);
 	}
 
 	@Override
@@ -361,78 +308,36 @@ public class PrettyPrint extends DepthFirstAdapter
 		outATimesExp(node);
 	}
 
-
-	public void caseALookupExp(ALookupExp node)
+	public void caseAWhileStatement(AWhileStatement node)
 	{
-		inALookupExp(node);
-		if(node.getBase() != null)
+		inAWhileStatement(node);
+		print( "while(" );
+		if(node.getWhileexp() != null)
 		{
-			node.getBase().apply(this);
+			node.getWhileexp().apply(this);
 		}
-		print( "[" );
-		if(node.getIndex() != null)
+		print( ") " );
+		if(node.getStatement() != null)
 		{
-			node.getIndex().apply(this);
+			node.getStatement().apply(this);
 		}
-		print( "]" );
-		outALookupExp(node);
+		outAWhileStatement(node);
 	}
 
-	public void caseALengthExp(ALengthExp node)
+	private void endNest()
 	{
-		inALengthExp(node);
-		if(node.getExp() != null)
-		{
-			node.getExp().apply(this);
-		}
-		print(".length");
-		outALengthExp(node);
+		ident -= 4;
 	}
 
-	public void caseAMemberExp(AMemberExp node)
+	public void inABlockStatement(ABlockStatement node)
 	{
-		inAMemberExp(node);
-		if(node.getObject() != null)
-		{
-			node.getObject().apply(this);
-		}
-		print("." + node.getMemberName().getText() + "(");
-		List<PExp> copy = new ArrayList<PExp>(node.getArgs());
-		if(copy.size()>0){
-			for(int i = 0; i<copy.size()-1; i++)
-			{
-				copy.get(i).apply(this);
-				print(", ");
-			}
-			copy.get(copy.size()-1).apply(this);
-		}
-		print(")");
-		outAMemberExp(node);
+		println("{");
+		beginNest();
 	}
 
-	public void inANotExp(ANotExp node)
+	public void inABooleanType(ABooleanType node)
 	{
-		print( "!" );
-	}
-
-	public void inAParenExp(AParenExp node)
-	{
-		print("(");
-	}
-
-	public void outAParenExp(AParenExp node)
-	{
-		print(")");
-	}
-
-	public void inAIntegerExp(AIntegerExp node)
-	{
-		print(node.getInteger().getText());
-	}
-
-	public void inATrueExp(ATrueExp node)
-	{
-		print("true");
+		print("boolean ");
 	}
 
 	public void inAFalseExp(AFalseExp node)
@@ -440,14 +345,40 @@ public class PrettyPrint extends DepthFirstAdapter
 		print("false");
 	}
 
-	public void inAIdExp(AIdExp node)
+	public void inAIdentifierExp(AIdentifierExp node)
 	{
 		print(node.getId().getText());
 	}
 
-	public void inAThisExp(AThisExp node)
+	public void inAIdType(AIdentifierType node)
 	{
-		print("this");
+		print(node.getId().getText() + " ");
+	}
+
+	public void inAIntArrayType(AIntArrayType node)
+	{
+		print("int[] ");
+	}
+
+	public void inAIntegerLiteralExp(AIntegerLiteralExp node)
+	{
+		print(node.getNumber().getText());
+	}
+
+	public void inAIntegerType(AIntegerType node)
+	{
+		print("int ");
+	}
+
+	public void inAMainClass(AMainClass node)
+	{
+		print("class " + node.getClassName().getText());
+		println(" {");
+		beginNest();
+
+		print( "public static void main(String[] " + node.getMainArgName().getText());
+		println( ") {");
+		beginNest();
 	}
 
 	public void inANewArrayExp(ANewArrayExp node)
@@ -455,13 +386,88 @@ public class PrettyPrint extends DepthFirstAdapter
 		print( "new int[" );
 	}
 
+
+	public void inANewObjectExp(ANewObjectExp node)
+	{
+		print( "new " + node.getId().getText() + "()");
+	}
+
+	public void inANotExp(ANotExp node)
+	{
+		print( "!" );
+	}
+
+	public void inAPrintStatement(APrintStatement node)
+	{
+		print( "System.out.println(" );
+	}
+
+	public void inAThisExp(AThisExp node)
+	{
+		print("this");
+	}
+
+//	public void inAParenExp(AParenExp node)
+//	{
+//		print("(");
+//	}
+//
+//	public void outAParenExp(AParenExp node)
+//	{
+//		print(")");
+//	}
+
+	public void inATrueExp(ATrueExp node)
+	{
+		print("true");
+	}
+
+	public void outABlockStatement(ABlockStatement node)
+	{
+		endNest();
+		println("}");
+	}
+
+	public void outAMainClass(AMainClass node)
+	{
+		endNest();
+		println("}");
+		endNest();
+		println("}");
+	}
+
 	public void outANewArrayExp(ANewArrayExp node)
 	{
 		print( "]" );
 	}
 
-	public void inANewObjectExp(ANewObjectExp node)
+	public void outAPrintStatement(APrintStatement node)
 	{
-		print( "new " + node.getClassName().getText() + "()");
+		println( ");" );
+	}
+
+	public void outAVarDecl(AVarDecl node)
+	{
+		print(node.getVarName().getText());
+	}
+
+	private void print(String s)
+	{
+		if ( printSpace )
+			for (int i = 0; i < ident; i++ )
+				out.print(" ");
+		out.print(s);
+
+		printSpace = false;
+	}
+
+	private void println(String s)
+	{
+		if ( printSpace )
+			for (int i = 0; i < ident; i++ )
+				out.print(" ");
+		out.println(s);
+
+		printSpace = true;
 	}
 }

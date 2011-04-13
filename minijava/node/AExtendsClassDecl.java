@@ -6,60 +6,60 @@ import java.util.*;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class AClassdecl extends PClassdecl
+public final class AExtendsClassDecl extends PClassDecl
 {
-    private TId _classname_;
+    private TId _className_;
     private TId _super_;
-    private final LinkedList<PVardecl> _vars_ = new LinkedList<PVardecl>();
-    private final LinkedList<PMethoddecl> _methods_ = new LinkedList<PMethoddecl>();
+    private final LinkedList<PVarDecl> _varDecl_ = new LinkedList<PVarDecl>();
+    private final LinkedList<PMethodDecl> _methodDecl_ = new LinkedList<PMethodDecl>();
 
-    public AClassdecl()
+    public AExtendsClassDecl()
     {
         // Constructor
     }
 
-    public AClassdecl(
-        @SuppressWarnings("hiding") TId _classname_,
+    public AExtendsClassDecl(
+        @SuppressWarnings("hiding") TId _className_,
         @SuppressWarnings("hiding") TId _super_,
-        @SuppressWarnings("hiding") List<PVardecl> _vars_,
-        @SuppressWarnings("hiding") List<PMethoddecl> _methods_)
+        @SuppressWarnings("hiding") List<PVarDecl> _varDecl_,
+        @SuppressWarnings("hiding") List<PMethodDecl> _methodDecl_)
     {
         // Constructor
-        setClassname(_classname_);
+        setClassName(_className_);
 
         setSuper(_super_);
 
-        setVars(_vars_);
+        setVarDecl(_varDecl_);
 
-        setMethods(_methods_);
+        setMethodDecl(_methodDecl_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AClassdecl(
-            cloneNode(this._classname_),
+        return new AExtendsClassDecl(
+            cloneNode(this._className_),
             cloneNode(this._super_),
-            cloneList(this._vars_),
-            cloneList(this._methods_));
+            cloneList(this._varDecl_),
+            cloneList(this._methodDecl_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAClassdecl(this);
+        ((Analysis) sw).caseAExtendsClassDecl(this);
     }
 
-    public TId getClassname()
+    public TId getClassName()
     {
-        return this._classname_;
+        return this._className_;
     }
 
-    public void setClassname(TId node)
+    public void setClassName(TId node)
     {
-        if(this._classname_ != null)
+        if(this._className_ != null)
         {
-            this._classname_.parent(null);
+            this._className_.parent(null);
         }
 
         if(node != null)
@@ -72,7 +72,7 @@ public final class AClassdecl extends PClassdecl
             node.parent(this);
         }
 
-        this._classname_ = node;
+        this._className_ = node;
     }
 
     public TId getSuper()
@@ -100,16 +100,16 @@ public final class AClassdecl extends PClassdecl
         this._super_ = node;
     }
 
-    public LinkedList<PVardecl> getVars()
+    public LinkedList<PVarDecl> getVarDecl()
     {
-        return this._vars_;
+        return this._varDecl_;
     }
 
-    public void setVars(List<PVardecl> list)
+    public void setVarDecl(List<PVarDecl> list)
     {
-        this._vars_.clear();
-        this._vars_.addAll(list);
-        for(PVardecl e : list)
+        this._varDecl_.clear();
+        this._varDecl_.addAll(list);
+        for(PVarDecl e : list)
         {
             if(e.parent() != null)
             {
@@ -120,16 +120,16 @@ public final class AClassdecl extends PClassdecl
         }
     }
 
-    public LinkedList<PMethoddecl> getMethods()
+    public LinkedList<PMethodDecl> getMethodDecl()
     {
-        return this._methods_;
+        return this._methodDecl_;
     }
 
-    public void setMethods(List<PMethoddecl> list)
+    public void setMethodDecl(List<PMethodDecl> list)
     {
-        this._methods_.clear();
-        this._methods_.addAll(list);
-        for(PMethoddecl e : list)
+        this._methodDecl_.clear();
+        this._methodDecl_.addAll(list);
+        for(PMethodDecl e : list)
         {
             if(e.parent() != null)
             {
@@ -144,19 +144,19 @@ public final class AClassdecl extends PClassdecl
     public String toString()
     {
         return ""
-            + toString(this._classname_)
+            + toString(this._className_)
             + toString(this._super_)
-            + toString(this._vars_)
-            + toString(this._methods_);
+            + toString(this._varDecl_)
+            + toString(this._methodDecl_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._classname_ == child)
+        if(this._className_ == child)
         {
-            this._classname_ = null;
+            this._className_ = null;
             return;
         }
 
@@ -166,12 +166,12 @@ public final class AClassdecl extends PClassdecl
             return;
         }
 
-        if(this._vars_.remove(child))
+        if(this._varDecl_.remove(child))
         {
             return;
         }
 
-        if(this._methods_.remove(child))
+        if(this._methodDecl_.remove(child))
         {
             return;
         }
@@ -183,9 +183,9 @@ public final class AClassdecl extends PClassdecl
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._classname_ == oldChild)
+        if(this._className_ == oldChild)
         {
-            setClassname((TId) newChild);
+            setClassName((TId) newChild);
             return;
         }
 
@@ -195,13 +195,13 @@ public final class AClassdecl extends PClassdecl
             return;
         }
 
-        for(ListIterator<PVardecl> i = this._vars_.listIterator(); i.hasNext();)
+        for(ListIterator<PVarDecl> i = this._varDecl_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {
                 if(newChild != null)
                 {
-                    i.set((PVardecl) newChild);
+                    i.set((PVarDecl) newChild);
                     newChild.parent(this);
                     oldChild.parent(null);
                     return;
@@ -213,13 +213,13 @@ public final class AClassdecl extends PClassdecl
             }
         }
 
-        for(ListIterator<PMethoddecl> i = this._methods_.listIterator(); i.hasNext();)
+        for(ListIterator<PMethodDecl> i = this._methodDecl_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {
                 if(newChild != null)
                 {
-                    i.set((PMethoddecl) newChild);
+                    i.set((PMethodDecl) newChild);
                     newChild.parent(this);
                     oldChild.parent(null);
                     return;

@@ -5,19 +5,23 @@ package node;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class ANewintarrayExp extends PExp
+public final class AAssignStatement extends PStatement
 {
+    private TId _id_;
     private PExp _exp_;
 
-    public ANewintarrayExp()
+    public AAssignStatement()
     {
         // Constructor
     }
 
-    public ANewintarrayExp(
+    public AAssignStatement(
+        @SuppressWarnings("hiding") TId _id_,
         @SuppressWarnings("hiding") PExp _exp_)
     {
         // Constructor
+        setId(_id_);
+
         setExp(_exp_);
 
     }
@@ -25,13 +29,39 @@ public final class ANewintarrayExp extends PExp
     @Override
     public Object clone()
     {
-        return new ANewintarrayExp(
+        return new AAssignStatement(
+            cloneNode(this._id_),
             cloneNode(this._exp_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseANewintarrayExp(this);
+        ((Analysis) sw).caseAAssignStatement(this);
+    }
+
+    public TId getId()
+    {
+        return this._id_;
+    }
+
+    public void setId(TId node)
+    {
+        if(this._id_ != null)
+        {
+            this._id_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._id_ = node;
     }
 
     public PExp getExp()
@@ -63,6 +93,7 @@ public final class ANewintarrayExp extends PExp
     public String toString()
     {
         return ""
+            + toString(this._id_)
             + toString(this._exp_);
     }
 
@@ -70,6 +101,12 @@ public final class ANewintarrayExp extends PExp
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
+        if(this._id_ == child)
+        {
+            this._id_ = null;
+            return;
+        }
+
         if(this._exp_ == child)
         {
             this._exp_ = null;
@@ -83,6 +120,12 @@ public final class ANewintarrayExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
+        if(this._id_ == oldChild)
+        {
+            setId((TId) newChild);
+            return;
+        }
+
         if(this._exp_ == oldChild)
         {
             setExp((PExp) newChild);

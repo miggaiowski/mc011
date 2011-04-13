@@ -8,8 +8,8 @@ import analysis.*;
 @SuppressWarnings("nls")
 public final class AProgram extends PProgram
 {
-    private PMainclass _mainclass_;
-    private final LinkedList<PClassdecl> _classdecl_ = new LinkedList<PClassdecl>();
+    private PMainClass _mainClass_;
+    private final LinkedList<PClassDecl> _classDecl_ = new LinkedList<PClassDecl>();
 
     public AProgram()
     {
@@ -17,13 +17,13 @@ public final class AProgram extends PProgram
     }
 
     public AProgram(
-        @SuppressWarnings("hiding") PMainclass _mainclass_,
-        @SuppressWarnings("hiding") List<PClassdecl> _classdecl_)
+        @SuppressWarnings("hiding") PMainClass _mainClass_,
+        @SuppressWarnings("hiding") List<PClassDecl> _classDecl_)
     {
         // Constructor
-        setMainclass(_mainclass_);
+        setMainClass(_mainClass_);
 
-        setClassdecl(_classdecl_);
+        setClassDecl(_classDecl_);
 
     }
 
@@ -31,8 +31,8 @@ public final class AProgram extends PProgram
     public Object clone()
     {
         return new AProgram(
-            cloneNode(this._mainclass_),
-            cloneList(this._classdecl_));
+            cloneNode(this._mainClass_),
+            cloneList(this._classDecl_));
     }
 
     public void apply(Switch sw)
@@ -40,16 +40,16 @@ public final class AProgram extends PProgram
         ((Analysis) sw).caseAProgram(this);
     }
 
-    public PMainclass getMainclass()
+    public PMainClass getMainClass()
     {
-        return this._mainclass_;
+        return this._mainClass_;
     }
 
-    public void setMainclass(PMainclass node)
+    public void setMainClass(PMainClass node)
     {
-        if(this._mainclass_ != null)
+        if(this._mainClass_ != null)
         {
-            this._mainclass_.parent(null);
+            this._mainClass_.parent(null);
         }
 
         if(node != null)
@@ -62,19 +62,19 @@ public final class AProgram extends PProgram
             node.parent(this);
         }
 
-        this._mainclass_ = node;
+        this._mainClass_ = node;
     }
 
-    public LinkedList<PClassdecl> getClassdecl()
+    public LinkedList<PClassDecl> getClassDecl()
     {
-        return this._classdecl_;
+        return this._classDecl_;
     }
 
-    public void setClassdecl(List<PClassdecl> list)
+    public void setClassDecl(List<PClassDecl> list)
     {
-        this._classdecl_.clear();
-        this._classdecl_.addAll(list);
-        for(PClassdecl e : list)
+        this._classDecl_.clear();
+        this._classDecl_.addAll(list);
+        for(PClassDecl e : list)
         {
             if(e.parent() != null)
             {
@@ -89,21 +89,21 @@ public final class AProgram extends PProgram
     public String toString()
     {
         return ""
-            + toString(this._mainclass_)
-            + toString(this._classdecl_);
+            + toString(this._mainClass_)
+            + toString(this._classDecl_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._mainclass_ == child)
+        if(this._mainClass_ == child)
         {
-            this._mainclass_ = null;
+            this._mainClass_ = null;
             return;
         }
 
-        if(this._classdecl_.remove(child))
+        if(this._classDecl_.remove(child))
         {
             return;
         }
@@ -115,19 +115,19 @@ public final class AProgram extends PProgram
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._mainclass_ == oldChild)
+        if(this._mainClass_ == oldChild)
         {
-            setMainclass((PMainclass) newChild);
+            setMainClass((PMainClass) newChild);
             return;
         }
 
-        for(ListIterator<PClassdecl> i = this._classdecl_.listIterator(); i.hasNext();)
+        for(ListIterator<PClassDecl> i = this._classDecl_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {
                 if(newChild != null)
                 {
-                    i.set((PClassdecl) newChild);
+                    i.set((PClassDecl) newChild);
                     newChild.parent(this);
                     oldChild.parent(null);
                     return;

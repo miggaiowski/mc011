@@ -5,43 +5,43 @@ package node;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class AArrayattrStatement extends PStatement
+public final class AArrayAssignStatement extends PStatement
 {
     private TId _id_;
     private PExp _arrayindex_;
-    private PExp _righthandside_;
+    private PExp _value_;
 
-    public AArrayattrStatement()
+    public AArrayAssignStatement()
     {
         // Constructor
     }
 
-    public AArrayattrStatement(
+    public AArrayAssignStatement(
         @SuppressWarnings("hiding") TId _id_,
         @SuppressWarnings("hiding") PExp _arrayindex_,
-        @SuppressWarnings("hiding") PExp _righthandside_)
+        @SuppressWarnings("hiding") PExp _value_)
     {
         // Constructor
         setId(_id_);
 
         setArrayindex(_arrayindex_);
 
-        setRighthandside(_righthandside_);
+        setValue(_value_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AArrayattrStatement(
+        return new AArrayAssignStatement(
             cloneNode(this._id_),
             cloneNode(this._arrayindex_),
-            cloneNode(this._righthandside_));
+            cloneNode(this._value_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAArrayattrStatement(this);
+        ((Analysis) sw).caseAArrayAssignStatement(this);
     }
 
     public TId getId()
@@ -94,16 +94,16 @@ public final class AArrayattrStatement extends PStatement
         this._arrayindex_ = node;
     }
 
-    public PExp getRighthandside()
+    public PExp getValue()
     {
-        return this._righthandside_;
+        return this._value_;
     }
 
-    public void setRighthandside(PExp node)
+    public void setValue(PExp node)
     {
-        if(this._righthandside_ != null)
+        if(this._value_ != null)
         {
-            this._righthandside_.parent(null);
+            this._value_.parent(null);
         }
 
         if(node != null)
@@ -116,7 +116,7 @@ public final class AArrayattrStatement extends PStatement
             node.parent(this);
         }
 
-        this._righthandside_ = node;
+        this._value_ = node;
     }
 
     @Override
@@ -125,7 +125,7 @@ public final class AArrayattrStatement extends PStatement
         return ""
             + toString(this._id_)
             + toString(this._arrayindex_)
-            + toString(this._righthandside_);
+            + toString(this._value_);
     }
 
     @Override
@@ -144,9 +144,9 @@ public final class AArrayattrStatement extends PStatement
             return;
         }
 
-        if(this._righthandside_ == child)
+        if(this._value_ == child)
         {
-            this._righthandside_ = null;
+            this._value_ = null;
             return;
         }
 
@@ -169,9 +169,9 @@ public final class AArrayattrStatement extends PStatement
             return;
         }
 
-        if(this._righthandside_ == oldChild)
+        if(this._value_ == oldChild)
         {
-            setRighthandside((PExp) newChild);
+            setValue((PExp) newChild);
             return;
         }
 

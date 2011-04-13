@@ -34,7 +34,6 @@ minusop = '-';
 timesop = '*';
 and = '&&';
 less = '<';
-op = '&&' | '<' | '+' | '-' | '*';
 
 equal = '=';
 not = '!';
@@ -210,17 +209,17 @@ statement =
   | {while} [whileexp]:exp [statement]:statement
   | {print} [exp]:exp
   | {assign} [id]:id [exp]:exp
-  | {array_assign} [id]:id [arrayindex]:exp [righthandside]:exp;
+  | {array_assign} [id]:id [arrayindex]:exp [value]:exp;
 
 exp =
-      {and} [e1]:exp [e2]:exp
-    | {less_than} [e1]:exp [e2]:exp
-    | {times} [e1]:exp [e2]:exp
-    | {plus} [e1]:exp [e2]:exp
-    | {minus} [e1]:exp [e2]:exp
-    | {array_lookup} [e]:exp [index]:exp
-    | {array_length} [e]:exp
-    | {call} [e]:exp [id]:id [args]:exp*
+      {and} [left]:exp [right]:exp
+    | {less_than} [left]:exp [right]:exp
+    | {times} [left]:exp [right]:exp
+    | {plus} [left]:exp [right]:exp
+    | {minus} [left]:exp [right]:exp
+    | {array_lookup} [exp]:exp [index]:exp
+    | {array_length} [exp]:exp
+    | {call} [object]:exp [method_name]:id [args]:exp*
     | {integer_literal} [number]:number
     | {true}
     | {false}

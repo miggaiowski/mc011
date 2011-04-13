@@ -2,7 +2,7 @@
 
 package node;
 
-public abstract class PMethoddecl extends Node
+public abstract class PMethodDecl extends Node
 {
     // Empty body
 }

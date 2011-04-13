@@ -5,50 +5,50 @@ package node;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class AAttrStatement extends PStatement
+public final class ALessThanExp extends PExp
 {
-    private TId _id_;
-    private PExp _exp_;
+    private PExp _left_;
+    private PExp _right_;
 
-    public AAttrStatement()
+    public ALessThanExp()
     {
         // Constructor
     }
 
-    public AAttrStatement(
-        @SuppressWarnings("hiding") TId _id_,
-        @SuppressWarnings("hiding") PExp _exp_)
+    public ALessThanExp(
+        @SuppressWarnings("hiding") PExp _left_,
+        @SuppressWarnings("hiding") PExp _right_)
     {
         // Constructor
-        setId(_id_);
+        setLeft(_left_);
 
-        setExp(_exp_);
+        setRight(_right_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AAttrStatement(
-            cloneNode(this._id_),
-            cloneNode(this._exp_));
+        return new ALessThanExp(
+            cloneNode(this._left_),
+            cloneNode(this._right_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAAttrStatement(this);
+        ((Analysis) sw).caseALessThanExp(this);
     }
 
-    public TId getId()
+    public PExp getLeft()
     {
-        return this._id_;
+        return this._left_;
     }
 
-    public void setId(TId node)
+    public void setLeft(PExp node)
     {
-        if(this._id_ != null)
+        if(this._left_ != null)
         {
-            this._id_.parent(null);
+            this._left_.parent(null);
         }
 
         if(node != null)
@@ -61,19 +61,19 @@ public final class AAttrStatement extends PStatement
             node.parent(this);
         }
 
-        this._id_ = node;
+        this._left_ = node;
     }
 
-    public PExp getExp()
+    public PExp getRight()
     {
-        return this._exp_;
+        return this._right_;
     }
 
-    public void setExp(PExp node)
+    public void setRight(PExp node)
     {
-        if(this._exp_ != null)
+        if(this._right_ != null)
         {
-            this._exp_.parent(null);
+            this._right_.parent(null);
         }
 
         if(node != null)
@@ -86,30 +86,30 @@ public final class AAttrStatement extends PStatement
             node.parent(this);
         }
 
-        this._exp_ = node;
+        this._right_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._id_)
-            + toString(this._exp_);
+            + toString(this._left_)
+            + toString(this._right_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._id_ == child)
+        if(this._left_ == child)
         {
-            this._id_ = null;
+            this._left_ = null;
             return;
         }
 
-        if(this._exp_ == child)
+        if(this._right_ == child)
         {
-            this._exp_ = null;
+            this._right_ = null;
             return;
         }
 
@@ -120,15 +120,15 @@ public final class AAttrStatement extends PStatement
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._id_ == oldChild)
+        if(this._left_ == oldChild)
         {
-            setId((TId) newChild);
+            setLeft((PExp) newChild);
             return;
         }
 
-        if(this._exp_ == oldChild)
+        if(this._right_ == oldChild)
         {
-            setExp((PExp) newChild);
+            setRight((PExp) newChild);
             return;
         }
 

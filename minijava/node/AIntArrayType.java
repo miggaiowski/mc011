@@ -5,10 +5,10 @@ package node;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class AIntType extends PType
+public final class AIntArrayType extends PType
 {
 
-    public AIntType()
+    public AIntArrayType()
     {
         // Constructor
     }
@@ -16,12 +16,12 @@ public final class AIntType extends PType
     @Override
     public Object clone()
     {
-        return new AIntType();
+        return new AIntArrayType();
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAIntType(this);
+        ((Analysis) sw).caseAIntArrayType(this);
     }
 
     @Override

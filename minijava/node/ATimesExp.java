@@ -5,50 +5,50 @@ package node;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class AMainmethod extends PMainmethod
+public final class ATimesExp extends PExp
 {
-    private TId _paramname_;
-    private PStatement _statements_;
+    private PExp _left_;
+    private PExp _right_;
 
-    public AMainmethod()
+    public ATimesExp()
     {
         // Constructor
     }
 
-    public AMainmethod(
-        @SuppressWarnings("hiding") TId _paramname_,
-        @SuppressWarnings("hiding") PStatement _statements_)
+    public ATimesExp(
+        @SuppressWarnings("hiding") PExp _left_,
+        @SuppressWarnings("hiding") PExp _right_)
     {
         // Constructor
-        setParamname(_paramname_);
+        setLeft(_left_);
 
-        setStatements(_statements_);
+        setRight(_right_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AMainmethod(
-            cloneNode(this._paramname_),
-            cloneNode(this._statements_));
+        return new ATimesExp(
+            cloneNode(this._left_),
+            cloneNode(this._right_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAMainmethod(this);
+        ((Analysis) sw).caseATimesExp(this);
     }
 
-    public TId getParamname()
+    public PExp getLeft()
     {
-        return this._paramname_;
+        return this._left_;
     }
 
-    public void setParamname(TId node)
+    public void setLeft(PExp node)
     {
-        if(this._paramname_ != null)
+        if(this._left_ != null)
         {
-            this._paramname_.parent(null);
+            this._left_.parent(null);
         }
 
         if(node != null)
@@ -61,19 +61,19 @@ public final class AMainmethod extends PMainmethod
             node.parent(this);
         }
 
-        this._paramname_ = node;
+        this._left_ = node;
     }
 
-    public PStatement getStatements()
+    public PExp getRight()
     {
-        return this._statements_;
+        return this._right_;
     }
 
-    public void setStatements(PStatement node)
+    public void setRight(PExp node)
     {
-        if(this._statements_ != null)
+        if(this._right_ != null)
         {
-            this._statements_.parent(null);
+            this._right_.parent(null);
         }
 
         if(node != null)
@@ -86,30 +86,30 @@ public final class AMainmethod extends PMainmethod
             node.parent(this);
         }
 
-        this._statements_ = node;
+        this._right_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._paramname_)
-            + toString(this._statements_);
+            + toString(this._left_)
+            + toString(this._right_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._paramname_ == child)
+        if(this._left_ == child)
         {
-            this._paramname_ = null;
+            this._left_ = null;
             return;
         }
 
-        if(this._statements_ == child)
+        if(this._right_ == child)
         {
-            this._statements_ = null;
+            this._right_ = null;
             return;
         }
 
@@ -120,15 +120,15 @@ public final class AMainmethod extends PMainmethod
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._paramname_ == oldChild)
+        if(this._left_ == oldChild)
         {
-            setParamname((TId) newChild);
+            setLeft((PExp) newChild);
             return;
         }
 
-        if(this._statements_ == oldChild)
+        if(this._right_ == oldChild)
         {
-            setStatements((PStatement) newChild);
+            setRight((PExp) newChild);
             return;
         }
 

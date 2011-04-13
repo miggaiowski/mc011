@@ -5,18 +5,18 @@ package node;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class AIfelseStatement extends PStatement
+public final class AIfStatement extends PStatement
 {
     private PExp _ifexp_;
     private PStatement _ifstatement_;
     private PStatement _elsestatement_;
 
-    public AIfelseStatement()
+    public AIfStatement()
     {
         // Constructor
     }
 
-    public AIfelseStatement(
+    public AIfStatement(
         @SuppressWarnings("hiding") PExp _ifexp_,
         @SuppressWarnings("hiding") PStatement _ifstatement_,
         @SuppressWarnings("hiding") PStatement _elsestatement_)
@@ -33,7 +33,7 @@ public final class AIfelseStatement extends PStatement
     @Override
     public Object clone()
     {
-        return new AIfelseStatement(
+        return new AIfStatement(
             cloneNode(this._ifexp_),
             cloneNode(this._ifstatement_),
             cloneNode(this._elsestatement_));
@@ -41,7 +41,7 @@ public final class AIfelseStatement extends PStatement
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAIfelseStatement(this);
+        ((Analysis) sw).caseAIfStatement(this);
     }
 
     public PExp getIfexp()

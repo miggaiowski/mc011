@@ -6,45 +6,45 @@ import java.util.*;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class ASubExp extends PExp
+public final class ABlockStatement extends PStatement
 {
-    private final LinkedList<PExp> _terms_ = new LinkedList<PExp>();
+    private final LinkedList<PStatement> _statementlist_ = new LinkedList<PStatement>();
 
-    public ASubExp()
+    public ABlockStatement()
     {
         // Constructor
     }
 
-    public ASubExp(
-        @SuppressWarnings("hiding") List<PExp> _terms_)
+    public ABlockStatement(
+        @SuppressWarnings("hiding") List<PStatement> _statementlist_)
     {
         // Constructor
-        setTerms(_terms_);
+        setStatementlist(_statementlist_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new ASubExp(
-            cloneList(this._terms_));
+        return new ABlockStatement(
+            cloneList(this._statementlist_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseASubExp(this);
+        ((Analysis) sw).caseABlockStatement(this);
     }
 
-    public LinkedList<PExp> getTerms()
+    public LinkedList<PStatement> getStatementlist()
     {
-        return this._terms_;
+        return this._statementlist_;
     }
 
-    public void setTerms(List<PExp> list)
+    public void setStatementlist(List<PStatement> list)
     {
-        this._terms_.clear();
-        this._terms_.addAll(list);
-        for(PExp e : list)
+        this._statementlist_.clear();
+        this._statementlist_.addAll(list);
+        for(PStatement e : list)
         {
             if(e.parent() != null)
             {
@@ -59,14 +59,14 @@ public final class ASubExp extends PExp
     public String toString()
     {
         return ""
-            + toString(this._terms_);
+            + toString(this._statementlist_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._terms_.remove(child))
+        if(this._statementlist_.remove(child))
         {
             return;
         }
@@ -78,13 +78,13 @@ public final class ASubExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        for(ListIterator<PExp> i = this._terms_.listIterator(); i.hasNext();)
+        for(ListIterator<PStatement> i = this._statementlist_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {
                 if(newChild != null)
                 {
-                    i.set((PExp) newChild);
+                    i.set((PStatement) newChild);
                     newChild.parent(this);
                     oldChild.parent(null);
                     return;

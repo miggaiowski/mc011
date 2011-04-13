@@ -5,38 +5,38 @@ package node;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class AVardecl extends PVardecl
+public final class AVarDecl extends PVarDecl
 {
     private PType _type_;
-    private TId _varname_;
+    private TId _varName_;
 
-    public AVardecl()
+    public AVarDecl()
     {
         // Constructor
     }
 
-    public AVardecl(
+    public AVarDecl(
         @SuppressWarnings("hiding") PType _type_,
-        @SuppressWarnings("hiding") TId _varname_)
+        @SuppressWarnings("hiding") TId _varName_)
     {
         // Constructor
         setType(_type_);
 
-        setVarname(_varname_);
+        setVarName(_varName_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AVardecl(
+        return new AVarDecl(
             cloneNode(this._type_),
-            cloneNode(this._varname_));
+            cloneNode(this._varName_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAVardecl(this);
+        ((Analysis) sw).caseAVarDecl(this);
     }
 
     public PType getType()
@@ -64,16 +64,16 @@ public final class AVardecl extends PVardecl
         this._type_ = node;
     }
 
-    public TId getVarname()
+    public TId getVarName()
     {
-        return this._varname_;
+        return this._varName_;
     }
 
-    public void setVarname(TId node)
+    public void setVarName(TId node)
     {
-        if(this._varname_ != null)
+        if(this._varName_ != null)
         {
-            this._varname_.parent(null);
+            this._varName_.parent(null);
         }
 
         if(node != null)
@@ -86,7 +86,7 @@ public final class AVardecl extends PVardecl
             node.parent(this);
         }
 
-        this._varname_ = node;
+        this._varName_ = node;
     }
 
     @Override
@@ -94,7 +94,7 @@ public final class AVardecl extends PVardecl
     {
         return ""
             + toString(this._type_)
-            + toString(this._varname_);
+            + toString(this._varName_);
     }
 
     @Override
@@ -107,9 +107,9 @@ public final class AVardecl extends PVardecl
             return;
         }
 
-        if(this._varname_ == child)
+        if(this._varName_ == child)
         {
-            this._varname_ = null;
+            this._varName_ = null;
             return;
         }
 
@@ -126,9 +126,9 @@ public final class AVardecl extends PVardecl
             return;
         }
 
-        if(this._varname_ == oldChild)
+        if(this._varName_ == oldChild)
         {
-            setVarname((TId) newChild);
+            setVarName((TId) newChild);
             return;
         }
 

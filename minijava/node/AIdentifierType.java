@@ -5,16 +5,16 @@ package node;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class AIdExp extends PExp
+public final class AIdentifierType extends PType
 {
     private TId _id_;
 
-    public AIdExp()
+    public AIdentifierType()
     {
         // Constructor
     }
 
-    public AIdExp(
+    public AIdentifierType(
         @SuppressWarnings("hiding") TId _id_)
     {
         // Constructor
@@ -25,13 +25,13 @@ public final class AIdExp extends PExp
     @Override
     public Object clone()
     {
-        return new AIdExp(
+        return new AIdentifierType(
             cloneNode(this._id_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAIdExp(this);
+        ((Analysis) sw).caseAIdentifierType(this);
     }
 
     public TId getId()

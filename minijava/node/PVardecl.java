@@ -2,7 +2,7 @@
 
 package node;
 
-public abstract class PVardecl extends Node
+public abstract class PVarDecl extends Node
 {
     // Empty body
 }

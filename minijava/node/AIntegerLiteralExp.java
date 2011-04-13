@@ -5,16 +5,16 @@ package node;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class ANumberExp extends PExp
+public final class AIntegerLiteralExp extends PExp
 {
     private TNumber _number_;
 
-    public ANumberExp()
+    public AIntegerLiteralExp()
     {
         // Constructor
     }
 
-    public ANumberExp(
+    public AIntegerLiteralExp(
         @SuppressWarnings("hiding") TNumber _number_)
     {
         // Constructor
@@ -25,13 +25,13 @@ public final class ANumberExp extends PExp
     @Override
     public Object clone()
     {
-        return new ANumberExp(
+        return new AIntegerLiteralExp(
             cloneNode(this._number_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseANumberExp(this);
+        ((Analysis) sw).caseAIntegerLiteralExp(this);
     }
 
     public TNumber getNumber()

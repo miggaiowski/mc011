@@ -5,10 +5,10 @@ package node;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class AIntvectorType extends PType
+public final class AIntegerType extends PType
 {
 
-    public AIntvectorType()
+    public AIntegerType()
     {
         // Constructor
     }
@@ -16,12 +16,12 @@ public final class AIntvectorType extends PType
     @Override
     public Object clone()
     {
-        return new AIntvectorType();
+        return new AIntegerType();
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAIntvectorType(this);
+        ((Analysis) sw).caseAIntegerType(this);
     }
 
     @Override

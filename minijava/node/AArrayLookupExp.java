@@ -5,19 +5,23 @@ package node;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class AArraygetExp extends PExp
+public final class AArrayLookupExp extends PExp
 {
+    private PExp _exp_;
     private PExp _index_;
 
-    public AArraygetExp()
+    public AArrayLookupExp()
     {
         // Constructor
     }
 
-    public AArraygetExp(
+    public AArrayLookupExp(
+        @SuppressWarnings("hiding") PExp _exp_,
         @SuppressWarnings("hiding") PExp _index_)
     {
         // Constructor
+        setExp(_exp_);
+
         setIndex(_index_);
 
     }
@@ -25,13 +29,39 @@ public final class AArraygetExp extends PExp
     @Override
     public Object clone()
     {
-        return new AArraygetExp(
+        return new AArrayLookupExp(
+            cloneNode(this._exp_),
             cloneNode(this._index_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAArraygetExp(this);
+        ((Analysis) sw).caseAArrayLookupExp(this);
+    }
+
+    public PExp getExp()
+    {
+        return this._exp_;
+    }
+
+    public void setExp(PExp node)
+    {
+        if(this._exp_ != null)
+        {
+            this._exp_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._exp_ = node;
     }
 
     public PExp getIndex()
@@ -63,6 +93,7 @@ public final class AArraygetExp extends PExp
     public String toString()
     {
         return ""
+            + toString(this._exp_)
             + toString(this._index_);
     }
 
@@ -70,6 +101,12 @@ public final class AArraygetExp extends PExp
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
+        if(this._exp_ == child)
+        {
+            this._exp_ = null;
+            return;
+        }
+
         if(this._index_ == child)
         {
             this._index_ = null;
@@ -83,6 +120,12 @@ public final class AArraygetExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
+        if(this._exp_ == oldChild)
+        {
+            setExp((PExp) newChild);
+            return;
+        }
+
         if(this._index_ == oldChild)
         {
             setIndex((PExp) newChild);

@@ -74,27 +74,27 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseAMainclass(AMainclass node)
+    public void caseAMainClass(AMainClass node)
     {
         defaultCase(node);
     }
 
-    public void caseAMainmethod(AMainmethod node)
+    public void caseASimpleClassDecl(ASimpleClassDecl node)
     {
         defaultCase(node);
     }
 
-    public void caseAClassdecl(AClassdecl node)
+    public void caseAExtendsClassDecl(AExtendsClassDecl node)
     {
         defaultCase(node);
     }
 
-    public void caseAVardecl(AVardecl node)
+    public void caseAVarDecl(AVarDecl node)
     {
         defaultCase(node);
     }
 
-    public void caseAMethoddecl(AMethoddecl node)
+    public void caseAMethodDecl(AMethodDecl node)
     {
         defaultCase(node);
     }
@@ -104,7 +104,7 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseAIntvectorType(AIntvectorType node)
+    public void caseAIntArrayType(AIntArrayType node)
     {
         defaultCase(node);
     }
@@ -114,22 +114,22 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseAIntType(AIntType node)
+    public void caseAIntegerType(AIntegerType node)
     {
         defaultCase(node);
     }
 
-    public void caseAIdType(AIdType node)
+    public void caseAIdentifierType(AIdentifierType node)
     {
         defaultCase(node);
     }
 
-    public void caseAStatementlistStatement(AStatementlistStatement node)
+    public void caseABlockStatement(ABlockStatement node)
     {
         defaultCase(node);
     }
 
-    public void caseAIfelseStatement(AIfelseStatement node)
+    public void caseAIfStatement(AIfStatement node)
     {
         defaultCase(node);
     }
@@ -144,12 +144,12 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseAAttrStatement(AAttrStatement node)
+    public void caseAAssignStatement(AAssignStatement node)
     {
         defaultCase(node);
     }
 
-    public void caseAArrayattrStatement(AArrayattrStatement node)
+    public void caseAArrayAssignStatement(AArrayAssignStatement node)
     {
         defaultCase(node);
     }
@@ -159,42 +159,42 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseALessExp(ALessExp node)
+    public void caseALessThanExp(ALessThanExp node)
     {
         defaultCase(node);
     }
 
-    public void caseAMulExp(AMulExp node)
+    public void caseATimesExp(ATimesExp node)
     {
         defaultCase(node);
     }
 
-    public void caseAAddExp(AAddExp node)
+    public void caseAPlusExp(APlusExp node)
     {
         defaultCase(node);
     }
 
-    public void caseASubExp(ASubExp node)
+    public void caseAMinusExp(AMinusExp node)
     {
         defaultCase(node);
     }
 
-    public void caseAArraygetExp(AArraygetExp node)
+    public void caseAArrayLookupExp(AArrayLookupExp node)
     {
         defaultCase(node);
     }
 
-    public void caseALengthExp(ALengthExp node)
+    public void caseAArrayLengthExp(AArrayLengthExp node)
     {
         defaultCase(node);
     }
 
-    public void caseAMethodcallExp(AMethodcallExp node)
+    public void caseACallExp(ACallExp node)
     {
         defaultCase(node);
     }
 
-    public void caseANumberExp(ANumberExp node)
+    public void caseAIntegerLiteralExp(AIntegerLiteralExp node)
     {
         defaultCase(node);
     }
@@ -209,7 +209,7 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseAIdExp(AIdExp node)
+    public void caseAIdentifierExp(AIdentifierExp node)
     {
         defaultCase(node);
     }
@@ -219,27 +219,17 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseANewintarrayExp(ANewintarrayExp node)
+    public void caseANewArrayExp(ANewArrayExp node)
     {
         defaultCase(node);
     }
 
-    public void caseANewidExp(ANewidExp node)
+    public void caseANewObjectExp(ANewObjectExp node)
     {
         defaultCase(node);
     }
 
-    public void caseANotexpExp(ANotexpExp node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseALparexprparExp(ALparexprparExp node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAPreposExp(APreposExp node)
+    public void caseANotExp(ANotExp node)
     {
         defaultCase(node);
     }
@@ -365,11 +355,6 @@ public class AnalysisAdapter implements Analysis
     }
 
     public void caseTLess(TLess node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTOp(TOp node)
     {
         defaultCase(node);
     }

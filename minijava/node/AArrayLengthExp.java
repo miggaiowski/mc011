@@ -5,45 +5,45 @@ package node;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class AIdType extends PType
+public final class AArrayLengthExp extends PExp
 {
-    private TId _id_;
+    private PExp _exp_;
 
-    public AIdType()
+    public AArrayLengthExp()
     {
         // Constructor
     }
 
-    public AIdType(
-        @SuppressWarnings("hiding") TId _id_)
+    public AArrayLengthExp(
+        @SuppressWarnings("hiding") PExp _exp_)
     {
         // Constructor
-        setId(_id_);
+        setExp(_exp_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AIdType(
-            cloneNode(this._id_));
+        return new AArrayLengthExp(
+            cloneNode(this._exp_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAIdType(this);
+        ((Analysis) sw).caseAArrayLengthExp(this);
     }
 
-    public TId getId()
+    public PExp getExp()
     {
-        return this._id_;
+        return this._exp_;
     }
 
-    public void setId(TId node)
+    public void setExp(PExp node)
     {
-        if(this._id_ != null)
+        if(this._exp_ != null)
         {
-            this._id_.parent(null);
+            this._exp_.parent(null);
         }
 
         if(node != null)
@@ -56,23 +56,23 @@ public final class AIdType extends PType
             node.parent(this);
         }
 
-        this._id_ = node;
+        this._exp_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._id_);
+            + toString(this._exp_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._id_ == child)
+        if(this._exp_ == child)
         {
-            this._id_ = null;
+            this._exp_ = null;
             return;
         }
 
@@ -83,9 +83,9 @@ public final class AIdType extends PType
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._id_ == oldChild)
+        if(this._exp_ == oldChild)
         {
-            setId((TId) newChild);
+            setExp((PExp) newChild);
             return;
         }
 

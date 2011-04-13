@@ -2,7 +2,7 @@
 
 package node;
 
-public abstract class PMainclass extends Node
+public abstract class PMainClass extends Node
 {
     // Empty body
 }

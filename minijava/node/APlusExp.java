@@ -5,17 +5,17 @@ package node;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class AAndExp extends PExp
+public final class APlusExp extends PExp
 {
     private PExp _left_;
     private PExp _right_;
 
-    public AAndExp()
+    public APlusExp()
     {
         // Constructor
     }
 
-    public AAndExp(
+    public APlusExp(
         @SuppressWarnings("hiding") PExp _left_,
         @SuppressWarnings("hiding") PExp _right_)
     {
@@ -29,14 +29,14 @@ public final class AAndExp extends PExp
     @Override
     public Object clone()
     {
-        return new AAndExp(
+        return new APlusExp(
             cloneNode(this._left_),
             cloneNode(this._right_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAAndExp(this);
+        ((Analysis) sw).caseAPlusExp(this);
     }
 
     public PExp getLeft()
