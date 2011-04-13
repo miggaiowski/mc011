@@ -61,43 +61,48 @@ blank;
 
 Productions
 program = 
-     mainclass classdecl*;
+     mainclass class_decl*;
 
 mainclass {-> mainclass} = 
-     classn [classname]:id l_brace [mainmethod]:mainmethod r_brace 
-     {-> New mainclass(classname, mainmethod.mainmethod)};
-
-mainmethod {-> mainmethod} =
-     public static void main l_parenthese string l_bracket r_bracket [paramname]:id r_parenthese l_brace 
-        [statements]:statement 
+     classn [classname]:id l_brace 
+       public static void main l_parenthese string l_bracket r_bracket [paramname]:id r_parenthese 
+       [startmainmethod]:l_brace 
+          [statements]:statement 
+       [endmainmethod]:r_brace 
      r_brace 
-     {-> New mainmethod(paramname, statements.statement)}; 
+     {-> New mainclass(classname, paramname, statements.statement)};
 
-classdecl {-> classdecl} = 
-     {simpleclass} classn [classname]:id 
-                   l_brace 
-                       [vars]:vardecl* 
-                       [methods]:methoddecl*
-                   r_brace
-     {-> New classdecl(classname, Null, [vars.vardecl], [methods.methoddecl])}
-   | {extendingclass} classn [classname]:id extends [super]:id 
+// mainmethod {-> mainmethod} =
+//      public static void main l_parenthese string l_bracket r_bracket [paramname]:id r_parenthese l_brace 
+//         [statements]:statement 
+//      r_brace 
+//      {-> New mainmethod(paramname, statements.statement)}; 
+
+class_decl = 
+     {simple} classn [classname]:id
                       l_brace
-                          [vars]:vardecl* 
-                          [methods]:methoddecl*
+                          [vars]:var_decl* 
+                          [methods]:method_decl*
+		      r_brace
+     {-> New class_decl.simple(classname, [vars.var_decl], [methods.method_decl])}
+   | {extends} classn [classname]:id extends [super]:id 
+                      l_brace
+                          [vars]:var_decl* 
+                          [methods]:method_decl*
 		      r_brace 
-     {-> New classdecl(classname, super, [vars.vardecl], [methods.methoddecl])};
- 
-vardecl {-> vardecl} = 
-    type [varname]:id semicolon {-> New vardecl(type.type, varname)};
+     {-> New class_decl.extends(classname, super, [vars.var_decl], [methods.method_decl])};
 
-methoddecl {-> methoddecl} =
+var_decl {-> var_decl} = 
+    type [varname]:id semicolon {-> New var_decl(type.type, varname)};
+
+method_decl {-> method_decl} =
     public type [methodname]:id l_parenthese [parameters]:paramlist r_parenthese 
         l_brace
-	     [vars]:vardecl* 
+	     [vars]:var_decl* 
 	     [statements]:statement* 
 	     return [returnexpression]:exp semicolon 
         r_brace
-    {-> New methoddecl(type, methodname, [parameters.parameter], [vars.vardecl], [statements.statement], returnexpression.exp)};
+    {-> New method_decl(type, methodname, [parameters.parameter], [vars.var_decl], [statements.statement], returnexpression.exp)};
 
 paramlist {-> parameter*} = 
       {firstparameter} parameter paramrest* {-> [parameter, paramrest.parameter]}
@@ -110,89 +115,64 @@ parameter {-> parameter} =
     type id {-> New parameter(type.type, id)};
 
 type {-> type} = 
-      {intvector} int l_bracket r_bracket {-> New type.intvector()}
+      {intvector} int l_bracket r_bracket {-> New type.int_array()}
     | {boolean} boolean {-> New type.boolean()}
-    | {int} int {-> New type.int()}
-    | {id} id {-> New type.id(id)};
+    | {int} int {-> New type.integer()}
+    | {id} id {-> New type.identifier(id)};
 
 statement {-> statement} =
       {statementlist} l_brace [statementlist]:statement* r_brace 
-      {-> New statement.statementlist([statementlist.statement])}
+      {-> New statement.block([statementlist.statement])}
     | {ifelse} if l_parenthese [ifexp]:exp r_parenthese 
       	       	  [ifstatement]:statement 
 	       else 
 	       	  [elsestatement]:statement 
-      {-> New statement.ifelse(ifexp.exp, ifstatement, elsestatement)}
+      {-> New statement.if(ifexp.exp, ifstatement, elsestatement)}
     | {while} while l_parenthese [whileexp]:exp r_parenthese statement 
       {-> New statement.while(whileexp.exp, statement)}
     | {print} print l_parenthese exp r_parenthese semicolon
       {-> New statement.print(exp)}
     | {attr} id equal exp semicolon
-      {-> New statement.attr(id, exp)} 
+      {-> New statement.assign(id, exp)} 
     | {arrayattr} id l_bracket [arrayindex]:exp r_bracket equal [righthandside]:exp semicolon
-      {-> New statement.arrayattr(id, arrayindex.exp, righthandside.exp)};
+      {-> New statement.array_assign(id, arrayindex.exp, righthandside.exp)};
 
 exp {-> exp} = 
-        {and} andstm_list {-> New exp.and([andstm_list.exp])};
-
-andstm_list {-> exp*} =
-    less_than andstm_rest* {-> [less_than.exp, andstm_rest.exp]};
-
-andstm_rest {-> exp*} =
-    and less_than {-> [less_than.exp]} ;
+      {and} exp and less_than {-> New exp.and(exp.exp, less_than.exp)}
+    | {less_than} less_than {-> less_than.exp};
 
 less_than {-> exp} = 
-    plus_minus_list less_than_plus_minus? {-> New exp.less([plus_minus_list.exp, less_than_plus_minus.exp])};
+      {less_than} less_than less plus_minus {-> New exp.less_than(less_than.exp, plus_minus.exp)}  
+    | {plus_minus} plus_minus {-> plus_minus.exp};
 
-less_than_plus_minus {-> exp} = 
-    less plus_minus_list {-> plus_minus_list.exp};
+plus_minus {-> exp} =
+      {plus} plus_minus plusop times {-> New exp.plus(plus_minus.exp, times.exp)}
+    | {minus} plus_minus minusop times {-> New exp.minus(plus_minus.exp, times.exp)}
+    | {times} times {-> times.exp};
 
-plus_minus_list {-> exp} = 
-      {plus_list} plus_list {-> plus_list.exp}
-    | {minus_list} minus_list {-> minus_list.exp};
+times {-> exp} = 
+      {times} times timesop not_exp {-> New exp.times(times.exp, not_exp.exp)}
+    | {notexp} not_exp {-> not_exp.exp};
 
-plus_list {-> exp} = 
-    times_list plus_rest* {-> New exp.add([times_list.exp, plus_rest.exp])};
+not_exp {-> exp} = 
+      {notexp} not not_exp {-> New exp.not(not_exp.exp)}
+    | {postfixexp} postfix_exp {-> postfix_exp.exp};
 
-plus_rest {-> exp} = 
-    plusop times_list {-> times_list.exp};
-
-minus_list {-> exp} = 
-    times_list minus_rest* {-> New exp.sub([times_list.exp, minus_rest.exp])};
-
-minus_rest {-> exp} = 
-    minusop times_list {-> times_list.exp};
-
-times_list {-> exp} =
-    prefixexp times_rest* {-> New exp.mul([prefixexp.exp, times_rest.exp])}; 
-
-times_rest {-> exp} =
-    timesop prefixexp {-> prefixexp.exp};
-
-prefixexp {-> exp} =
-      {not_expression} notexp {-> notexp.exp}
-    | {expression} postfixexp_list {-> postfixexp_list.exp};
-
-notexp {-> exp} = 
-    not postfixexp_list {-> New exp.notexp(postfixexp_list.exp)};
-
-postfixexp_list {-> exp} = 
-    primary_exp postfixexp_rest* {-> New exp.prepos(primary_exp.exp, [postfixexp_rest.exp])};
-
-postfixexp_rest {-> exp} = 
-      {index} l_bracket exp r_bracket {-> New exp.arrayget(exp.exp)}
-    | {methodcall} dot id l_parenthese explist r_parenthese {-> New exp.methodcall(id, [explist.exp])}
-    | {length} dot length {-> New exp.length()};
-
+postfix_exp {-> exp} =
+      {arrayget} postfix_exp l_bracket exp r_bracket {-> New exp.array_lookup(postfix_exp.exp, exp.exp)}
+    | {methodcall} postfix_exp dot id l_parenthese explist r_parenthese {-> New exp.call(postfix_exp.exp, id, [explist.exp])}
+    | {length} postfix_exp dot length {-> New exp.array_length(postfix_exp.exp)}
+    | {primaryexp} primary_exp {-> primary_exp.exp};
+ 
 primary_exp {-> exp} = 
-      {number} number {-> New exp.number(number)}
+      {number} number {-> New exp.integer_literal(number)}
     | {true} true {-> New exp.true()}
     | {false} false {-> New exp.false()}
-    | {id} id {-> New exp.id(id)}
+    | {id} id {-> New exp.identifier(id)}
     | {this} this {-> New exp.this()}
-    | {newintarray} new int l_bracket exp r_bracket {-> New exp.newintarray(exp)}
-    | {newid} new id l_parenthese r_parenthese {-> New exp.newid(id)}
-    | {lparexprpar} l_parenthese exp r_parenthese {-> New exp.lparexprpar(exp)};
+    | {newintarray} new int l_bracket exp r_bracket {-> New exp.new_array(exp)}
+    | {newid} new id l_parenthese r_parenthese {-> New exp.new_object(id)}
+    | {lparexprpar} l_parenthese exp r_parenthese {-> exp.exp};
 
 explist {-> exp*} = 
       {explisthead} exp exprest* {-> [exp, exprest.exp]}
@@ -203,22 +183,21 @@ exprest {-> exp} =
 
 Abstract Syntax Tree
 program = 
-     mainclass classdecl*;	
+     mainclass class_decl*;	
+
 mainclass = 
-     [classname]:id [mainmethod]:mainmethod;
+     [classname]:id [paramname]:id [statements]:statement;
 
-mainmethod =
-     [paramname]:id [statements]:statement;
-
-classdecl = 
-     [classname]:id [super]:id? [vars]:vardecl* [methods]:methoddecl*;
+class_decl = 
+      {simple}    [classname]:id              [vars]:var_decl*  [methods]:method_decl*
+    | {extends}   [classname]:id  [super]:id  [vars]:var_decl*  [methods]:method_decl*;
  
-vardecl = 
+var_decl = 
     type [varname]:id;
 
-methoddecl =
+method_decl =
     type [methodname]:id [parameters]:parameter*
-         [vars]:vardecl*
+         [vars]:var_decl*
  	 [statements]:statement* 
 	 [returnexpression]:exp;
 
@@ -226,35 +205,33 @@ parameter =
     type id;
 
 type =
-      {intvector} 
+      {int_array} 
     | {boolean} 
-    | {int} 
-    | {id} id ;
+    | {integer} 
+    | {identifier} id ;
 
 statement =
-    {statementlist} [statementlist]:statement*
-  | {ifelse} [ifexp]:exp [ifstatement]:statement [elsestatement]:statement
+    {block} [statementlist]:statement*
+  | {if} [ifexp]:exp [ifstatement]:statement [elsestatement]:statement
   | {while} [whileexp]:exp [statement]:statement
   | {print} [exp]:exp
-  | {attr} [id]:id [exp]:exp
-  | {arrayattr} [id]:id [arrayindex]:exp [righthandside]:exp;
+  | {assign} [id]:id [exp]:exp
+  | {array_assign} [id]:id [arrayindex]:exp [righthandside]:exp;
 
 exp =
-      {and} [andexps]:exp*
-    | {less} [exps]:exp*
-    | {mul} [factor]:exp*
-    | {add} [terms]:exp*
-    | {sub} [terms]:exp*
-    | {arrayget} [index]:exp 
-    | {length}
-    | {methodcall} [id]:id [explist]:exp*
-    | {number} [number]:number
+      {and} [e1]:exp [e2]:exp
+    | {less_than} [e1]:exp [e2]:exp
+    | {times} [e1]:exp [e2]:exp
+    | {plus} [e1]:exp [e2]:exp
+    | {minus} [e1]:exp [e2]:exp
+    | {array_lookup} [e]:exp [index]:exp
+    | {array_length} [e]:exp
+    | {call} [e]:exp [id]:id [args]:exp*
+    | {integer_literal} [number]:number
     | {true}
     | {false}
-    | {id} [id]:id
+    | {identifier} [id]:id
     | {this} 
-    | {newintarray} [exp]:exp
-    | {newid} [id]:id
-    | {notexp} [exp]:exp
-    | {lparexprpar} [exp]:exp
-    | {prepos} [prefix]:exp [posfixs]:exp*;
+    | {new_array} [exp]:exp
+    | {new_object} [id]:id
+    | {not} [exp]:exp;
