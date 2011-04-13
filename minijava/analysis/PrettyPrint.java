@@ -1,526 +1,467 @@
 package analysis;
 
+import java.util.*;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import node.AAddExp;
-import node.AAndExp;
-import node.AArrayattrStatement;
-import node.AArraygetExp;
-import node.AAttrStatement;
-import node.ABooleanType;
-import node.AClassdecl;
-import node.AFalseExp;
-import node.AIdExp;
-import node.AIdType;
-import node.AIfelseStatement;
-import node.AIntType;
-import node.AIntvectorType;
-import node.ALengthExp;
-import node.ALessExp;
-import node.ALparexprparExp;
-import node.AMainclass;
-import node.AMainmethod;
-import node.AMethodcallExp;
-import node.AMethoddecl;
-import node.AMulExp;
-import node.ANewidExp;
-import node.ANewintarrayExp;
-import node.ANotexpExp;
-import node.ANumberExp;
-import node.AParameter;
-import node.APreposExp;
-import node.APrintStatement;
-import node.AStatementlistStatement;
-import node.ASubExp;
-import node.AThisExp;
-import node.ATrueExp;
-import node.AVardecl;
-import node.AWhileStatement;
-import node.PExp;
-import node.PMethoddecl;
-import node.PParameter;
-import node.PStatement;
-import node.PVardecl;
-import node.TId;
+import node.*;
 
 public class PrettyPrint extends DepthFirstAdapter
 {
-    PrintStream out;
+	PrintStream out;
 
-    private int ident;
-    private boolean printSpace;
+	private int ident;
+	private boolean printSpace;
 
-    private void beginNest()
-    {
-        ident += 4;
-    }
+	private void beginNest()
+	{
+		ident += 4;
+	}
 
-    private void endNest()
-    {
-        ident -= 4;
-    }
+	private void endNest()
+	{
+		ident -= 4;
+	}
 
-    private void print(String s)
-    {
-        if ( printSpace )
-            for (int i = 0; i < ident; i++ )
-                out.print(" ");
-        out.print(s);
+	private void print(String s)
+	{
+		if ( printSpace )
+			for (int i = 0; i < ident; i++ )
+				out.print(" ");
+		out.print(s);
 
-        printSpace = false;
-    }
+		printSpace = false;
+	}
 
-    private void println(String s)
-    {
-        if ( printSpace )
-            for (int i = 0; i < ident; i++ )
-                out.print(" ");
-        out.println(s);
+	private void println(String s)
+	{
+		if ( printSpace )
+			for (int i = 0; i < ident; i++ )
+				out.print(" ");
+		out.println(s);
 
-        printSpace = true;
-    }
+		printSpace = true;
+	}
 
-    public PrettyPrint(PrintStream p)
-    {
-        super();
-        out = p;
-        ident = 0;
-        printSpace = true;
-    }
+	public PrettyPrint(PrintStream p)
+	{
+		super();
+		out = p;
+		ident = 0;
+		printSpace = true;
+	}
 
-    public PrettyPrint()
-    {
-        this(System.out);
-    }
+	public PrettyPrint()
+	{
+		this(System.out);
+	}
 
-    public void inAMainclass(AMainclass node)
-    {
-        print("class " + node.getClassname().getText());
-        println(" {");
-        beginNest();
-        //        node.getMainmethod().apply(this);
-    }
+	public void inAMainClass(AMainClass node)
+	{
+		print("class " + node.getClassName().getText());
+		println(" {");
+		beginNest();
 
-    public void outAMainclass(AMainclass node)
-    {
-        endNest();
-        println("}");
-    }
+		print( "public static void main(String[] " + node.getMainArgName().getText());
+		println( ") {");
+		beginNest();
+	}
 
-    public void inAMainmethod(AMainmethod node) {
-        print( "public static void main(String[] " + node.getParamname().getText());
-        println( ") {");
-        beginNest();
-    }
+	public void outAMainClass(AMainClass node)
+	{
+		endNest();
+		println("}");
+		endNest();
+		println("}");
+	}
 
-    public void outAMainmethod(AMainmethod node) {
-        endNest();
-        println( "}");
-    }
+	public void caseASimpleClassDecl(ASimpleClassDecl node)
+	{
+		inASimpleClassDecl(node);
+		print("class " + node.getClassName().getText());
+		println( " {" );
+		beginNest();
+		{
+			List<PVarDecl> copy = new ArrayList<PVarDecl>(node.getVarDecl());
+			for(PVarDecl e : copy)
+			{
+				e.apply(this);
+				println(";");
+			}
+		}
+		{
+			List<PMethodDecl> copy = new ArrayList<PMethodDecl>(node.getMethodDecl());
+			for(PMethodDecl e : copy)
+			{
+				e.apply(this);
+			}
+		}
+		endNest();
+		println("}");
+		outASimpleClassDecl(node);
+	}
+
+	public void caseAExtendsClassDecl(AExtendsClassDecl node)
+	{
+		inAExtendsClassDecl(node);
+		print("class " + node.getClassName().getText());
+		print( " extends " + node.getSuper().getText());
+		println(" {");
+		beginNest();
+		{
+			List<PVarDecl> copy = new ArrayList<PVarDecl>(node.getVarDecl());
+			for(PVarDecl e : copy)
+			{
+				e.apply(this);
+				println(";");
+			}
+		}
+		{
+			List<PMethodDecl> copy = new ArrayList<PMethodDecl>(node.getMethodDecl());
+			for(PMethodDecl e : copy)
+			{
+				e.apply(this);
+			}
+		}
+		endNest();
+		println("}");
+		outAExtendsClassDecl(node);
+	}
+
+	public void outAVarDecl(AVarDecl node)
+	{
+		print(node.getVarName().getText());
+	}
+
+	public void caseAMethodDecl(AMethodDecl node)
+	{
+		inAMethodDecl(node);
+		print("public ");
+		if(node.getType() != null)
+		{
+			node.getType().apply(this);
+		}
+		print(node.getMethodName().getText());
+		print( "(");
+		{
+			List<PParameter> copy = new ArrayList<PParameter>(node.getParameters());
+			if(copy.size()>0){
+				for(int i = 0; i<copy.size()-1; i++)
+				{
+					copy.get(i).apply(this);
+					print(", ");
+				}
+				copy.get(copy.size()-1).apply(this);
+			}
+		}
+		print(")");
+		println(" {");
+		beginNest();
+		{
+			List<PVarDecl> copy = new ArrayList<PVarDecl>(node.getVarDecl());
+			for(PVarDecl e : copy)
+			{
+				e.apply(this);
+				println(";");
+			}
+		}
+		{
+			List<PStatement> copy = new ArrayList<PStatement>(node.getStatements());
+			for(PStatement e : copy)
+			{
+				e.apply(this);
+			}
+		}
+		print("return ");
+		if(node.getReturnExpression() != null)
+		{
+			node.getReturnExpression().apply(this);
+		}
+		println(";");
+		endNest();
+		println("}");
+		outAMethodDecl(node);
+	}
+
+	public void inAIntArrayType(AIntArrayType node)
+	{
+		print("int[] ");
+	}
+
+	public void inABooleanType(ABooleanType node)
+	{
+		print("boolean ");
+	}
+
+	public void inAIntType(AIntegerType node)
+	{
+		print("int ");
+	}
+
+	public void inAIdType(AIdentifierType node)
+	{
+		print(node.getId().getText() + " ");
+	}
+
+	public void inABlockStatement(ABlockStatement node)
+	{
+		println("{");
+		beginNest();
+	}
+
+	public void outABlockStatement(ABlockStatement node)
+	{
+		endNest();
+		println("}");
+	}
+
+	public void caseAIfStatement(AIfStatement node) {
+		inAIfStatement(node);
+		print( "if (" );
+		if (node.getIfexp() != null) {
+			node.getIfexp().apply(this);
+		}
+		print(") ");
+		if(node.getIfstatement() != null) {
+			node.getIfstatement().apply(this);
+		}
+		if(node.getElsestatement() != null) {
+			print("else ");
+			node.getElsestatement().apply(this);
+		}
+		outAIfStatement(node);
+	}
+
+	public void caseAWhileStatement(AWhileStatement node)
+	{
+		inAWhileStatement(node);
+		print( "while(" );
+		if(node.getCondition() != null)
+		{
+			node.getCondition().apply(this);
+		}
+		print( ") " );
+		if(node.getBody() != null)
+		{
+			node.getBody().apply(this);
+		}
+		outAWhileStatement(node);
+	}
+
+	public void inAPrintStatement(APrintStatement node)
+	{
+		print( "System.out.println(" );
+	}
+
+	public void outAPrintStatement(APrintStatement node)
+	{
+		println( ");" );
+	}
+
+	public void caseAAssignStatement(AAssignStatement node)
+	{
+		inAAssignStatement(node);
+		print(node.getVar().getText() + " = " );
+		if(node.getValue() != null)
+		{
+			node.getValue().apply(this);
+		}
+		println( ";" );
+		outAAssignStatement(node);
+	}
+
+	public void caseAArrayAssignStatement(AArrayAssignStatement node)
+	{
+		inAArrayAssignStatement(node);
+		print(node.getVar().getText() + "[" );
+		if(node.getIndex() != null)
+		{
+			node.getIndex().apply(this);
+		}
+		print( "] = " );
+		if(node.getValue() != null)
+		{
+			node.getValue().apply(this);
+		}
+		println( ";" );
+		outAArrayAssignStatement(node);
+	}
+
+	public void caseAAndExp(AAndExp node)
+	{
+		inAAndExp(node);
+		if(node.getLeft() != null)
+		{
+			node.getLeft().apply(this);
+		}
+		print( " && ");
+		if(node.getRight() != null)
+		{
+			node.getRight().apply(this);
+		}
+		outAAndExp(node);
+	}
+
+	public void caseALessExp(ALessExp node)
+	{
+		inALessExp(node);
+		if(node.getLeft() != null)
+		{
+			node.getLeft().apply(this);
+		}
+		print( " < ");
+		if(node.getRight() != null)
+		{
+			node.getRight().apply(this);
+		}
+		outALessExp(node);
+	}
+
+	public void caseAPlusExp(APlusExp node)
+	{
+		inAPlusExp(node);
+		if(node.getLeft() != null)
+		{
+			node.getLeft().apply(this);
+		}
+		print( " + ");
+		if(node.getRight() != null)
+		{
+			node.getRight().apply(this);
+		}
+		outAPlusExp(node);
+	}
+
+	public void caseAMinusExp(AMinusExp node)
+	{
+		inAMinusExp(node);
+		if(node.getLeft() != null)
+		{
+			node.getLeft().apply(this);
+		}
+		print( " - ");
+		if(node.getRight() != null)
+		{
+			node.getRight().apply(this);
+		}
+		outAMinusExp(node);
+	}
+
+	@Override
+	public void caseATimesExp(ATimesExp node)
+	{
+		inATimesExp(node);
+		if(node.getLeft() != null)
+		{
+			node.getLeft().apply(this);
+		}
+		print( " * ");
+		if(node.getRight() != null)
+		{
+			node.getRight().apply(this);
+		}
+		outATimesExp(node);
+	}
 
 
-    public void caseAClassdecl(AClassdecl node)
-    {
-        inAClassdecl(node);
-        print("class " + node.getClassname().getText());
-        if (node.getSuper() != null) {
-            print( " extends " + node.getSuper().getText());
-        }
-        println( " {" );
-        beginNest();
-        {
-            List<PVardecl> copy = new ArrayList<PVardecl>(node.getVars());
-            for(PVardecl e : copy)
-            {
-                e.apply(this);
-                println(";");
-            }
-        }
-        {
-            List<PMethoddecl> copy = new ArrayList<PMethoddecl>(node.getMethods());
-            for(PMethoddecl e : copy)
-            {
-                e.apply(this);
-            }
-        }
-        endNest();
-        println("}");
-        outAClassdecl(node);
-    }
+	public void caseALookupExp(ALookupExp node)
+	{
+		inALookupExp(node);
+		if(node.getBase() != null)
+		{
+			node.getBase().apply(this);
+		}
+		print( "[" );
+		if(node.getIndex() != null)
+		{
+			node.getIndex().apply(this);
+		}
+		print( "]" );
+		outALookupExp(node);
+	}
 
-    public void outAVardecl(AVardecl node)
-    {
-        print(node.getVarname().getText());
-    }
+	public void caseALengthExp(ALengthExp node)
+	{
+		inALengthExp(node);
+		if(node.getExp() != null)
+		{
+			node.getExp().apply(this);
+		}
+		print(".length");
+		outALengthExp(node);
+	}
 
-    public void caseAParameter(AParameter node)
-    {
-        inAParameter(node);
-        if(node.getType() != null)
-        {
-            node.getType().apply(this);
-        }
-        if(node.getId() != null)
-        {
-            print(node.getId().getText());
-        }
-        outAParameter(node);
-    }
+	public void caseAMemberExp(AMemberExp node)
+	{
+		inAMemberExp(node);
+		if(node.getObject() != null)
+		{
+			node.getObject().apply(this);
+		}
+		print("." + node.getMemberName().getText() + "(");
+		List<PExp> copy = new ArrayList<PExp>(node.getArgs());
+		if(copy.size()>0){
+			for(int i = 0; i<copy.size()-1; i++)
+			{
+				copy.get(i).apply(this);
+				print(", ");
+			}
+			copy.get(copy.size()-1).apply(this);
+		}
+		print(")");
+		outAMemberExp(node);
+	}
 
+	public void inANotExp(ANotExp node)
+	{
+		print( "!" );
+	}
 
-    public void caseAMethoddecl(AMethoddecl node)
-    {
-        inAMethoddecl(node);
-        print("public ");
-        if(node.getType() != null)
-        {
-            node.getType().apply(this);
-        }
-        print(node.getMethodname().getText());
-        print( "(");
-        {
-            List<PParameter> copy = new ArrayList<PParameter>(node.getParameters());
-            if(copy.size()>0){
-                for(int i = 0; i<copy.size()-1; i++)
-                {
-                    copy.get(i).apply(this);
-                    print(", ");
-                }
-                copy.get(copy.size()-1).apply(this);
-            }
-        }
-        print(")");
-        println(" {");
-        beginNest();
-        {
-            List<PVardecl> copy = new ArrayList<PVardecl>(node.getVars());
-            for(PVardecl e : copy)
-            {
-                e.apply(this);
-                println(";");
-            }
-        }
-        {
-            List<PStatement> copy = new ArrayList<PStatement>(node.getStatements());
-            for(PStatement e : copy)
-            {
-                e.apply(this);
-            }
-        }
-        print("return ");
-        if(node.getReturnexpression() != null)
-        {
-            node.getReturnexpression().apply(this);
-        }
-        println(";");
-        endNest();
-        println("}");
-        outAMethoddecl(node);
-    }
+	public void inAParenExp(AParenExp node)
+	{
+		print("(");
+	}
 
-    public void inAIntvectorType(AIntvectorType node)
-    {
-        print("int[] ");
-    }
+	public void outAParenExp(AParenExp node)
+	{
+		print(")");
+	}
 
-    public void inABooleanType(ABooleanType node)
-    {
-        print("boolean ");
-    }
+	public void inAIntegerExp(AIntegerExp node)
+	{
+		print(node.getInteger().getText());
+	}
 
-    public void inAIntType(AIntType node)
-    {
-        print("int ");
-    }
+	public void inATrueExp(ATrueExp node)
+	{
+		print("true");
+	}
 
-    public void inAIdType(AIdType node)
-    {
-        print(node.getId().getText() + " ");
-    }
+	public void inAFalseExp(AFalseExp node)
+	{
+		print("false");
+	}
 
-    public void inAStatementlistStatement(AStatementlistStatement node)
-    {
-        println("{");
-        beginNest();
-    }
+	public void inAIdExp(AIdExp node)
+	{
+		print(node.getId().getText());
+	}
 
-    public void outAStatementlistStatement(AStatementlistStatement node)
-    {
-        endNest();
-        println("}");
-    }
+	public void inAThisExp(AThisExp node)
+	{
+		print("this");
+	}
 
-    public void caseAIfelseStatement(AIfelseStatement node)
-    {
-        inAIfelseStatement(node);
-        print( "if (" );
-        if(node.getIfexp() != null)
-        {
-            node.getIfexp().apply(this);
-        }
-        println( ") { " );
-        if(node.getIfstatement() != null)
-        {
-            beginNest();
-            node.getIfstatement().apply(this);
-            endNest();         
-        }
-        println("}");
-        println("else {");
-        if(node.getElsestatement() != null)
-        {
-            beginNest();
-            node.getElsestatement().apply(this);
-            endNest();
-        }
-        println("}");
-        outAIfelseStatement(node);
-    }
+	public void inANewArrayExp(ANewArrayExp node)
+	{
+		print( "new int[" );
+	}
 
-    public void caseAWhileStatement(AWhileStatement node)
-    {
-        inAWhileStatement(node);
-        print( "while(" );
-        if(node.getWhileexp() != null)
-        {
-            node.getWhileexp().apply(this);
-        }
-        print( ") " );
-        if(node.getStatement() != null)
-        {
-            node.getStatement().apply(this);
-        }
-        outAWhileStatement(node);
-    }
+	public void outANewArrayExp(ANewArrayExp node)
+	{
+		print( "]" );
+	}
 
-    public void inAPrintStatement(APrintStatement node)
-    {
-        print( "System.out.println(" );
-    }
-
-    public void outAPrintStatement(APrintStatement node)
-    {
-        println( ");" );
-    }
-
-    public void caseAAttrStatement(AAttrStatement node)
-    {
-        inAAttrStatement(node);
-        print(node.getId().getText() + " = " );
-        if(node.getExp() != null)
-        {
-            node.getExp().apply(this);
-        }
-        println( ";" );
-        outAAttrStatement(node);
-    }
-
-    public void caseAArrayattrStatement(AArrayattrStatement node)
-    {
-        inAArrayattrStatement(node);
-        print(node.getId().getText() + "[" );
-        if(node.getArrayindex() != null)
-        {
-            node.getArrayindex().apply(this);
-        }
-        print( "] = " );
-        if(node.getRighthandside() != null)
-        {
-            node.getRighthandside().apply(this);
-        }
-        println( ";" );
-        outAArrayattrStatement(node);
-    }
-
-    public void caseAAndExp(AAndExp node)
-    {
-        inAAndExp(node);
-
-        if (node.getAndexps().size() > 1) {
-            for (int i = 0; i < node.getAndexps().size(); i++) {
-                node.getAndexps().get(i).apply(this);
-                if (i < node.getAndexps().size() - 1)
-                    println(" && ");
-            }
-        }
-        else
-            node.getAndexps().get(0).apply(this);
-
-        outAAndExp(node);
-    }
-
-    public void caseALessExp(ALessExp node)
-    {
-        inALessExp(node);
-
-        if (node.getExps().size() > 1) {
-            for (int i = 0; i < node.getExps().size(); i++) {
-                node.getExps().get(i).apply(this);
-                if (i < node.getExps().size() - 1)
-                    print(" < ");
-            }
-        }
-        else
-            node.getExps().get(0).apply(this);
-
-        outALessExp(node);
-    }
-
-    public void caseAAddExp(AAddExp node)
-    {
-        inAAddExp(node);
-
-        if (node.getTerms().size() > 1) {
-            for (int i = 0; i < node.getTerms().size(); i++) {
-                node.getTerms().get(i).apply(this);
-                if (i < node.getTerms().size() - 1)
-                    print(" + ");
-            }
-        }
-        else
-            node.getTerms().get(0).apply(this);
-
-        outAAddExp(node);
-    }
-
-    public void caseASubExp(ASubExp node)
-    {
-        inASubExp(node);
-
-        if (node.getTerms().size() > 1) {
-            for (int i = 0; i < node.getTerms().size(); i++) {
-                node.getTerms().get(i).apply(this);
-                if (i < node.getTerms().size() - 1)
-                    print(" - ");
-            }
-        }
-        else
-            node.getTerms().get(0).apply(this);
-
-        outASubExp(node);
-    }
-
-    @Override
-    public void caseAMulExp(AMulExp node)
-    {
-        inAMulExp(node);
-
-        if (node.getFactor().size() > 1) {
-            for (int i = 0; i < node.getFactor().size(); i++) {
-                node.getFactor().get(i).apply(this);
-                if (i < node.getFactor().size() - 1)
-                    print(" * ");
-            }
-        }
-        else
-            node.getFactor().get(0).apply(this);
-
-        outAMulExp(node);
-    }
-
-    public void caseAArraygetExp(AArraygetExp node) {
-
-        inAArraygetExp(node);
-
-        print( "[" );
-        if(node.getIndex() != null)
-        {
-            node.getIndex().apply(this);
-        }
-        print( "]" );
-        outAArraygetExp(node);
-    }
-
-    public void caseALengthExp(ALengthExp node)
-    {
-        inALengthExp(node);
-        print(".length");
-        outALengthExp(node);
-    }
-
-    public void caseAMethodcallExp(AMethodcallExp node)
-    {
-        inAMethodcallExp(node);
-        print(".");
-        print(node.getId().getText() + "(");
-        for (int i = 0; i < node.getExplist().size(); i++) {
-            node.getExplist().get(i).apply(this);
-            if (i < node.getExplist().size() - 1)
-                print(", ");
-        }
-        print(")");
-        outAMethodcallExp(node);
-    }
-
-    public void caseAPreposExp(APreposExp node)
-    {
-        inAPreposExp(node);
-        
-        if(node.getPrefix() != null) {
-            node.getPrefix().apply(this);
-        }
-        List<PExp> copy = new ArrayList<PExp>(node.getPosfixs());
-        for(PExp e : copy) {
-            e.apply(this);
-        }
-        
-        outAPreposExp(node);
-    }
-
-    public void inANotexpExp(ANotexpExp node)
-    {
-        print( "!" );
-    }
-
-    public void inALparexprparExp(ALparexprparExp node)
-    {
-        print("(");
-    }
-
-    public void outALparexprparExp(ALparexprparExp node)
-    {
-        print(")");
-    }
-
-    public void inANumberExp(ANumberExp node)
-    {
-        print(node.getNumber().getText());
-    }
-
-    public void inATrueExp(ATrueExp node)
-    {
-        print("true");
-    }
-
-    public void inAFalseExp(AFalseExp node)
-    {
-        print("false");
-    }
-
-    public void inAIdExp(AIdExp node)
-    {
-        print(node.getId().getText());
-    }
-
-    public void inAThisExp(AThisExp node)
-    {
-        print("this");
-    }
-
-    public void inANewintarrayExp(ANewintarrayExp node)
-    {
-        print( "new int[" );
-    }
-
-    public void outANewintarrayExp(ANewintarrayExp node)
-    {
-        print( "]" );
-    }
-
-    public void inANewidExp(ANewidExp node)
-    {
-        print( "new " + node.getId().getText() + "()");
-    }
+	public void inANewObjectExp(ANewObjectExp node)
+	{
+		print( "new " + node.getClassName().getText() + "()");
+	}
 }

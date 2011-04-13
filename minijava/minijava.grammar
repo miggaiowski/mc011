@@ -61,22 +61,16 @@ blank;
 
 Productions
 program = 
-     mainclass class_decl*;
+     main_class class_decl*;
 
-mainclass {-> mainclass} = 
+main_class {-> main_class} = 
      classn [classname]:id l_brace 
        public static void main l_parenthese string l_bracket r_bracket [paramname]:id r_parenthese 
        [startmainmethod]:l_brace 
           [statements]:statement 
        [endmainmethod]:r_brace 
      r_brace 
-     {-> New mainclass(classname, paramname, statements.statement)};
-
-// mainmethod {-> mainmethod} =
-//      public static void main l_parenthese string l_bracket r_bracket [paramname]:id r_parenthese l_brace 
-//         [statements]:statement 
-//      r_brace 
-//      {-> New mainmethod(paramname, statements.statement)}; 
+     {-> New main_class(classname, paramname, statements.statement)};
 
 class_decl = 
      {simple} classn [classname]:id
@@ -183,23 +177,23 @@ exprest {-> exp} =
 
 Abstract Syntax Tree
 program = 
-     mainclass class_decl*;	
+     main_class class_decl*;	
 
-mainclass = 
-     [classname]:id [paramname]:id [statements]:statement;
+main_class = 
+    [class_name]:id [main_arg_name]:id [statements]:statement;
 
 class_decl = 
-      {simple}    [classname]:id              [vars]:var_decl*  [methods]:method_decl*
-    | {extends}   [classname]:id  [super]:id  [vars]:var_decl*  [methods]:method_decl*;
+      {simple}    [class_name]:id              [var_decl]:var_decl*  [method_decl]:method_decl*
+    | {extends}   [class_name]:id  [super]:id  [var_decl]:var_decl*  [method_decl]:method_decl*;
  
 var_decl = 
-    type [varname]:id;
+    type [var_name]:id;
 
 method_decl =
-    type [methodname]:id [parameters]:parameter*
-         [vars]:var_decl*
+    type [method_name]:id [parameters]:parameter*
+         [var_decl]:var_decl*
  	 [statements]:statement* 
-	 [returnexpression]:exp;
+	 [return_expression]:exp;
 
 parameter = 
     type id;
