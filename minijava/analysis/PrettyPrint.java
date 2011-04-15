@@ -144,7 +144,7 @@ public class PrettyPrint extends DepthFirstAdapter
 		outAIfStatement(node);
 	}
 
-	public void caseALengthExp(AArrayLengthExp node)
+	public void caseAArrayLengthExp(AArrayLengthExp node)
 	{
 		inAArrayLengthExp(node);
 		if(node.getExp() != null)
@@ -170,7 +170,7 @@ public class PrettyPrint extends DepthFirstAdapter
 		outALessThanExp(node);
 	}
 
-	public void caseALookupExp(AArrayLookupExp node)
+	public void caseAArrayLookupExp(AArrayLookupExp node)
 	{
 		inAArrayLookupExp(node);
 		if(node.getExp() != null)
@@ -202,6 +202,7 @@ public class PrettyPrint extends DepthFirstAdapter
 				for(int i = 0; i<copy.size()-1; i++)
 				{
 					copy.get(i).apply(this);
+					
 					print(", ");
 				}
 				copy.get(copy.size()-1).apply(this);
@@ -251,6 +252,20 @@ public class PrettyPrint extends DepthFirstAdapter
 		outAMinusExp(node);
 	}
 
+	public void caseAParameter(AParameter node)
+    {
+        inAParameter(node);
+        if(node.getType() != null)
+        {
+            node.getType().apply(this);
+        }
+        if(node.getId() != null)
+        {
+        	print(node.getId().getText());
+        }
+        outAParameter(node);
+    }
+	
 	public void caseAPlusExp(APlusExp node)
 	{
 		inAPlusExp(node);
@@ -350,7 +365,7 @@ public class PrettyPrint extends DepthFirstAdapter
 		print(node.getId().getText());
 	}
 
-	public void inAIdType(AIdentifierType node)
+	public void inAIdentifierType(AIdentifierType node)
 	{
 		print(node.getId().getText() + " ");
 	}
@@ -450,6 +465,16 @@ public class PrettyPrint extends DepthFirstAdapter
 	{
 		print(node.getVarName().getText());
 	}
+	
+	public void inAParentheseExp(AParentheseExp node)
+    {
+		print("(");
+    }
+
+    public void outAParentheseExp(AParentheseExp node)
+    {
+    	print(")");
+    }
 
 	private void print(String s)
 	{

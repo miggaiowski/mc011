@@ -860,4 +860,25 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         }
         outANotExp(node);
     }
+
+    public void inAParentheseExp(AParentheseExp node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAParentheseExp(AParentheseExp node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAParentheseExp(AParentheseExp node)
+    {
+        inAParentheseExp(node);
+        if(node.getExp() != null)
+        {
+            node.getExp().apply(this);
+        }
+        outAParentheseExp(node);
+    }
 }

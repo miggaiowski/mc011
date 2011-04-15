@@ -234,6 +234,11 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
+    public void caseAParentheseExp(AParentheseExp node)
+    {
+        defaultCase(node);
+    }
+
     public void caseTClassn(TClassn node)
     {
         defaultCase(node);

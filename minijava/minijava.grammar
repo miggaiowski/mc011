@@ -165,7 +165,7 @@ primary_exp {-> exp} =
     | {this} this {-> New exp.this()}
     | {newintarray} new int l_bracket exp r_bracket {-> New exp.new_array(exp)}
     | {newid} new id l_parenthese r_parenthese {-> New exp.new_object(id)}
-    | {lparexprpar} l_parenthese exp r_parenthese {-> exp.exp};
+    | {lparexprpar} l_parenthese exp r_parenthese {-> New exp.parenthese(exp)};
 
 explist {-> exp*} = 
       {explisthead} exp exprest* {-> [exp, exprest.exp]}
@@ -227,4 +227,5 @@ exp =
     | {this} 
     | {new_array} [exp]:exp
     | {new_object} [id]:id
-    | {not} [exp]:exp;
+    | {not} [exp]:exp
+    | {parenthese} [exp]:exp;

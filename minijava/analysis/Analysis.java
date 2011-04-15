@@ -45,6 +45,7 @@ public interface Analysis extends Switch
     void caseANewArrayExp(ANewArrayExp node);
     void caseANewObjectExp(ANewObjectExp node);
     void caseANotExp(ANotExp node);
+    void caseAParentheseExp(AParentheseExp node);
 
     void caseTClassn(TClassn node);
     void caseTExtends(TExtends node);
