@@ -25,6 +25,7 @@ public interface Analysis extends Switch
     void caseAIdentifierType(AIdentifierType node);
     void caseABlockStatement(ABlockStatement node);
     void caseAIfStatement(AIfStatement node);
+    void caseAIfElseStatement(AIfElseStatement node);
     void caseAWhileStatement(AWhileStatement node);
     void caseAPrintStatement(APrintStatement node);
     void caseAAssignStatement(AAssignStatement node);

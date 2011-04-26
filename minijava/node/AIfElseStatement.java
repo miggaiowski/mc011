@@ -5,38 +5,43 @@ package node;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class AIfStatement extends PStatement
+public final class AIfElseStatement extends PStatement
 {
     private PExp _ifexp_;
     private PStatement _ifstatement_;
+    private PStatement _elsestatement_;
 
-    public AIfStatement()
+    public AIfElseStatement()
     {
         // Constructor
     }
 
-    public AIfStatement(
+    public AIfElseStatement(
         @SuppressWarnings("hiding") PExp _ifexp_,
-        @SuppressWarnings("hiding") PStatement _ifstatement_)
+        @SuppressWarnings("hiding") PStatement _ifstatement_,
+        @SuppressWarnings("hiding") PStatement _elsestatement_)
     {
         // Constructor
         setIfexp(_ifexp_);
 
         setIfstatement(_ifstatement_);
 
+        setElsestatement(_elsestatement_);
+
     }
 
     @Override
     public Object clone()
     {
-        return new AIfStatement(
+        return new AIfElseStatement(
             cloneNode(this._ifexp_),
-            cloneNode(this._ifstatement_));
+            cloneNode(this._ifstatement_),
+            cloneNode(this._elsestatement_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAIfStatement(this);
+        ((Analysis) sw).caseAIfElseStatement(this);
     }
 
     public PExp getIfexp()
@@ -89,12 +94,38 @@ public final class AIfStatement extends PStatement
         this._ifstatement_ = node;
     }
 
+    public PStatement getElsestatement()
+    {
+        return this._elsestatement_;
+    }
+
+    public void setElsestatement(PStatement node)
+    {
+        if(this._elsestatement_ != null)
+        {
+            this._elsestatement_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._elsestatement_ = node;
+    }
+
     @Override
     public String toString()
     {
         return ""
             + toString(this._ifexp_)
-            + toString(this._ifstatement_);
+            + toString(this._ifstatement_)
+            + toString(this._elsestatement_);
     }
 
     @Override
@@ -110,6 +141,12 @@ public final class AIfStatement extends PStatement
         if(this._ifstatement_ == child)
         {
             this._ifstatement_ = null;
+            return;
+        }
+
+        if(this._elsestatement_ == child)
+        {
+            this._elsestatement_ = null;
             return;
         }
 
@@ -129,6 +166,12 @@ public final class AIfStatement extends PStatement
         if(this._ifstatement_ == oldChild)
         {
             setIfstatement((PStatement) newChild);
+            return;
+        }
+
+        if(this._elsestatement_ == oldChild)
+        {
+            setElsestatement((PStatement) newChild);
             return;
         }
 
