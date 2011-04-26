@@ -18,11 +18,11 @@ public interface Analysis extends Switch
     void caseAExtendsClassDecl(AExtendsClassDecl node);
     void caseAVarDecl(AVarDecl node);
     void caseAMethodDecl(AMethodDecl node);
-    void caseAParameter(AParameter node);
-    void caseAIntArrayType(AIntArrayType node);
+    void caseAFormal(AFormal node);
+    void caseAArrayType(AArrayType node);
     void caseABooleanType(ABooleanType node);
-    void caseAIntegerType(AIntegerType node);
-    void caseAIdentifierType(AIdentifierType node);
+    void caseAIntType(AIntType node);
+    void caseAObjectType(AObjectType node);
     void caseABlockStatement(ABlockStatement node);
     void caseAIfStatement(AIfStatement node);
     void caseAIfElseStatement(AIfElseStatement node);

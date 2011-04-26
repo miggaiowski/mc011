@@ -5,23 +5,19 @@ package minijava.node;
 import minijava.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AParameter extends PParameter
+public final class AObjectType extends PType
 {
-    private PType _type_;
     private TId _id_;
 
-    public AParameter()
+    public AObjectType()
     {
         // Constructor
     }
 
-    public AParameter(
-        @SuppressWarnings("hiding") PType _type_,
+    public AObjectType(
         @SuppressWarnings("hiding") TId _id_)
     {
         // Constructor
-        setType(_type_);
-
         setId(_id_);
 
     }
@@ -29,39 +25,13 @@ public final class AParameter extends PParameter
     @Override
     public Object clone()
     {
-        return new AParameter(
-            cloneNode(this._type_),
+        return new AObjectType(
             cloneNode(this._id_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAParameter(this);
-    }
-
-    public PType getType()
-    {
-        return this._type_;
-    }
-
-    public void setType(PType node)
-    {
-        if(this._type_ != null)
-        {
-            this._type_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._type_ = node;
+        ((Analysis) sw).caseAObjectType(this);
     }
 
     public TId getId()
@@ -93,7 +63,6 @@ public final class AParameter extends PParameter
     public String toString()
     {
         return ""
-            + toString(this._type_)
             + toString(this._id_);
     }
 
@@ -101,12 +70,6 @@ public final class AParameter extends PParameter
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._type_ == child)
-        {
-            this._type_ = null;
-            return;
-        }
-
         if(this._id_ == child)
         {
             this._id_ = null;
@@ -120,12 +83,6 @@ public final class AParameter extends PParameter
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._type_ == oldChild)
-        {
-            setType((PType) newChild);
-            return;
-        }
-
         if(this._id_ == oldChild)
         {
             setId((TId) newChild);

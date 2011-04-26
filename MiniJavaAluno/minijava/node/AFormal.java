@@ -5,19 +5,23 @@ package minijava.node;
 import minijava.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AIdentifierType extends PType
+public final class AFormal extends PFormal
 {
+    private PType _type_;
     private TId _id_;
 
-    public AIdentifierType()
+    public AFormal()
     {
         // Constructor
     }
 
-    public AIdentifierType(
+    public AFormal(
+        @SuppressWarnings("hiding") PType _type_,
         @SuppressWarnings("hiding") TId _id_)
     {
         // Constructor
+        setType(_type_);
+
         setId(_id_);
 
     }
@@ -25,13 +29,39 @@ public final class AIdentifierType extends PType
     @Override
     public Object clone()
     {
-        return new AIdentifierType(
+        return new AFormal(
+            cloneNode(this._type_),
             cloneNode(this._id_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAIdentifierType(this);
+        ((Analysis) sw).caseAFormal(this);
+    }
+
+    public PType getType()
+    {
+        return this._type_;
+    }
+
+    public void setType(PType node)
+    {
+        if(this._type_ != null)
+        {
+            this._type_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._type_ = node;
     }
 
     public TId getId()
@@ -63,6 +93,7 @@ public final class AIdentifierType extends PType
     public String toString()
     {
         return ""
+            + toString(this._type_)
             + toString(this._id_);
     }
 
@@ -70,6 +101,12 @@ public final class AIdentifierType extends PType
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
+        if(this._type_ == child)
+        {
+            this._type_ = null;
+            return;
+        }
+
         if(this._id_ == child)
         {
             this._id_ = null;
@@ -83,6 +120,12 @@ public final class AIdentifierType extends PType
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
+        if(this._type_ == oldChild)
+        {
+            setType((PType) newChild);
+            return;
+        }
+
         if(this._id_ == oldChild)
         {
             setId((TId) newChild);

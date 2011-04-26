@@ -99,12 +99,12 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseAParameter(AParameter node)
+    public void caseAFormal(AFormal node)
     {
         defaultCase(node);
     }
 
-    public void caseAIntArrayType(AIntArrayType node)
+    public void caseAArrayType(AArrayType node)
     {
         defaultCase(node);
     }
@@ -114,12 +114,12 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseAIntegerType(AIntegerType node)
+    public void caseAIntType(AIntType node)
     {
         defaultCase(node);
     }
 
-    public void caseAIdentifierType(AIdentifierType node)
+    public void caseAObjectType(AObjectType node)
     {
         defaultCase(node);
     }

@@ -103,29 +103,29 @@ Productions
     type [varname]:id semicolon {-> New var_decl(type.type, varname)};
 
   method_decl {-> method_decl} =
-    public type [methodname]:id l_parenthese [parameters]:paramlist r_parenthese 
+    public type [methodname]:id l_parenthese [parameters]:formallist r_parenthese 
         l_brace
 	     [vars]:var_decl* 
 	     [statements]:statement* 
 	     return [returnexpression]:exp semicolon 
         r_brace
-    {-> New method_decl(type, methodname, [parameters.parameter], [vars.var_decl], [statements.statement], returnexpression.exp)};
+    {-> New method_decl(type, methodname, [parameters.formal], [vars.var_decl], [statements.statement], returnexpression.exp)};
 
-  paramlist {-> parameter*} = 
-      {firstparameter} parameter paramrest* {-> [parameter, paramrest.parameter]}
+  formallist {-> formal*} = 
+      {firstparameter} formal formalrest* {-> [formal, formalrest.formal]}
     | {empty} {-> []};
 
-  paramrest {-> parameter} =
-    {anotherparameter} comma type id {-> New parameter(type, id)};
+  formalrest {-> formal} =
+    {anotherparameter} comma type id {-> New formal(type, id)};
 
-  parameter {-> parameter} = 
-    type id {-> New parameter(type.type, id)};
+  formal {-> formal} = 
+    type id {-> New formal(type.type, id)};
 
   type {-> type} = 
-      {intvector} int l_bracket r_bracket {-> New type.int_array()}
+      {intvector} int l_bracket r_bracket {-> New type.array()}
     | {boolean} boolean {-> New type.boolean()}
-    | {int} int {-> New type.integer()}
-    | {id} id {-> New type.identifier(id)};
+    | {int} int {-> New type.int()}
+    | {id} id {-> New type.object(id)};
 
   statement {-> statement} =
       {stm_without_trailing_substm} stm_without_trailing_substm
@@ -223,19 +223,19 @@ Abstract Syntax Tree
     type [var_name]:id;
 
   method_decl =
-    type [method_name]:id [parameters]:parameter*
+    type [method_name]:id [parameters]:formal*
          [var_decl]:var_decl*
  	 [statements]:statement* 
 	 [return_expression]:exp;
 
-  parameter = 
+  formal = 
     type id;
 
   type =
-      {int_array} 
+      {array} 
     | {boolean} 
-    | {integer} 
-    | {identifier} id ;
+    | {int} 
+    | {object} id ;
 
   statement =
       {block} [statementlist]:statement*

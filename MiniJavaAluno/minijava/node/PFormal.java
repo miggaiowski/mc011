@@ -2,7 +2,7 @@
 
 package minijava.node;
 
-public abstract class PParameter extends Node
+public abstract class PFormal extends Node
 {
     // Empty body
 }

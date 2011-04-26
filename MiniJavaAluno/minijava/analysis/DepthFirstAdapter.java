@@ -215,8 +215,8 @@ public class DepthFirstAdapter extends AnalysisAdapter
             node.getMethodName().apply(this);
         }
         {
-            List<PParameter> copy = new ArrayList<PParameter>(node.getParameters());
-            for(PParameter e : copy)
+            List<PFormal> copy = new ArrayList<PFormal>(node.getParameters());
+            for(PFormal e : copy)
             {
                 e.apply(this);
             }
@@ -242,20 +242,20 @@ public class DepthFirstAdapter extends AnalysisAdapter
         outAMethodDecl(node);
     }
 
-    public void inAParameter(AParameter node)
+    public void inAFormal(AFormal node)
     {
         defaultIn(node);
     }
 
-    public void outAParameter(AParameter node)
+    public void outAFormal(AFormal node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAParameter(AParameter node)
+    public void caseAFormal(AFormal node)
     {
-        inAParameter(node);
+        inAFormal(node);
         if(node.getType() != null)
         {
             node.getType().apply(this);
@@ -264,24 +264,24 @@ public class DepthFirstAdapter extends AnalysisAdapter
         {
             node.getId().apply(this);
         }
-        outAParameter(node);
+        outAFormal(node);
     }
 
-    public void inAIntArrayType(AIntArrayType node)
+    public void inAArrayType(AArrayType node)
     {
         defaultIn(node);
     }
 
-    public void outAIntArrayType(AIntArrayType node)
+    public void outAArrayType(AArrayType node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAIntArrayType(AIntArrayType node)
+    public void caseAArrayType(AArrayType node)
     {
-        inAIntArrayType(node);
-        outAIntArrayType(node);
+        inAArrayType(node);
+        outAArrayType(node);
     }
 
     public void inABooleanType(ABooleanType node)
@@ -301,42 +301,42 @@ public class DepthFirstAdapter extends AnalysisAdapter
         outABooleanType(node);
     }
 
-    public void inAIntegerType(AIntegerType node)
+    public void inAIntType(AIntType node)
     {
         defaultIn(node);
     }
 
-    public void outAIntegerType(AIntegerType node)
+    public void outAIntType(AIntType node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAIntegerType(AIntegerType node)
+    public void caseAIntType(AIntType node)
     {
-        inAIntegerType(node);
-        outAIntegerType(node);
+        inAIntType(node);
+        outAIntType(node);
     }
 
-    public void inAIdentifierType(AIdentifierType node)
+    public void inAObjectType(AObjectType node)
     {
         defaultIn(node);
     }
 
-    public void outAIdentifierType(AIdentifierType node)
+    public void outAObjectType(AObjectType node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAIdentifierType(AIdentifierType node)
+    public void caseAObjectType(AObjectType node)
     {
-        inAIdentifierType(node);
+        inAObjectType(node);
         if(node.getId() != null)
         {
             node.getId().apply(this);
         }
-        outAIdentifierType(node);
+        outAObjectType(node);
     }
 
     public void inABlockStatement(ABlockStatement node)

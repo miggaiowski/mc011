@@ -5,10 +5,10 @@ package minijava.node;
 import minijava.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AIntArrayType extends PType
+public final class AIntType extends PType
 {
 
-    public AIntArrayType()
+    public AIntType()
     {
         // Constructor
     }
@@ -16,12 +16,12 @@ public final class AIntArrayType extends PType
     @Override
     public Object clone()
     {
-        return new AIntArrayType();
+        return new AIntType();
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAIntArrayType(this);
+        ((Analysis) sw).caseAIntType(this);
     }
 
     @Override

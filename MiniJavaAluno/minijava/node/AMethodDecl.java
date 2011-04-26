@@ -10,7 +10,7 @@ public final class AMethodDecl extends PMethodDecl
 {
     private PType _type_;
     private TId _methodName_;
-    private final LinkedList<PParameter> _parameters_ = new LinkedList<PParameter>();
+    private final LinkedList<PFormal> _parameters_ = new LinkedList<PFormal>();
     private final LinkedList<PVarDecl> _varDecl_ = new LinkedList<PVarDecl>();
     private final LinkedList<PStatement> _statements_ = new LinkedList<PStatement>();
     private PExp _returnExpression_;
@@ -23,7 +23,7 @@ public final class AMethodDecl extends PMethodDecl
     public AMethodDecl(
         @SuppressWarnings("hiding") PType _type_,
         @SuppressWarnings("hiding") TId _methodName_,
-        @SuppressWarnings("hiding") List<PParameter> _parameters_,
+        @SuppressWarnings("hiding") List<PFormal> _parameters_,
         @SuppressWarnings("hiding") List<PVarDecl> _varDecl_,
         @SuppressWarnings("hiding") List<PStatement> _statements_,
         @SuppressWarnings("hiding") PExp _returnExpression_)
@@ -110,16 +110,16 @@ public final class AMethodDecl extends PMethodDecl
         this._methodName_ = node;
     }
 
-    public LinkedList<PParameter> getParameters()
+    public LinkedList<PFormal> getParameters()
     {
         return this._parameters_;
     }
 
-    public void setParameters(List<PParameter> list)
+    public void setParameters(List<PFormal> list)
     {
         this._parameters_.clear();
         this._parameters_.addAll(list);
-        for(PParameter e : list)
+        for(PFormal e : list)
         {
             if(e.parent() != null)
             {
@@ -263,13 +263,13 @@ public final class AMethodDecl extends PMethodDecl
             return;
         }
 
-        for(ListIterator<PParameter> i = this._parameters_.listIterator(); i.hasNext();)
+        for(ListIterator<PFormal> i = this._parameters_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {
                 if(newChild != null)
                 {
-                    i.set((PParameter) newChild);
+                    i.set((PFormal) newChild);
                     newChild.parent(this);
                     oldChild.parent(null);
                     return;

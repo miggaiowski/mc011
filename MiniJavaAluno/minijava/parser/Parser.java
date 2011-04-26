@@ -262,31 +262,31 @@ public class Parser
 			push(goTo(4), list);
 		    }
 		    break;
-                    case 16: /* reduce AAfirstparameterparamlist1Paramlist */
+                    case 16: /* reduce AAfirstparameterformallist1Formallist */
 		    {
 			ArrayList list = new16();
 			push(goTo(5), list);
 		    }
 		    break;
-                    case 17: /* reduce AAfirstparameterparamlist2Paramlist */
+                    case 17: /* reduce AAfirstparameterformallist2Formallist */
 		    {
 			ArrayList list = new17();
 			push(goTo(5), list);
 		    }
 		    break;
-                    case 18: /* reduce AEmptyParamlist */
+                    case 18: /* reduce AEmptyFormallist */
 		    {
 			ArrayList list = new18();
 			push(goTo(5), list);
 		    }
 		    break;
-                    case 19: /* reduce AAnotherparameterParamrest */
+                    case 19: /* reduce AAnotherparameterFormalrest */
 		    {
 			ArrayList list = new19();
 			push(goTo(6), list);
 		    }
 		    break;
-                    case 20: /* reduce AParameter */
+                    case 20: /* reduce AFormal */
 		    {
 			ArrayList list = new20();
 			push(goTo(7), list);
@@ -598,13 +598,13 @@ public class Parser
 			push(goTo(24), list);
 		    }
 		    break;
-                    case 72: /* reduce ATerminal$Paramrest */
+                    case 72: /* reduce ATerminal$Formalrest */
 		    {
 			ArrayList list = new72();
 			push(goTo(25), list);
 		    }
 		    break;
-                    case 73: /* reduce ANonTerminal$Paramrest */
+                    case 73: /* reduce ANonTerminal$Formalrest */
 		    {
 			ArrayList list = new73();
 			push(goTo(25), list);
@@ -1317,7 +1317,7 @@ public class Parser
 
 
     @SuppressWarnings("unchecked")
-    ArrayList new16() /* reduce AAfirstparameterparamlist1Paramlist */
+    ArrayList new16() /* reduce AAfirstparameterformallist1Formallist */
     {
         @SuppressWarnings("hiding") ArrayList nodeList = new ArrayList();
 
@@ -1325,11 +1325,11 @@ public class Parser
         LinkedList listNode2 = new LinkedList();
         {
             // Block
-        PParameter pparameterNode1;
-        pparameterNode1 = (PParameter)nodeArrayList1.get(0);
-	if(pparameterNode1 != null)
+        PFormal pformalNode1;
+        pformalNode1 = (PFormal)nodeArrayList1.get(0);
+	if(pformalNode1 != null)
 	{
-	  listNode2.add(pparameterNode1);
+	  listNode2.add(pformalNode1);
 	}
         }
 	nodeList.add(listNode2);
@@ -1339,7 +1339,7 @@ public class Parser
 
 
     @SuppressWarnings("unchecked")
-    ArrayList new17() /* reduce AAfirstparameterparamlist2Paramlist */
+    ArrayList new17() /* reduce AAfirstparameterformallist2Formallist */
     {
         @SuppressWarnings("hiding") ArrayList nodeList = new ArrayList();
 
@@ -1348,13 +1348,13 @@ public class Parser
         LinkedList listNode3 = new LinkedList();
         {
             // Block
-        PParameter pparameterNode1;
+        PFormal pformalNode1;
         LinkedList listNode2 = new LinkedList();
-        pparameterNode1 = (PParameter)nodeArrayList1.get(0);
+        pformalNode1 = (PFormal)nodeArrayList1.get(0);
         listNode2 = (LinkedList)nodeArrayList2.get(0);
-	if(pparameterNode1 != null)
+	if(pformalNode1 != null)
 	{
-	  listNode3.add(pparameterNode1);
+	  listNode3.add(pformalNode1);
 	}
 	if(listNode2 != null)
 	{
@@ -1368,7 +1368,7 @@ public class Parser
 
 
     @SuppressWarnings("unchecked")
-    ArrayList new18() /* reduce AEmptyParamlist */
+    ArrayList new18() /* reduce AEmptyFormallist */
     {
         @SuppressWarnings("hiding") ArrayList nodeList = new ArrayList();
 
@@ -1383,14 +1383,14 @@ public class Parser
 
 
     @SuppressWarnings("unchecked")
-    ArrayList new19() /* reduce AAnotherparameterParamrest */
+    ArrayList new19() /* reduce AAnotherparameterFormalrest */
     {
         @SuppressWarnings("hiding") ArrayList nodeList = new ArrayList();
 
         @SuppressWarnings("unused") ArrayList nodeArrayList3 = pop();
         @SuppressWarnings("unused") ArrayList nodeArrayList2 = pop();
         @SuppressWarnings("unused") ArrayList nodeArrayList1 = pop();
-        PParameter pparameterNode1;
+        PFormal pformalNode1;
         {
             // Block
         PType ptypeNode2;
@@ -1398,22 +1398,22 @@ public class Parser
         ptypeNode2 = (PType)nodeArrayList2.get(0);
         tidNode3 = (TId)nodeArrayList3.get(0);
 
-        pparameterNode1 = new AParameter(ptypeNode2, tidNode3);
+        pformalNode1 = new AFormal(ptypeNode2, tidNode3);
         }
-	nodeList.add(pparameterNode1);
+	nodeList.add(pformalNode1);
         return nodeList;
     }
 
 
 
     @SuppressWarnings("unchecked")
-    ArrayList new20() /* reduce AParameter */
+    ArrayList new20() /* reduce AFormal */
     {
         @SuppressWarnings("hiding") ArrayList nodeList = new ArrayList();
 
         @SuppressWarnings("unused") ArrayList nodeArrayList2 = pop();
         @SuppressWarnings("unused") ArrayList nodeArrayList1 = pop();
-        PParameter pparameterNode1;
+        PFormal pformalNode1;
         {
             // Block
         PType ptypeNode2;
@@ -1421,9 +1421,9 @@ public class Parser
         ptypeNode2 = (PType)nodeArrayList1.get(0);
         tidNode3 = (TId)nodeArrayList2.get(0);
 
-        pparameterNode1 = new AParameter(ptypeNode2, tidNode3);
+        pformalNode1 = new AFormal(ptypeNode2, tidNode3);
         }
-	nodeList.add(pparameterNode1);
+	nodeList.add(pformalNode1);
         return nodeList;
     }
 
@@ -1441,7 +1441,7 @@ public class Parser
         {
             // Block
 
-        ptypeNode1 = new AIntArrayType();
+        ptypeNode1 = new AArrayType();
         }
 	nodeList.add(ptypeNode1);
         return nodeList;
@@ -1477,7 +1477,7 @@ public class Parser
         {
             // Block
 
-        ptypeNode1 = new AIntegerType();
+        ptypeNode1 = new AIntType();
         }
 	nodeList.add(ptypeNode1);
         return nodeList;
@@ -1497,7 +1497,7 @@ public class Parser
         TId tidNode2;
         tidNode2 = (TId)nodeArrayList1.get(0);
 
-        ptypeNode1 = new AIdentifierType(tidNode2);
+        ptypeNode1 = new AObjectType(tidNode2);
         }
 	nodeList.add(ptypeNode1);
         return nodeList;
@@ -2561,7 +2561,7 @@ public class Parser
 
 
     @SuppressWarnings("unchecked")
-    ArrayList new72() /* reduce ATerminal$Paramrest */
+    ArrayList new72() /* reduce ATerminal$Formalrest */
     {
         @SuppressWarnings("hiding") ArrayList nodeList = new ArrayList();
 
@@ -2569,11 +2569,11 @@ public class Parser
         LinkedList listNode2 = new LinkedList();
         {
             // Block
-        PParameter pparameterNode1;
-        pparameterNode1 = (PParameter)nodeArrayList1.get(0);
-	if(pparameterNode1 != null)
+        PFormal pformalNode1;
+        pformalNode1 = (PFormal)nodeArrayList1.get(0);
+	if(pformalNode1 != null)
 	{
-	  listNode2.add(pparameterNode1);
+	  listNode2.add(pformalNode1);
 	}
         }
 	nodeList.add(listNode2);
@@ -2583,7 +2583,7 @@ public class Parser
 
 
     @SuppressWarnings("unchecked")
-    ArrayList new73() /* reduce ANonTerminal$Paramrest */
+    ArrayList new73() /* reduce ANonTerminal$Formalrest */
     {
         @SuppressWarnings("hiding") ArrayList nodeList = new ArrayList();
 
@@ -2593,16 +2593,16 @@ public class Parser
         {
             // Block
         LinkedList listNode1 = new LinkedList();
-        PParameter pparameterNode2;
+        PFormal pformalNode2;
         listNode1 = (LinkedList)nodeArrayList1.get(0);
-        pparameterNode2 = (PParameter)nodeArrayList2.get(0);
+        pformalNode2 = (PFormal)nodeArrayList2.get(0);
 	if(listNode1 != null)
 	{
 	  listNode3.addAll(listNode1);
 	}
-	if(pparameterNode2 != null)
+	if(pformalNode2 != null)
 	{
-	  listNode3.add(pparameterNode2);
+	  listNode3.add(pformalNode2);
 	}
         }
 	nodeList.add(listNode3);

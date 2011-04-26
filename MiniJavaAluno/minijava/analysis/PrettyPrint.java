@@ -174,14 +174,14 @@ public class PrettyPrint extends DepthFirstAdapter
 	public void caseALessThanExp(ALessThanExp node)
 	{
 		inALessThanExp(node);
-		if(node.getLeft() != null)
+		if(node.getLhs() != null)
 		{
-			node.getLeft().apply(this);
+			node.getLhs().apply(this);
 		}
 		print( " < ");
-		if(node.getRight() != null)
+		if(node.getRhs() != null)
 		{
-			node.getRight().apply(this);
+			node.getRhs().apply(this);
 		}
 		outALessThanExp(node);
 	}
@@ -213,7 +213,7 @@ public class PrettyPrint extends DepthFirstAdapter
 		print(node.getMethodName().getText());
 		print( "(");
 		{
-			List<PParameter> copy = new ArrayList<PParameter>(node.getParameters());
+			List<PFormal> copy = new ArrayList<PFormal>(node.getParameters());
 			if(copy.size()>0){
 				for(int i = 0; i<copy.size()-1; i++)
 				{
@@ -256,21 +256,21 @@ public class PrettyPrint extends DepthFirstAdapter
 	public void caseAMinusExp(AMinusExp node)
 	{
 		inAMinusExp(node);
-		if(node.getLeft() != null)
+		if(node.getLhs() != null)
 		{
-			node.getLeft().apply(this);
+			node.getLhs().apply(this);
 		}
 		print( " - ");
-		if(node.getRight() != null)
+		if(node.getRhs() != null)
 		{
-			node.getRight().apply(this);
+			node.getRhs().apply(this);
 		}
 		outAMinusExp(node);
 	}
 
-	public void caseAParameter(AParameter node)
+	public void caseAFormal(AFormal node)
     {
-        inAParameter(node);
+        inAFormal(node);
         if(node.getType() != null)
         {
             node.getType().apply(this);
@@ -279,20 +279,20 @@ public class PrettyPrint extends DepthFirstAdapter
         {
         	print(node.getId().getText());
         }
-        outAParameter(node);
+        outAFormal(node);
     }
 	
 	public void caseAPlusExp(APlusExp node)
 	{
 		inAPlusExp(node);
-		if(node.getLeft() != null)
+		if(node.getLhs() != null)
 		{
-			node.getLeft().apply(this);
+			node.getLhs().apply(this);
 		}
 		print( " + ");
-		if(node.getRight() != null)
+		if(node.getRhs() != null)
 		{
-			node.getRight().apply(this);
+			node.getRhs().apply(this);
 		}
 		outAPlusExp(node);
 	}
@@ -327,14 +327,14 @@ public class PrettyPrint extends DepthFirstAdapter
 	public void caseATimesExp(ATimesExp node)
 	{
 		inATimesExp(node);
-		if(node.getLeft() != null)
+		if(node.getLhs() != null)
 		{
-			node.getLeft().apply(this);
+			node.getLhs().apply(this);
 		}
 		print( " * ");
-		if(node.getRight() != null)
+		if(node.getRhs() != null)
 		{
-			node.getRight().apply(this);
+			node.getRhs().apply(this);
 		}
 		outATimesExp(node);
 	}
@@ -381,12 +381,12 @@ public class PrettyPrint extends DepthFirstAdapter
 		print(node.getId().getText());
 	}
 
-	public void inAIdentifierType(AIdentifierType node)
+	public void inAObjectType(AObjectType node)
 	{
 		print(node.getId().getText() + " ");
 	}
 
-	public void inAIntArrayType(AIntArrayType node)
+	public void inAArrayType(AArrayType node)
 	{
 		print("int[] ");
 	}
@@ -396,7 +396,7 @@ public class PrettyPrint extends DepthFirstAdapter
 		print(node.getNumber().getText());
 	}
 
-	public void inAIntegerType(AIntegerType node)
+	public void inAIntType(AIntType node)
 	{
 		print("int ");
 	}
