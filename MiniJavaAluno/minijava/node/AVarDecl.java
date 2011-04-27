@@ -8,7 +8,7 @@ import minijava.analysis.*;
 public final class AVarDecl extends PVarDecl
 {
     private PType _type_;
-    private TId _varName_;
+    private TId _name_;
 
     public AVarDecl()
     {
@@ -17,12 +17,12 @@ public final class AVarDecl extends PVarDecl
 
     public AVarDecl(
         @SuppressWarnings("hiding") PType _type_,
-        @SuppressWarnings("hiding") TId _varName_)
+        @SuppressWarnings("hiding") TId _name_)
     {
         // Constructor
         setType(_type_);
 
-        setVarName(_varName_);
+        setName(_name_);
 
     }
 
@@ -31,7 +31,7 @@ public final class AVarDecl extends PVarDecl
     {
         return new AVarDecl(
             cloneNode(this._type_),
-            cloneNode(this._varName_));
+            cloneNode(this._name_));
     }
 
     public void apply(Switch sw)
@@ -64,16 +64,16 @@ public final class AVarDecl extends PVarDecl
         this._type_ = node;
     }
 
-    public TId getVarName()
+    public TId getName()
     {
-        return this._varName_;
+        return this._name_;
     }
 
-    public void setVarName(TId node)
+    public void setName(TId node)
     {
-        if(this._varName_ != null)
+        if(this._name_ != null)
         {
-            this._varName_.parent(null);
+            this._name_.parent(null);
         }
 
         if(node != null)
@@ -86,7 +86,7 @@ public final class AVarDecl extends PVarDecl
             node.parent(this);
         }
 
-        this._varName_ = node;
+        this._name_ = node;
     }
 
     @Override
@@ -94,7 +94,7 @@ public final class AVarDecl extends PVarDecl
     {
         return ""
             + toString(this._type_)
-            + toString(this._varName_);
+            + toString(this._name_);
     }
 
     @Override
@@ -107,9 +107,9 @@ public final class AVarDecl extends PVarDecl
             return;
         }
 
-        if(this._varName_ == child)
+        if(this._name_ == child)
         {
-            this._varName_ = null;
+            this._name_ = null;
             return;
         }
 
@@ -126,9 +126,9 @@ public final class AVarDecl extends PVarDecl
             return;
         }
 
-        if(this._varName_ == oldChild)
+        if(this._name_ == oldChild)
         {
-            setVarName((TId) newChild);
+            setName((TId) newChild);
             return;
         }
 

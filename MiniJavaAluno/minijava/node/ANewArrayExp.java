@@ -7,7 +7,8 @@ import minijava.analysis.*;
 @SuppressWarnings("nls")
 public final class ANewArrayExp extends PExp
 {
-    private PExp _exp_;
+    private TLBracket _token_;
+    private PExp _size_;
 
     public ANewArrayExp()
     {
@@ -15,10 +16,13 @@ public final class ANewArrayExp extends PExp
     }
 
     public ANewArrayExp(
-        @SuppressWarnings("hiding") PExp _exp_)
+        @SuppressWarnings("hiding") TLBracket _token_,
+        @SuppressWarnings("hiding") PExp _size_)
     {
         // Constructor
-        setExp(_exp_);
+        setToken(_token_);
+
+        setSize(_size_);
 
     }
 
@@ -26,7 +30,8 @@ public final class ANewArrayExp extends PExp
     public Object clone()
     {
         return new ANewArrayExp(
-            cloneNode(this._exp_));
+            cloneNode(this._token_),
+            cloneNode(this._size_));
     }
 
     public void apply(Switch sw)
@@ -34,16 +39,16 @@ public final class ANewArrayExp extends PExp
         ((Analysis) sw).caseANewArrayExp(this);
     }
 
-    public PExp getExp()
+    public TLBracket getToken()
     {
-        return this._exp_;
+        return this._token_;
     }
 
-    public void setExp(PExp node)
+    public void setToken(TLBracket node)
     {
-        if(this._exp_ != null)
+        if(this._token_ != null)
         {
-            this._exp_.parent(null);
+            this._token_.parent(null);
         }
 
         if(node != null)
@@ -56,23 +61,55 @@ public final class ANewArrayExp extends PExp
             node.parent(this);
         }
 
-        this._exp_ = node;
+        this._token_ = node;
+    }
+
+    public PExp getSize()
+    {
+        return this._size_;
+    }
+
+    public void setSize(PExp node)
+    {
+        if(this._size_ != null)
+        {
+            this._size_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._size_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._exp_);
+            + toString(this._token_)
+            + toString(this._size_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._exp_ == child)
+        if(this._token_ == child)
         {
-            this._exp_ = null;
+            this._token_ = null;
+            return;
+        }
+
+        if(this._size_ == child)
+        {
+            this._size_ = null;
             return;
         }
 
@@ -83,9 +120,15 @@ public final class ANewArrayExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._exp_ == oldChild)
+        if(this._token_ == oldChild)
         {
-            setExp((PExp) newChild);
+            setToken((TLBracket) newChild);
+            return;
+        }
+
+        if(this._size_ == oldChild)
+        {
+            setSize((PExp) newChild);
             return;
         }
 

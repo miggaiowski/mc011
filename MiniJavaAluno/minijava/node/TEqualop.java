@@ -5,16 +5,16 @@ package minijava.node;
 import minijava.analysis.*;
 
 @SuppressWarnings("nls")
-public final class TEqual extends Token
+public final class TEqualop extends Token
 {
-    public TEqual()
+    public TEqualop()
     {
-        super.setText("=");
+        super.setText("==");
     }
 
-    public TEqual(int line, int pos)
+    public TEqualop(int line, int pos)
     {
-        super.setText("=");
+        super.setText("==");
         setLine(line);
         setPos(pos);
     }
@@ -22,17 +22,17 @@ public final class TEqual extends Token
     @Override
     public Object clone()
     {
-      return new TEqual(getLine(), getPos());
+      return new TEqualop(getLine(), getPos());
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseTEqual(this);
+        ((Analysis) sw).caseTEqualop(this);
     }
 
     @Override
     public void setText(@SuppressWarnings("unused") String text)
     {
-        throw new RuntimeException("Cannot change TEqual text.");
+        throw new RuntimeException("Cannot change TEqualop text.");
     }
 }

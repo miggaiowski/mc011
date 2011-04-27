@@ -7,16 +7,26 @@ import minijava.analysis.*;
 @SuppressWarnings("nls")
 public final class ATrueExp extends PExp
 {
+    private TTrue _token_;
 
     public ATrueExp()
     {
         // Constructor
     }
 
+    public ATrueExp(
+        @SuppressWarnings("hiding") TTrue _token_)
+    {
+        // Constructor
+        setToken(_token_);
+
+    }
+
     @Override
     public Object clone()
     {
-        return new ATrueExp();
+        return new ATrueExp(
+            cloneNode(this._token_));
     }
 
     public void apply(Switch sw)
@@ -24,16 +34,48 @@ public final class ATrueExp extends PExp
         ((Analysis) sw).caseATrueExp(this);
     }
 
+    public TTrue getToken()
+    {
+        return this._token_;
+    }
+
+    public void setToken(TTrue node)
+    {
+        if(this._token_ != null)
+        {
+            this._token_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._token_ = node;
+    }
+
     @Override
     public String toString()
     {
-        return "";
+        return ""
+            + toString(this._token_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
+        if(this._token_ == child)
+        {
+            this._token_ = null;
+            return;
+        }
+
         throw new RuntimeException("Not a child.");
     }
 
@@ -41,6 +83,12 @@ public final class ATrueExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
+        if(this._token_ == oldChild)
+        {
+            setToken((TTrue) newChild);
+            return;
+        }
+
         throw new RuntimeException("Not a child.");
     }
 }

@@ -7,9 +7,9 @@ import minijava.analysis.*;
 @SuppressWarnings("nls")
 public final class AMainClass extends PMainClass
 {
-    private TId _className_;
-    private TId _mainArgName_;
-    private PStatement _statements_;
+    private TId _name_;
+    private TId _mainArgs_;
+    private PStatement _statement_;
 
     public AMainClass()
     {
@@ -17,16 +17,16 @@ public final class AMainClass extends PMainClass
     }
 
     public AMainClass(
-        @SuppressWarnings("hiding") TId _className_,
-        @SuppressWarnings("hiding") TId _mainArgName_,
-        @SuppressWarnings("hiding") PStatement _statements_)
+        @SuppressWarnings("hiding") TId _name_,
+        @SuppressWarnings("hiding") TId _mainArgs_,
+        @SuppressWarnings("hiding") PStatement _statement_)
     {
         // Constructor
-        setClassName(_className_);
+        setName(_name_);
 
-        setMainArgName(_mainArgName_);
+        setMainArgs(_mainArgs_);
 
-        setStatements(_statements_);
+        setStatement(_statement_);
 
     }
 
@@ -34,9 +34,9 @@ public final class AMainClass extends PMainClass
     public Object clone()
     {
         return new AMainClass(
-            cloneNode(this._className_),
-            cloneNode(this._mainArgName_),
-            cloneNode(this._statements_));
+            cloneNode(this._name_),
+            cloneNode(this._mainArgs_),
+            cloneNode(this._statement_));
     }
 
     public void apply(Switch sw)
@@ -44,16 +44,16 @@ public final class AMainClass extends PMainClass
         ((Analysis) sw).caseAMainClass(this);
     }
 
-    public TId getClassName()
+    public TId getName()
     {
-        return this._className_;
+        return this._name_;
     }
 
-    public void setClassName(TId node)
+    public void setName(TId node)
     {
-        if(this._className_ != null)
+        if(this._name_ != null)
         {
-            this._className_.parent(null);
+            this._name_.parent(null);
         }
 
         if(node != null)
@@ -66,19 +66,19 @@ public final class AMainClass extends PMainClass
             node.parent(this);
         }
 
-        this._className_ = node;
+        this._name_ = node;
     }
 
-    public TId getMainArgName()
+    public TId getMainArgs()
     {
-        return this._mainArgName_;
+        return this._mainArgs_;
     }
 
-    public void setMainArgName(TId node)
+    public void setMainArgs(TId node)
     {
-        if(this._mainArgName_ != null)
+        if(this._mainArgs_ != null)
         {
-            this._mainArgName_.parent(null);
+            this._mainArgs_.parent(null);
         }
 
         if(node != null)
@@ -91,19 +91,19 @@ public final class AMainClass extends PMainClass
             node.parent(this);
         }
 
-        this._mainArgName_ = node;
+        this._mainArgs_ = node;
     }
 
-    public PStatement getStatements()
+    public PStatement getStatement()
     {
-        return this._statements_;
+        return this._statement_;
     }
 
-    public void setStatements(PStatement node)
+    public void setStatement(PStatement node)
     {
-        if(this._statements_ != null)
+        if(this._statement_ != null)
         {
-            this._statements_.parent(null);
+            this._statement_.parent(null);
         }
 
         if(node != null)
@@ -116,37 +116,37 @@ public final class AMainClass extends PMainClass
             node.parent(this);
         }
 
-        this._statements_ = node;
+        this._statement_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._className_)
-            + toString(this._mainArgName_)
-            + toString(this._statements_);
+            + toString(this._name_)
+            + toString(this._mainArgs_)
+            + toString(this._statement_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._className_ == child)
+        if(this._name_ == child)
         {
-            this._className_ = null;
+            this._name_ = null;
             return;
         }
 
-        if(this._mainArgName_ == child)
+        if(this._mainArgs_ == child)
         {
-            this._mainArgName_ = null;
+            this._mainArgs_ = null;
             return;
         }
 
-        if(this._statements_ == child)
+        if(this._statement_ == child)
         {
-            this._statements_ = null;
+            this._statement_ = null;
             return;
         }
 
@@ -157,21 +157,21 @@ public final class AMainClass extends PMainClass
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._className_ == oldChild)
+        if(this._name_ == oldChild)
         {
-            setClassName((TId) newChild);
+            setName((TId) newChild);
             return;
         }
 
-        if(this._mainArgName_ == oldChild)
+        if(this._mainArgs_ == oldChild)
         {
-            setMainArgName((TId) newChild);
+            setMainArgs((TId) newChild);
             return;
         }
 
-        if(this._statements_ == oldChild)
+        if(this._statement_ == oldChild)
         {
-            setStatements((PStatement) newChild);
+            setStatement((PStatement) newChild);
             return;
         }
 

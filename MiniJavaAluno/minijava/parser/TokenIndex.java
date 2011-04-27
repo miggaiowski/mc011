@@ -160,80 +160,86 @@ class TokenIndex extends AnalysisAdapter
     }
 
     @Override
-    public void caseTEqual(@SuppressWarnings("unused") TEqual node)
+    public void caseTEqualop(@SuppressWarnings("unused") TEqualop node)
     {
         this.index = 25;
     }
 
     @Override
-    public void caseTNot(@SuppressWarnings("unused") TNot node)
+    public void caseTAttr(@SuppressWarnings("unused") TAttr node)
     {
         this.index = 26;
     }
 
     @Override
-    public void caseTLBracket(@SuppressWarnings("unused") TLBracket node)
+    public void caseTNot(@SuppressWarnings("unused") TNot node)
     {
         this.index = 27;
     }
 
     @Override
-    public void caseTRBracket(@SuppressWarnings("unused") TRBracket node)
+    public void caseTLBracket(@SuppressWarnings("unused") TLBracket node)
     {
         this.index = 28;
     }
 
     @Override
-    public void caseTLBrace(@SuppressWarnings("unused") TLBrace node)
+    public void caseTRBracket(@SuppressWarnings("unused") TRBracket node)
     {
         this.index = 29;
     }
 
     @Override
-    public void caseTRBrace(@SuppressWarnings("unused") TRBrace node)
+    public void caseTLBrace(@SuppressWarnings("unused") TLBrace node)
     {
         this.index = 30;
     }
 
     @Override
-    public void caseTLParenthese(@SuppressWarnings("unused") TLParenthese node)
+    public void caseTRBrace(@SuppressWarnings("unused") TRBrace node)
     {
         this.index = 31;
     }
 
     @Override
-    public void caseTRParenthese(@SuppressWarnings("unused") TRParenthese node)
+    public void caseTLParenthese(@SuppressWarnings("unused") TLParenthese node)
     {
         this.index = 32;
     }
 
     @Override
-    public void caseTDot(@SuppressWarnings("unused") TDot node)
+    public void caseTRParenthese(@SuppressWarnings("unused") TRParenthese node)
     {
         this.index = 33;
     }
 
     @Override
-    public void caseTSemicolon(@SuppressWarnings("unused") TSemicolon node)
+    public void caseTDot(@SuppressWarnings("unused") TDot node)
     {
         this.index = 34;
     }
 
     @Override
-    public void caseTComma(@SuppressWarnings("unused") TComma node)
+    public void caseTSemicolon(@SuppressWarnings("unused") TSemicolon node)
     {
         this.index = 35;
     }
 
     @Override
-    public void caseTPrint(@SuppressWarnings("unused") TPrint node)
+    public void caseTComma(@SuppressWarnings("unused") TComma node)
     {
         this.index = 36;
     }
 
     @Override
-    public void caseEOF(@SuppressWarnings("unused") EOF node)
+    public void caseTPrint(@SuppressWarnings("unused") TPrint node)
     {
         this.index = 37;
+    }
+
+    @Override
+    public void caseEOF(@SuppressWarnings("unused") EOF node)
+    {
+        this.index = 38;
     }
 }

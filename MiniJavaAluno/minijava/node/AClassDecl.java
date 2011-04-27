@@ -6,60 +6,60 @@ import java.util.*;
 import minijava.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AExtendsClassDecl extends PClassDecl
+public final class AClassDecl extends PClassDecl
 {
-    private TId _className_;
+    private TId _name_;
     private TId _super_;
-    private final LinkedList<PVarDecl> _varDecl_ = new LinkedList<PVarDecl>();
-    private final LinkedList<PMethodDecl> _methodDecl_ = new LinkedList<PMethodDecl>();
+    private final LinkedList<PVarDecl> _attributes_ = new LinkedList<PVarDecl>();
+    private final LinkedList<PMethodDecl> _methods_ = new LinkedList<PMethodDecl>();
 
-    public AExtendsClassDecl()
+    public AClassDecl()
     {
         // Constructor
     }
 
-    public AExtendsClassDecl(
-        @SuppressWarnings("hiding") TId _className_,
+    public AClassDecl(
+        @SuppressWarnings("hiding") TId _name_,
         @SuppressWarnings("hiding") TId _super_,
-        @SuppressWarnings("hiding") List<PVarDecl> _varDecl_,
-        @SuppressWarnings("hiding") List<PMethodDecl> _methodDecl_)
+        @SuppressWarnings("hiding") List<PVarDecl> _attributes_,
+        @SuppressWarnings("hiding") List<PMethodDecl> _methods_)
     {
         // Constructor
-        setClassName(_className_);
+        setName(_name_);
 
         setSuper(_super_);
 
-        setVarDecl(_varDecl_);
+        setAttributes(_attributes_);
 
-        setMethodDecl(_methodDecl_);
+        setMethods(_methods_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AExtendsClassDecl(
-            cloneNode(this._className_),
+        return new AClassDecl(
+            cloneNode(this._name_),
             cloneNode(this._super_),
-            cloneList(this._varDecl_),
-            cloneList(this._methodDecl_));
+            cloneList(this._attributes_),
+            cloneList(this._methods_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAExtendsClassDecl(this);
+        ((Analysis) sw).caseAClassDecl(this);
     }
 
-    public TId getClassName()
+    public TId getName()
     {
-        return this._className_;
+        return this._name_;
     }
 
-    public void setClassName(TId node)
+    public void setName(TId node)
     {
-        if(this._className_ != null)
+        if(this._name_ != null)
         {
-            this._className_.parent(null);
+            this._name_.parent(null);
         }
 
         if(node != null)
@@ -72,7 +72,7 @@ public final class AExtendsClassDecl extends PClassDecl
             node.parent(this);
         }
 
-        this._className_ = node;
+        this._name_ = node;
     }
 
     public TId getSuper()
@@ -100,15 +100,15 @@ public final class AExtendsClassDecl extends PClassDecl
         this._super_ = node;
     }
 
-    public LinkedList<PVarDecl> getVarDecl()
+    public LinkedList<PVarDecl> getAttributes()
     {
-        return this._varDecl_;
+        return this._attributes_;
     }
 
-    public void setVarDecl(List<PVarDecl> list)
+    public void setAttributes(List<PVarDecl> list)
     {
-        this._varDecl_.clear();
-        this._varDecl_.addAll(list);
+        this._attributes_.clear();
+        this._attributes_.addAll(list);
         for(PVarDecl e : list)
         {
             if(e.parent() != null)
@@ -120,15 +120,15 @@ public final class AExtendsClassDecl extends PClassDecl
         }
     }
 
-    public LinkedList<PMethodDecl> getMethodDecl()
+    public LinkedList<PMethodDecl> getMethods()
     {
-        return this._methodDecl_;
+        return this._methods_;
     }
 
-    public void setMethodDecl(List<PMethodDecl> list)
+    public void setMethods(List<PMethodDecl> list)
     {
-        this._methodDecl_.clear();
-        this._methodDecl_.addAll(list);
+        this._methods_.clear();
+        this._methods_.addAll(list);
         for(PMethodDecl e : list)
         {
             if(e.parent() != null)
@@ -144,19 +144,19 @@ public final class AExtendsClassDecl extends PClassDecl
     public String toString()
     {
         return ""
-            + toString(this._className_)
+            + toString(this._name_)
             + toString(this._super_)
-            + toString(this._varDecl_)
-            + toString(this._methodDecl_);
+            + toString(this._attributes_)
+            + toString(this._methods_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._className_ == child)
+        if(this._name_ == child)
         {
-            this._className_ = null;
+            this._name_ = null;
             return;
         }
 
@@ -166,12 +166,12 @@ public final class AExtendsClassDecl extends PClassDecl
             return;
         }
 
-        if(this._varDecl_.remove(child))
+        if(this._attributes_.remove(child))
         {
             return;
         }
 
-        if(this._methodDecl_.remove(child))
+        if(this._methods_.remove(child))
         {
             return;
         }
@@ -183,9 +183,9 @@ public final class AExtendsClassDecl extends PClassDecl
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._className_ == oldChild)
+        if(this._name_ == oldChild)
         {
-            setClassName((TId) newChild);
+            setName((TId) newChild);
             return;
         }
 
@@ -195,7 +195,7 @@ public final class AExtendsClassDecl extends PClassDecl
             return;
         }
 
-        for(ListIterator<PVarDecl> i = this._varDecl_.listIterator(); i.hasNext();)
+        for(ListIterator<PVarDecl> i = this._attributes_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {
@@ -213,7 +213,7 @@ public final class AExtendsClassDecl extends PClassDecl
             }
         }
 
-        for(ListIterator<PMethodDecl> i = this._methodDecl_.listIterator(); i.hasNext();)
+        for(ListIterator<PMethodDecl> i = this._methods_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {

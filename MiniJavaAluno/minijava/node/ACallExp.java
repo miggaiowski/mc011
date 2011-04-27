@@ -9,8 +9,8 @@ import minijava.analysis.*;
 public final class ACallExp extends PExp
 {
     private PExp _object_;
-    private TId _methodName_;
-    private final LinkedList<PExp> _args_ = new LinkedList<PExp>();
+    private TId _method_;
+    private final LinkedList<PExp> _actuals_ = new LinkedList<PExp>();
 
     public ACallExp()
     {
@@ -19,15 +19,15 @@ public final class ACallExp extends PExp
 
     public ACallExp(
         @SuppressWarnings("hiding") PExp _object_,
-        @SuppressWarnings("hiding") TId _methodName_,
-        @SuppressWarnings("hiding") List<PExp> _args_)
+        @SuppressWarnings("hiding") TId _method_,
+        @SuppressWarnings("hiding") List<PExp> _actuals_)
     {
         // Constructor
         setObject(_object_);
 
-        setMethodName(_methodName_);
+        setMethod(_method_);
 
-        setArgs(_args_);
+        setActuals(_actuals_);
 
     }
 
@@ -36,8 +36,8 @@ public final class ACallExp extends PExp
     {
         return new ACallExp(
             cloneNode(this._object_),
-            cloneNode(this._methodName_),
-            cloneList(this._args_));
+            cloneNode(this._method_),
+            cloneList(this._actuals_));
     }
 
     public void apply(Switch sw)
@@ -70,16 +70,16 @@ public final class ACallExp extends PExp
         this._object_ = node;
     }
 
-    public TId getMethodName()
+    public TId getMethod()
     {
-        return this._methodName_;
+        return this._method_;
     }
 
-    public void setMethodName(TId node)
+    public void setMethod(TId node)
     {
-        if(this._methodName_ != null)
+        if(this._method_ != null)
         {
-            this._methodName_.parent(null);
+            this._method_.parent(null);
         }
 
         if(node != null)
@@ -92,18 +92,18 @@ public final class ACallExp extends PExp
             node.parent(this);
         }
 
-        this._methodName_ = node;
+        this._method_ = node;
     }
 
-    public LinkedList<PExp> getArgs()
+    public LinkedList<PExp> getActuals()
     {
-        return this._args_;
+        return this._actuals_;
     }
 
-    public void setArgs(List<PExp> list)
+    public void setActuals(List<PExp> list)
     {
-        this._args_.clear();
-        this._args_.addAll(list);
+        this._actuals_.clear();
+        this._actuals_.addAll(list);
         for(PExp e : list)
         {
             if(e.parent() != null)
@@ -120,8 +120,8 @@ public final class ACallExp extends PExp
     {
         return ""
             + toString(this._object_)
-            + toString(this._methodName_)
-            + toString(this._args_);
+            + toString(this._method_)
+            + toString(this._actuals_);
     }
 
     @Override
@@ -134,13 +134,13 @@ public final class ACallExp extends PExp
             return;
         }
 
-        if(this._methodName_ == child)
+        if(this._method_ == child)
         {
-            this._methodName_ = null;
+            this._method_ = null;
             return;
         }
 
-        if(this._args_.remove(child))
+        if(this._actuals_.remove(child))
         {
             return;
         }
@@ -158,13 +158,13 @@ public final class ACallExp extends PExp
             return;
         }
 
-        if(this._methodName_ == oldChild)
+        if(this._method_ == oldChild)
         {
-            setMethodName((TId) newChild);
+            setMethod((TId) newChild);
             return;
         }
 
-        for(ListIterator<PExp> i = this._args_.listIterator(); i.hasNext();)
+        for(ListIterator<PExp> i = this._actuals_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {

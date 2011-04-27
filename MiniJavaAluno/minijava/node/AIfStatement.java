@@ -7,8 +7,10 @@ import minijava.analysis.*;
 @SuppressWarnings("nls")
 public final class AIfStatement extends PStatement
 {
-    private PExp _ifexp_;
-    private PStatement _ifstatement_;
+    private TIf _token_;
+    private PExp _condition_;
+    private PStatement _thenClause_;
+    private PStatement _elseClause_;
 
     public AIfStatement()
     {
@@ -16,13 +18,19 @@ public final class AIfStatement extends PStatement
     }
 
     public AIfStatement(
-        @SuppressWarnings("hiding") PExp _ifexp_,
-        @SuppressWarnings("hiding") PStatement _ifstatement_)
+        @SuppressWarnings("hiding") TIf _token_,
+        @SuppressWarnings("hiding") PExp _condition_,
+        @SuppressWarnings("hiding") PStatement _thenClause_,
+        @SuppressWarnings("hiding") PStatement _elseClause_)
     {
         // Constructor
-        setIfexp(_ifexp_);
+        setToken(_token_);
 
-        setIfstatement(_ifstatement_);
+        setCondition(_condition_);
+
+        setThenClause(_thenClause_);
+
+        setElseClause(_elseClause_);
 
     }
 
@@ -30,8 +38,10 @@ public final class AIfStatement extends PStatement
     public Object clone()
     {
         return new AIfStatement(
-            cloneNode(this._ifexp_),
-            cloneNode(this._ifstatement_));
+            cloneNode(this._token_),
+            cloneNode(this._condition_),
+            cloneNode(this._thenClause_),
+            cloneNode(this._elseClause_));
     }
 
     public void apply(Switch sw)
@@ -39,16 +49,16 @@ public final class AIfStatement extends PStatement
         ((Analysis) sw).caseAIfStatement(this);
     }
 
-    public PExp getIfexp()
+    public TIf getToken()
     {
-        return this._ifexp_;
+        return this._token_;
     }
 
-    public void setIfexp(PExp node)
+    public void setToken(TIf node)
     {
-        if(this._ifexp_ != null)
+        if(this._token_ != null)
         {
-            this._ifexp_.parent(null);
+            this._token_.parent(null);
         }
 
         if(node != null)
@@ -61,19 +71,19 @@ public final class AIfStatement extends PStatement
             node.parent(this);
         }
 
-        this._ifexp_ = node;
+        this._token_ = node;
     }
 
-    public PStatement getIfstatement()
+    public PExp getCondition()
     {
-        return this._ifstatement_;
+        return this._condition_;
     }
 
-    public void setIfstatement(PStatement node)
+    public void setCondition(PExp node)
     {
-        if(this._ifstatement_ != null)
+        if(this._condition_ != null)
         {
-            this._ifstatement_.parent(null);
+            this._condition_.parent(null);
         }
 
         if(node != null)
@@ -86,30 +96,94 @@ public final class AIfStatement extends PStatement
             node.parent(this);
         }
 
-        this._ifstatement_ = node;
+        this._condition_ = node;
+    }
+
+    public PStatement getThenClause()
+    {
+        return this._thenClause_;
+    }
+
+    public void setThenClause(PStatement node)
+    {
+        if(this._thenClause_ != null)
+        {
+            this._thenClause_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._thenClause_ = node;
+    }
+
+    public PStatement getElseClause()
+    {
+        return this._elseClause_;
+    }
+
+    public void setElseClause(PStatement node)
+    {
+        if(this._elseClause_ != null)
+        {
+            this._elseClause_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._elseClause_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._ifexp_)
-            + toString(this._ifstatement_);
+            + toString(this._token_)
+            + toString(this._condition_)
+            + toString(this._thenClause_)
+            + toString(this._elseClause_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._ifexp_ == child)
+        if(this._token_ == child)
         {
-            this._ifexp_ = null;
+            this._token_ = null;
             return;
         }
 
-        if(this._ifstatement_ == child)
+        if(this._condition_ == child)
         {
-            this._ifstatement_ = null;
+            this._condition_ = null;
+            return;
+        }
+
+        if(this._thenClause_ == child)
+        {
+            this._thenClause_ = null;
+            return;
+        }
+
+        if(this._elseClause_ == child)
+        {
+            this._elseClause_ = null;
             return;
         }
 
@@ -120,15 +194,27 @@ public final class AIfStatement extends PStatement
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._ifexp_ == oldChild)
+        if(this._token_ == oldChild)
         {
-            setIfexp((PExp) newChild);
+            setToken((TIf) newChild);
             return;
         }
 
-        if(this._ifstatement_ == oldChild)
+        if(this._condition_ == oldChild)
         {
-            setIfstatement((PStatement) newChild);
+            setCondition((PExp) newChild);
+            return;
+        }
+
+        if(this._thenClause_ == oldChild)
+        {
+            setThenClause((PStatement) newChild);
+            return;
+        }
+
+        if(this._elseClause_ == oldChild)
+        {
+            setElseClause((PStatement) newChild);
             return;
         }
 

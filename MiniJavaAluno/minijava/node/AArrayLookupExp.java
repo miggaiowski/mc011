@@ -7,7 +7,8 @@ import minijava.analysis.*;
 @SuppressWarnings("nls")
 public final class AArrayLookupExp extends PExp
 {
-    private PExp _exp_;
+    private TLBracket _token_;
+    private PExp _array_;
     private PExp _index_;
 
     public AArrayLookupExp()
@@ -16,11 +17,14 @@ public final class AArrayLookupExp extends PExp
     }
 
     public AArrayLookupExp(
-        @SuppressWarnings("hiding") PExp _exp_,
+        @SuppressWarnings("hiding") TLBracket _token_,
+        @SuppressWarnings("hiding") PExp _array_,
         @SuppressWarnings("hiding") PExp _index_)
     {
         // Constructor
-        setExp(_exp_);
+        setToken(_token_);
+
+        setArray(_array_);
 
         setIndex(_index_);
 
@@ -30,7 +34,8 @@ public final class AArrayLookupExp extends PExp
     public Object clone()
     {
         return new AArrayLookupExp(
-            cloneNode(this._exp_),
+            cloneNode(this._token_),
+            cloneNode(this._array_),
             cloneNode(this._index_));
     }
 
@@ -39,16 +44,16 @@ public final class AArrayLookupExp extends PExp
         ((Analysis) sw).caseAArrayLookupExp(this);
     }
 
-    public PExp getExp()
+    public TLBracket getToken()
     {
-        return this._exp_;
+        return this._token_;
     }
 
-    public void setExp(PExp node)
+    public void setToken(TLBracket node)
     {
-        if(this._exp_ != null)
+        if(this._token_ != null)
         {
-            this._exp_.parent(null);
+            this._token_.parent(null);
         }
 
         if(node != null)
@@ -61,7 +66,32 @@ public final class AArrayLookupExp extends PExp
             node.parent(this);
         }
 
-        this._exp_ = node;
+        this._token_ = node;
+    }
+
+    public PExp getArray()
+    {
+        return this._array_;
+    }
+
+    public void setArray(PExp node)
+    {
+        if(this._array_ != null)
+        {
+            this._array_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._array_ = node;
     }
 
     public PExp getIndex()
@@ -93,7 +123,8 @@ public final class AArrayLookupExp extends PExp
     public String toString()
     {
         return ""
-            + toString(this._exp_)
+            + toString(this._token_)
+            + toString(this._array_)
             + toString(this._index_);
     }
 
@@ -101,9 +132,15 @@ public final class AArrayLookupExp extends PExp
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._exp_ == child)
+        if(this._token_ == child)
         {
-            this._exp_ = null;
+            this._token_ = null;
+            return;
+        }
+
+        if(this._array_ == child)
+        {
+            this._array_ = null;
             return;
         }
 
@@ -120,9 +157,15 @@ public final class AArrayLookupExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._exp_ == oldChild)
+        if(this._token_ == oldChild)
         {
-            setExp((PExp) newChild);
+            setToken((TLBracket) newChild);
+            return;
+        }
+
+        if(this._array_ == oldChild)
+        {
+            setArray((PExp) newChild);
             return;
         }
 

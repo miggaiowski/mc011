@@ -7,8 +7,9 @@ import minijava.analysis.*;
 @SuppressWarnings("nls")
 public final class AArrayAssignStatement extends PStatement
 {
-    private TId _id_;
-    private PExp _arrayindex_;
+    private TAttr _token_;
+    private TId _target_;
+    private PExp _index_;
     private PExp _value_;
 
     public AArrayAssignStatement()
@@ -17,14 +18,17 @@ public final class AArrayAssignStatement extends PStatement
     }
 
     public AArrayAssignStatement(
-        @SuppressWarnings("hiding") TId _id_,
-        @SuppressWarnings("hiding") PExp _arrayindex_,
+        @SuppressWarnings("hiding") TAttr _token_,
+        @SuppressWarnings("hiding") TId _target_,
+        @SuppressWarnings("hiding") PExp _index_,
         @SuppressWarnings("hiding") PExp _value_)
     {
         // Constructor
-        setId(_id_);
+        setToken(_token_);
 
-        setArrayindex(_arrayindex_);
+        setTarget(_target_);
+
+        setIndex(_index_);
 
         setValue(_value_);
 
@@ -34,8 +38,9 @@ public final class AArrayAssignStatement extends PStatement
     public Object clone()
     {
         return new AArrayAssignStatement(
-            cloneNode(this._id_),
-            cloneNode(this._arrayindex_),
+            cloneNode(this._token_),
+            cloneNode(this._target_),
+            cloneNode(this._index_),
             cloneNode(this._value_));
     }
 
@@ -44,16 +49,16 @@ public final class AArrayAssignStatement extends PStatement
         ((Analysis) sw).caseAArrayAssignStatement(this);
     }
 
-    public TId getId()
+    public TAttr getToken()
     {
-        return this._id_;
+        return this._token_;
     }
 
-    public void setId(TId node)
+    public void setToken(TAttr node)
     {
-        if(this._id_ != null)
+        if(this._token_ != null)
         {
-            this._id_.parent(null);
+            this._token_.parent(null);
         }
 
         if(node != null)
@@ -66,19 +71,19 @@ public final class AArrayAssignStatement extends PStatement
             node.parent(this);
         }
 
-        this._id_ = node;
+        this._token_ = node;
     }
 
-    public PExp getArrayindex()
+    public TId getTarget()
     {
-        return this._arrayindex_;
+        return this._target_;
     }
 
-    public void setArrayindex(PExp node)
+    public void setTarget(TId node)
     {
-        if(this._arrayindex_ != null)
+        if(this._target_ != null)
         {
-            this._arrayindex_.parent(null);
+            this._target_.parent(null);
         }
 
         if(node != null)
@@ -91,7 +96,32 @@ public final class AArrayAssignStatement extends PStatement
             node.parent(this);
         }
 
-        this._arrayindex_ = node;
+        this._target_ = node;
+    }
+
+    public PExp getIndex()
+    {
+        return this._index_;
+    }
+
+    public void setIndex(PExp node)
+    {
+        if(this._index_ != null)
+        {
+            this._index_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._index_ = node;
     }
 
     public PExp getValue()
@@ -123,8 +153,9 @@ public final class AArrayAssignStatement extends PStatement
     public String toString()
     {
         return ""
-            + toString(this._id_)
-            + toString(this._arrayindex_)
+            + toString(this._token_)
+            + toString(this._target_)
+            + toString(this._index_)
             + toString(this._value_);
     }
 
@@ -132,15 +163,21 @@ public final class AArrayAssignStatement extends PStatement
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._id_ == child)
+        if(this._token_ == child)
         {
-            this._id_ = null;
+            this._token_ = null;
             return;
         }
 
-        if(this._arrayindex_ == child)
+        if(this._target_ == child)
         {
-            this._arrayindex_ = null;
+            this._target_ = null;
+            return;
+        }
+
+        if(this._index_ == child)
+        {
+            this._index_ = null;
             return;
         }
 
@@ -157,15 +194,21 @@ public final class AArrayAssignStatement extends PStatement
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._id_ == oldChild)
+        if(this._token_ == oldChild)
         {
-            setId((TId) newChild);
+            setToken((TAttr) newChild);
             return;
         }
 
-        if(this._arrayindex_ == oldChild)
+        if(this._target_ == oldChild)
         {
-            setArrayindex((PExp) newChild);
+            setTarget((TId) newChild);
+            return;
+        }
+
+        if(this._index_ == oldChild)
+        {
+            setIndex((PExp) newChild);
             return;
         }
 

@@ -51,7 +51,7 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     {
         inAProgram(node);
         {
-            List<PClassDecl> copy = new ArrayList<PClassDecl>(node.getClassDecl());
+            List<PClassDecl> copy = new ArrayList<PClassDecl>(node.getClasses());
             Collections.reverse(copy);
             for(PClassDecl e : copy)
             {
@@ -79,37 +79,37 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAMainClass(AMainClass node)
     {
         inAMainClass(node);
-        if(node.getStatements() != null)
+        if(node.getStatement() != null)
         {
-            node.getStatements().apply(this);
+            node.getStatement().apply(this);
         }
-        if(node.getMainArgName() != null)
+        if(node.getMainArgs() != null)
         {
-            node.getMainArgName().apply(this);
+            node.getMainArgs().apply(this);
         }
-        if(node.getClassName() != null)
+        if(node.getName() != null)
         {
-            node.getClassName().apply(this);
+            node.getName().apply(this);
         }
         outAMainClass(node);
     }
 
-    public void inASimpleClassDecl(ASimpleClassDecl node)
+    public void inAClassDecl(AClassDecl node)
     {
         defaultIn(node);
     }
 
-    public void outASimpleClassDecl(ASimpleClassDecl node)
+    public void outAClassDecl(AClassDecl node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseASimpleClassDecl(ASimpleClassDecl node)
+    public void caseAClassDecl(AClassDecl node)
     {
-        inASimpleClassDecl(node);
+        inAClassDecl(node);
         {
-            List<PMethodDecl> copy = new ArrayList<PMethodDecl>(node.getMethodDecl());
+            List<PMethodDecl> copy = new ArrayList<PMethodDecl>(node.getMethods());
             Collections.reverse(copy);
             for(PMethodDecl e : copy)
             {
@@ -117,44 +117,7 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
             }
         }
         {
-            List<PVarDecl> copy = new ArrayList<PVarDecl>(node.getVarDecl());
-            Collections.reverse(copy);
-            for(PVarDecl e : copy)
-            {
-                e.apply(this);
-            }
-        }
-        if(node.getClassName() != null)
-        {
-            node.getClassName().apply(this);
-        }
-        outASimpleClassDecl(node);
-    }
-
-    public void inAExtendsClassDecl(AExtendsClassDecl node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAExtendsClassDecl(AExtendsClassDecl node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAExtendsClassDecl(AExtendsClassDecl node)
-    {
-        inAExtendsClassDecl(node);
-        {
-            List<PMethodDecl> copy = new ArrayList<PMethodDecl>(node.getMethodDecl());
-            Collections.reverse(copy);
-            for(PMethodDecl e : copy)
-            {
-                e.apply(this);
-            }
-        }
-        {
-            List<PVarDecl> copy = new ArrayList<PVarDecl>(node.getVarDecl());
+            List<PVarDecl> copy = new ArrayList<PVarDecl>(node.getAttributes());
             Collections.reverse(copy);
             for(PVarDecl e : copy)
             {
@@ -165,11 +128,11 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         {
             node.getSuper().apply(this);
         }
-        if(node.getClassName() != null)
+        if(node.getName() != null)
         {
-            node.getClassName().apply(this);
+            node.getName().apply(this);
         }
-        outAExtendsClassDecl(node);
+        outAClassDecl(node);
     }
 
     public void inAVarDecl(AVarDecl node)
@@ -186,9 +149,9 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAVarDecl(AVarDecl node)
     {
         inAVarDecl(node);
-        if(node.getVarName() != null)
+        if(node.getName() != null)
         {
-            node.getVarName().apply(this);
+            node.getName().apply(this);
         }
         if(node.getType() != null)
         {
@@ -211,12 +174,12 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAMethodDecl(AMethodDecl node)
     {
         inAMethodDecl(node);
-        if(node.getReturnExpression() != null)
+        if(node.getReturnExp() != null)
         {
-            node.getReturnExpression().apply(this);
+            node.getReturnExp().apply(this);
         }
         {
-            List<PStatement> copy = new ArrayList<PStatement>(node.getStatements());
+            List<PStatement> copy = new ArrayList<PStatement>(node.getBody());
             Collections.reverse(copy);
             for(PStatement e : copy)
             {
@@ -224,7 +187,7 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
             }
         }
         {
-            List<PVarDecl> copy = new ArrayList<PVarDecl>(node.getVarDecl());
+            List<PVarDecl> copy = new ArrayList<PVarDecl>(node.getLocals());
             Collections.reverse(copy);
             for(PVarDecl e : copy)
             {
@@ -232,20 +195,20 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
             }
         }
         {
-            List<PFormal> copy = new ArrayList<PFormal>(node.getParameters());
+            List<PFormal> copy = new ArrayList<PFormal>(node.getFormals());
             Collections.reverse(copy);
             for(PFormal e : copy)
             {
                 e.apply(this);
             }
         }
-        if(node.getMethodName() != null)
+        if(node.getName() != null)
         {
-            node.getMethodName().apply(this);
+            node.getName().apply(this);
         }
-        if(node.getType() != null)
+        if(node.getReturnType() != null)
         {
-            node.getType().apply(this);
+            node.getReturnType().apply(this);
         }
         outAMethodDecl(node);
     }
@@ -264,9 +227,9 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAFormal(AFormal node)
     {
         inAFormal(node);
-        if(node.getId() != null)
+        if(node.getName() != null)
         {
-            node.getId().apply(this);
+            node.getName().apply(this);
         }
         if(node.getType() != null)
         {
@@ -289,6 +252,10 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAArrayType(AArrayType node)
     {
         inAArrayType(node);
+        if(node.getToken() != null)
+        {
+            node.getToken().apply(this);
+        }
         outAArrayType(node);
     }
 
@@ -306,6 +273,10 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseABooleanType(ABooleanType node)
     {
         inABooleanType(node);
+        if(node.getToken() != null)
+        {
+            node.getToken().apply(this);
+        }
         outABooleanType(node);
     }
 
@@ -323,6 +294,10 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAIntType(AIntType node)
     {
         inAIntType(node);
+        if(node.getToken() != null)
+        {
+            node.getToken().apply(this);
+        }
         outAIntType(node);
     }
 
@@ -340,9 +315,9 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAObjectType(AObjectType node)
     {
         inAObjectType(node);
-        if(node.getId() != null)
+        if(node.getName() != null)
         {
-            node.getId().apply(this);
+            node.getName().apply(this);
         }
         outAObjectType(node);
     }
@@ -362,12 +337,16 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     {
         inABlockStatement(node);
         {
-            List<PStatement> copy = new ArrayList<PStatement>(node.getStatementlist());
+            List<PStatement> copy = new ArrayList<PStatement>(node.getStatements());
             Collections.reverse(copy);
             for(PStatement e : copy)
             {
                 e.apply(this);
             }
+        }
+        if(node.getToken() != null)
+        {
+            node.getToken().apply(this);
         }
         outABlockStatement(node);
     }
@@ -386,44 +365,23 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAIfStatement(AIfStatement node)
     {
         inAIfStatement(node);
-        if(node.getIfstatement() != null)
+        if(node.getElseClause() != null)
         {
-            node.getIfstatement().apply(this);
+            node.getElseClause().apply(this);
         }
-        if(node.getIfexp() != null)
+        if(node.getThenClause() != null)
         {
-            node.getIfexp().apply(this);
+            node.getThenClause().apply(this);
+        }
+        if(node.getCondition() != null)
+        {
+            node.getCondition().apply(this);
+        }
+        if(node.getToken() != null)
+        {
+            node.getToken().apply(this);
         }
         outAIfStatement(node);
-    }
-
-    public void inAIfElseStatement(AIfElseStatement node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAIfElseStatement(AIfElseStatement node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAIfElseStatement(AIfElseStatement node)
-    {
-        inAIfElseStatement(node);
-        if(node.getElsestatement() != null)
-        {
-            node.getElsestatement().apply(this);
-        }
-        if(node.getIfstatement() != null)
-        {
-            node.getIfstatement().apply(this);
-        }
-        if(node.getIfexp() != null)
-        {
-            node.getIfexp().apply(this);
-        }
-        outAIfElseStatement(node);
     }
 
     public void inAWhileStatement(AWhileStatement node)
@@ -440,13 +398,17 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAWhileStatement(AWhileStatement node)
     {
         inAWhileStatement(node);
-        if(node.getStatement() != null)
+        if(node.getBody() != null)
         {
-            node.getStatement().apply(this);
+            node.getBody().apply(this);
         }
-        if(node.getWhileexp() != null)
+        if(node.getCondition() != null)
         {
-            node.getWhileexp().apply(this);
+            node.getCondition().apply(this);
+        }
+        if(node.getToken() != null)
+        {
+            node.getToken().apply(this);
         }
         outAWhileStatement(node);
     }
@@ -465,9 +427,13 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAPrintStatement(APrintStatement node)
     {
         inAPrintStatement(node);
-        if(node.getExp() != null)
+        if(node.getValue() != null)
         {
-            node.getExp().apply(this);
+            node.getValue().apply(this);
+        }
+        if(node.getToken() != null)
+        {
+            node.getToken().apply(this);
         }
         outAPrintStatement(node);
     }
@@ -486,13 +452,17 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAAssignStatement(AAssignStatement node)
     {
         inAAssignStatement(node);
-        if(node.getExp() != null)
+        if(node.getValue() != null)
         {
-            node.getExp().apply(this);
+            node.getValue().apply(this);
         }
-        if(node.getId() != null)
+        if(node.getTarget() != null)
         {
-            node.getId().apply(this);
+            node.getTarget().apply(this);
+        }
+        if(node.getToken() != null)
+        {
+            node.getToken().apply(this);
         }
         outAAssignStatement(node);
     }
@@ -515,13 +485,17 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         {
             node.getValue().apply(this);
         }
-        if(node.getArrayindex() != null)
+        if(node.getIndex() != null)
         {
-            node.getArrayindex().apply(this);
+            node.getIndex().apply(this);
         }
-        if(node.getId() != null)
+        if(node.getTarget() != null)
         {
-            node.getId().apply(this);
+            node.getTarget().apply(this);
+        }
+        if(node.getToken() != null)
+        {
+            node.getToken().apply(this);
         }
         outAArrayAssignStatement(node);
     }
@@ -548,7 +522,40 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         {
             node.getLhs().apply(this);
         }
+        if(node.getToken() != null)
+        {
+            node.getToken().apply(this);
+        }
         outAAndExp(node);
+    }
+
+    public void inAEqualExp(AEqualExp node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAEqualExp(AEqualExp node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAEqualExp(AEqualExp node)
+    {
+        inAEqualExp(node);
+        if(node.getRhs() != null)
+        {
+            node.getRhs().apply(this);
+        }
+        if(node.getLhs() != null)
+        {
+            node.getLhs().apply(this);
+        }
+        if(node.getToken() != null)
+        {
+            node.getToken().apply(this);
+        }
+        outAEqualExp(node);
     }
 
     public void inALessThanExp(ALessThanExp node)
@@ -572,6 +579,10 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         if(node.getLhs() != null)
         {
             node.getLhs().apply(this);
+        }
+        if(node.getToken() != null)
+        {
+            node.getToken().apply(this);
         }
         outALessThanExp(node);
     }
@@ -598,6 +609,10 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         {
             node.getLhs().apply(this);
         }
+        if(node.getToken() != null)
+        {
+            node.getToken().apply(this);
+        }
         outATimesExp(node);
     }
 
@@ -622,6 +637,10 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         if(node.getLhs() != null)
         {
             node.getLhs().apply(this);
+        }
+        if(node.getToken() != null)
+        {
+            node.getToken().apply(this);
         }
         outAPlusExp(node);
     }
@@ -648,6 +667,10 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         {
             node.getLhs().apply(this);
         }
+        if(node.getToken() != null)
+        {
+            node.getToken().apply(this);
+        }
         outAMinusExp(node);
     }
 
@@ -669,9 +692,13 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         {
             node.getIndex().apply(this);
         }
-        if(node.getExp() != null)
+        if(node.getArray() != null)
         {
-            node.getExp().apply(this);
+            node.getArray().apply(this);
+        }
+        if(node.getToken() != null)
+        {
+            node.getToken().apply(this);
         }
         outAArrayLookupExp(node);
     }
@@ -690,9 +717,13 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAArrayLengthExp(AArrayLengthExp node)
     {
         inAArrayLengthExp(node);
-        if(node.getExp() != null)
+        if(node.getArray() != null)
         {
-            node.getExp().apply(this);
+            node.getArray().apply(this);
+        }
+        if(node.getToken() != null)
+        {
+            node.getToken().apply(this);
         }
         outAArrayLengthExp(node);
     }
@@ -712,16 +743,16 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     {
         inACallExp(node);
         {
-            List<PExp> copy = new ArrayList<PExp>(node.getArgs());
+            List<PExp> copy = new ArrayList<PExp>(node.getActuals());
             Collections.reverse(copy);
             for(PExp e : copy)
             {
                 e.apply(this);
             }
         }
-        if(node.getMethodName() != null)
+        if(node.getMethod() != null)
         {
-            node.getMethodName().apply(this);
+            node.getMethod().apply(this);
         }
         if(node.getObject() != null)
         {
@@ -744,9 +775,9 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAIntegerLiteralExp(AIntegerLiteralExp node)
     {
         inAIntegerLiteralExp(node);
-        if(node.getNumber() != null)
+        if(node.getValue() != null)
         {
-            node.getNumber().apply(this);
+            node.getValue().apply(this);
         }
         outAIntegerLiteralExp(node);
     }
@@ -765,6 +796,10 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseATrueExp(ATrueExp node)
     {
         inATrueExp(node);
+        if(node.getToken() != null)
+        {
+            node.getToken().apply(this);
+        }
         outATrueExp(node);
     }
 
@@ -782,6 +817,10 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAFalseExp(AFalseExp node)
     {
         inAFalseExp(node);
+        if(node.getToken() != null)
+        {
+            node.getToken().apply(this);
+        }
         outAFalseExp(node);
     }
 
@@ -799,9 +838,9 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAIdentifierExp(AIdentifierExp node)
     {
         inAIdentifierExp(node);
-        if(node.getId() != null)
+        if(node.getName() != null)
         {
-            node.getId().apply(this);
+            node.getName().apply(this);
         }
         outAIdentifierExp(node);
     }
@@ -820,6 +859,10 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAThisExp(AThisExp node)
     {
         inAThisExp(node);
+        if(node.getToken() != null)
+        {
+            node.getToken().apply(this);
+        }
         outAThisExp(node);
     }
 
@@ -837,9 +880,13 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseANewArrayExp(ANewArrayExp node)
     {
         inANewArrayExp(node);
-        if(node.getExp() != null)
+        if(node.getSize() != null)
         {
-            node.getExp().apply(this);
+            node.getSize().apply(this);
+        }
+        if(node.getToken() != null)
+        {
+            node.getToken().apply(this);
         }
         outANewArrayExp(node);
     }
@@ -858,9 +905,9 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseANewObjectExp(ANewObjectExp node)
     {
         inANewObjectExp(node);
-        if(node.getId() != null)
+        if(node.getName() != null)
         {
-            node.getId().apply(this);
+            node.getName().apply(this);
         }
         outANewObjectExp(node);
     }
@@ -879,9 +926,13 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseANotExp(ANotExp node)
     {
         inANotExp(node);
-        if(node.getExp() != null)
+        if(node.getValue() != null)
         {
-            node.getExp().apply(this);
+            node.getValue().apply(this);
+        }
+        if(node.getToken() != null)
+        {
+            node.getToken().apply(this);
         }
         outANotExp(node);
     }

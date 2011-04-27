@@ -7,7 +7,7 @@ import minijava.analysis.*;
 @SuppressWarnings("nls")
 public final class AIntegerLiteralExp extends PExp
 {
-    private TNumber _number_;
+    private TNumber _value_;
 
     public AIntegerLiteralExp()
     {
@@ -15,10 +15,10 @@ public final class AIntegerLiteralExp extends PExp
     }
 
     public AIntegerLiteralExp(
-        @SuppressWarnings("hiding") TNumber _number_)
+        @SuppressWarnings("hiding") TNumber _value_)
     {
         // Constructor
-        setNumber(_number_);
+        setValue(_value_);
 
     }
 
@@ -26,7 +26,7 @@ public final class AIntegerLiteralExp extends PExp
     public Object clone()
     {
         return new AIntegerLiteralExp(
-            cloneNode(this._number_));
+            cloneNode(this._value_));
     }
 
     public void apply(Switch sw)
@@ -34,16 +34,16 @@ public final class AIntegerLiteralExp extends PExp
         ((Analysis) sw).caseAIntegerLiteralExp(this);
     }
 
-    public TNumber getNumber()
+    public TNumber getValue()
     {
-        return this._number_;
+        return this._value_;
     }
 
-    public void setNumber(TNumber node)
+    public void setValue(TNumber node)
     {
-        if(this._number_ != null)
+        if(this._value_ != null)
         {
-            this._number_.parent(null);
+            this._value_.parent(null);
         }
 
         if(node != null)
@@ -56,23 +56,23 @@ public final class AIntegerLiteralExp extends PExp
             node.parent(this);
         }
 
-        this._number_ = node;
+        this._value_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._number_);
+            + toString(this._value_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._number_ == child)
+        if(this._value_ == child)
         {
-            this._number_ = null;
+            this._value_ = null;
             return;
         }
 
@@ -83,9 +83,9 @@ public final class AIntegerLiteralExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._number_ == oldChild)
+        if(this._value_ == oldChild)
         {
-            setNumber((TNumber) newChild);
+            setValue((TNumber) newChild);
             return;
         }
 

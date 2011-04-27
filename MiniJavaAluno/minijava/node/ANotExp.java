@@ -7,7 +7,8 @@ import minijava.analysis.*;
 @SuppressWarnings("nls")
 public final class ANotExp extends PExp
 {
-    private PExp _exp_;
+    private TNot _token_;
+    private PExp _value_;
 
     public ANotExp()
     {
@@ -15,10 +16,13 @@ public final class ANotExp extends PExp
     }
 
     public ANotExp(
-        @SuppressWarnings("hiding") PExp _exp_)
+        @SuppressWarnings("hiding") TNot _token_,
+        @SuppressWarnings("hiding") PExp _value_)
     {
         // Constructor
-        setExp(_exp_);
+        setToken(_token_);
+
+        setValue(_value_);
 
     }
 
@@ -26,7 +30,8 @@ public final class ANotExp extends PExp
     public Object clone()
     {
         return new ANotExp(
-            cloneNode(this._exp_));
+            cloneNode(this._token_),
+            cloneNode(this._value_));
     }
 
     public void apply(Switch sw)
@@ -34,16 +39,16 @@ public final class ANotExp extends PExp
         ((Analysis) sw).caseANotExp(this);
     }
 
-    public PExp getExp()
+    public TNot getToken()
     {
-        return this._exp_;
+        return this._token_;
     }
 
-    public void setExp(PExp node)
+    public void setToken(TNot node)
     {
-        if(this._exp_ != null)
+        if(this._token_ != null)
         {
-            this._exp_.parent(null);
+            this._token_.parent(null);
         }
 
         if(node != null)
@@ -56,23 +61,55 @@ public final class ANotExp extends PExp
             node.parent(this);
         }
 
-        this._exp_ = node;
+        this._token_ = node;
+    }
+
+    public PExp getValue()
+    {
+        return this._value_;
+    }
+
+    public void setValue(PExp node)
+    {
+        if(this._value_ != null)
+        {
+            this._value_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._value_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._exp_);
+            + toString(this._token_)
+            + toString(this._value_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._exp_ == child)
+        if(this._token_ == child)
         {
-            this._exp_ = null;
+            this._token_ = null;
+            return;
+        }
+
+        if(this._value_ == child)
+        {
+            this._value_ = null;
             return;
         }
 
@@ -83,9 +120,15 @@ public final class ANotExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._exp_ == oldChild)
+        if(this._token_ == oldChild)
         {
-            setExp((PExp) newChild);
+            setToken((TNot) newChild);
+            return;
+        }
+
+        if(this._value_ == oldChild)
+        {
+            setValue((PExp) newChild);
             return;
         }
 

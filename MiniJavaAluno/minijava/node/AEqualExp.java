@@ -5,19 +5,19 @@ package minijava.node;
 import minijava.analysis.*;
 
 @SuppressWarnings("nls")
-public final class APlusExp extends PExp
+public final class AEqualExp extends PExp
 {
-    private TPlusop _token_;
+    private TEqualop _token_;
     private PExp _lhs_;
     private PExp _rhs_;
 
-    public APlusExp()
+    public AEqualExp()
     {
         // Constructor
     }
 
-    public APlusExp(
-        @SuppressWarnings("hiding") TPlusop _token_,
+    public AEqualExp(
+        @SuppressWarnings("hiding") TEqualop _token_,
         @SuppressWarnings("hiding") PExp _lhs_,
         @SuppressWarnings("hiding") PExp _rhs_)
     {
@@ -33,7 +33,7 @@ public final class APlusExp extends PExp
     @Override
     public Object clone()
     {
-        return new APlusExp(
+        return new AEqualExp(
             cloneNode(this._token_),
             cloneNode(this._lhs_),
             cloneNode(this._rhs_));
@@ -41,15 +41,15 @@ public final class APlusExp extends PExp
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAPlusExp(this);
+        ((Analysis) sw).caseAEqualExp(this);
     }
 
-    public TPlusop getToken()
+    public TEqualop getToken()
     {
         return this._token_;
     }
 
-    public void setToken(TPlusop node)
+    public void setToken(TEqualop node)
     {
         if(this._token_ != null)
         {
@@ -159,7 +159,7 @@ public final class APlusExp extends PExp
         // Replace child
         if(this._token_ == oldChild)
         {
-            setToken((TPlusop) newChild);
+            setToken((TEqualop) newChild);
             return;
         }
 

@@ -9,7 +9,7 @@ import minijava.analysis.*;
 public final class AProgram extends PProgram
 {
     private PMainClass _mainClass_;
-    private final LinkedList<PClassDecl> _classDecl_ = new LinkedList<PClassDecl>();
+    private final LinkedList<PClassDecl> _classes_ = new LinkedList<PClassDecl>();
 
     public AProgram()
     {
@@ -18,12 +18,12 @@ public final class AProgram extends PProgram
 
     public AProgram(
         @SuppressWarnings("hiding") PMainClass _mainClass_,
-        @SuppressWarnings("hiding") List<PClassDecl> _classDecl_)
+        @SuppressWarnings("hiding") List<PClassDecl> _classes_)
     {
         // Constructor
         setMainClass(_mainClass_);
 
-        setClassDecl(_classDecl_);
+        setClasses(_classes_);
 
     }
 
@@ -32,7 +32,7 @@ public final class AProgram extends PProgram
     {
         return new AProgram(
             cloneNode(this._mainClass_),
-            cloneList(this._classDecl_));
+            cloneList(this._classes_));
     }
 
     public void apply(Switch sw)
@@ -65,15 +65,15 @@ public final class AProgram extends PProgram
         this._mainClass_ = node;
     }
 
-    public LinkedList<PClassDecl> getClassDecl()
+    public LinkedList<PClassDecl> getClasses()
     {
-        return this._classDecl_;
+        return this._classes_;
     }
 
-    public void setClassDecl(List<PClassDecl> list)
+    public void setClasses(List<PClassDecl> list)
     {
-        this._classDecl_.clear();
-        this._classDecl_.addAll(list);
+        this._classes_.clear();
+        this._classes_.addAll(list);
         for(PClassDecl e : list)
         {
             if(e.parent() != null)
@@ -90,7 +90,7 @@ public final class AProgram extends PProgram
     {
         return ""
             + toString(this._mainClass_)
-            + toString(this._classDecl_);
+            + toString(this._classes_);
     }
 
     @Override
@@ -103,7 +103,7 @@ public final class AProgram extends PProgram
             return;
         }
 
-        if(this._classDecl_.remove(child))
+        if(this._classes_.remove(child))
         {
             return;
         }
@@ -121,7 +121,7 @@ public final class AProgram extends PProgram
             return;
         }
 
-        for(ListIterator<PClassDecl> i = this._classDecl_.listIterator(); i.hasNext();)
+        for(ListIterator<PClassDecl> i = this._classes_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {

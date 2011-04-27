@@ -79,12 +79,7 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseASimpleClassDecl(ASimpleClassDecl node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAExtendsClassDecl(AExtendsClassDecl node)
+    public void caseAClassDecl(AClassDecl node)
     {
         defaultCase(node);
     }
@@ -134,11 +129,6 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseAIfElseStatement(AIfElseStatement node)
-    {
-        defaultCase(node);
-    }
-
     public void caseAWhileStatement(AWhileStatement node)
     {
         defaultCase(node);
@@ -160,6 +150,11 @@ public class AnalysisAdapter implements Analysis
     }
 
     public void caseAAndExp(AAndExp node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseAEqualExp(AEqualExp node)
     {
         defaultCase(node);
     }
@@ -369,7 +364,12 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseTEqual(TEqual node)
+    public void caseTEqualop(TEqualop node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseTAttr(TAttr node)
     {
         defaultCase(node);
     }

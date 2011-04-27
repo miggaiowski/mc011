@@ -7,8 +7,9 @@ import minijava.analysis.*;
 @SuppressWarnings("nls")
 public final class AWhileStatement extends PStatement
 {
-    private PExp _whileexp_;
-    private PStatement _statement_;
+    private TWhile _token_;
+    private PExp _condition_;
+    private PStatement _body_;
 
     public AWhileStatement()
     {
@@ -16,13 +17,16 @@ public final class AWhileStatement extends PStatement
     }
 
     public AWhileStatement(
-        @SuppressWarnings("hiding") PExp _whileexp_,
-        @SuppressWarnings("hiding") PStatement _statement_)
+        @SuppressWarnings("hiding") TWhile _token_,
+        @SuppressWarnings("hiding") PExp _condition_,
+        @SuppressWarnings("hiding") PStatement _body_)
     {
         // Constructor
-        setWhileexp(_whileexp_);
+        setToken(_token_);
 
-        setStatement(_statement_);
+        setCondition(_condition_);
+
+        setBody(_body_);
 
     }
 
@@ -30,8 +34,9 @@ public final class AWhileStatement extends PStatement
     public Object clone()
     {
         return new AWhileStatement(
-            cloneNode(this._whileexp_),
-            cloneNode(this._statement_));
+            cloneNode(this._token_),
+            cloneNode(this._condition_),
+            cloneNode(this._body_));
     }
 
     public void apply(Switch sw)
@@ -39,16 +44,16 @@ public final class AWhileStatement extends PStatement
         ((Analysis) sw).caseAWhileStatement(this);
     }
 
-    public PExp getWhileexp()
+    public TWhile getToken()
     {
-        return this._whileexp_;
+        return this._token_;
     }
 
-    public void setWhileexp(PExp node)
+    public void setToken(TWhile node)
     {
-        if(this._whileexp_ != null)
+        if(this._token_ != null)
         {
-            this._whileexp_.parent(null);
+            this._token_.parent(null);
         }
 
         if(node != null)
@@ -61,19 +66,19 @@ public final class AWhileStatement extends PStatement
             node.parent(this);
         }
 
-        this._whileexp_ = node;
+        this._token_ = node;
     }
 
-    public PStatement getStatement()
+    public PExp getCondition()
     {
-        return this._statement_;
+        return this._condition_;
     }
 
-    public void setStatement(PStatement node)
+    public void setCondition(PExp node)
     {
-        if(this._statement_ != null)
+        if(this._condition_ != null)
         {
-            this._statement_.parent(null);
+            this._condition_.parent(null);
         }
 
         if(node != null)
@@ -86,30 +91,62 @@ public final class AWhileStatement extends PStatement
             node.parent(this);
         }
 
-        this._statement_ = node;
+        this._condition_ = node;
+    }
+
+    public PStatement getBody()
+    {
+        return this._body_;
+    }
+
+    public void setBody(PStatement node)
+    {
+        if(this._body_ != null)
+        {
+            this._body_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._body_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._whileexp_)
-            + toString(this._statement_);
+            + toString(this._token_)
+            + toString(this._condition_)
+            + toString(this._body_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._whileexp_ == child)
+        if(this._token_ == child)
         {
-            this._whileexp_ = null;
+            this._token_ = null;
             return;
         }
 
-        if(this._statement_ == child)
+        if(this._condition_ == child)
         {
-            this._statement_ = null;
+            this._condition_ = null;
+            return;
+        }
+
+        if(this._body_ == child)
+        {
+            this._body_ = null;
             return;
         }
 
@@ -120,15 +157,21 @@ public final class AWhileStatement extends PStatement
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._whileexp_ == oldChild)
+        if(this._token_ == oldChild)
         {
-            setWhileexp((PExp) newChild);
+            setToken((TWhile) newChild);
             return;
         }
 
-        if(this._statement_ == oldChild)
+        if(this._condition_ == oldChild)
         {
-            setStatement((PStatement) newChild);
+            setCondition((PExp) newChild);
+            return;
+        }
+
+        if(this._body_ == oldChild)
+        {
+            setBody((PStatement) newChild);
             return;
         }
 

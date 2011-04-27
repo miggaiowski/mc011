@@ -14,8 +14,7 @@ public interface Analysis extends Switch
     void caseStart(Start node);
     void caseAProgram(AProgram node);
     void caseAMainClass(AMainClass node);
-    void caseASimpleClassDecl(ASimpleClassDecl node);
-    void caseAExtendsClassDecl(AExtendsClassDecl node);
+    void caseAClassDecl(AClassDecl node);
     void caseAVarDecl(AVarDecl node);
     void caseAMethodDecl(AMethodDecl node);
     void caseAFormal(AFormal node);
@@ -25,12 +24,12 @@ public interface Analysis extends Switch
     void caseAObjectType(AObjectType node);
     void caseABlockStatement(ABlockStatement node);
     void caseAIfStatement(AIfStatement node);
-    void caseAIfElseStatement(AIfElseStatement node);
     void caseAWhileStatement(AWhileStatement node);
     void caseAPrintStatement(APrintStatement node);
     void caseAAssignStatement(AAssignStatement node);
     void caseAArrayAssignStatement(AArrayAssignStatement node);
     void caseAAndExp(AAndExp node);
+    void caseAEqualExp(AEqualExp node);
     void caseALessThanExp(ALessThanExp node);
     void caseATimesExp(ATimesExp node);
     void caseAPlusExp(APlusExp node);
@@ -73,7 +72,8 @@ public interface Analysis extends Switch
     void caseTTimesop(TTimesop node);
     void caseTAnd(TAnd node);
     void caseTLess(TLess node);
-    void caseTEqual(TEqual node);
+    void caseTEqualop(TEqualop node);
+    void caseTAttr(TAttr node);
     void caseTNot(TNot node);
     void caseTLBracket(TLBracket node);
     void caseTRBracket(TRBracket node);

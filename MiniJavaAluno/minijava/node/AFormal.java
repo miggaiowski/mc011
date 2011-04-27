@@ -8,7 +8,7 @@ import minijava.analysis.*;
 public final class AFormal extends PFormal
 {
     private PType _type_;
-    private TId _id_;
+    private TId _name_;
 
     public AFormal()
     {
@@ -17,12 +17,12 @@ public final class AFormal extends PFormal
 
     public AFormal(
         @SuppressWarnings("hiding") PType _type_,
-        @SuppressWarnings("hiding") TId _id_)
+        @SuppressWarnings("hiding") TId _name_)
     {
         // Constructor
         setType(_type_);
 
-        setId(_id_);
+        setName(_name_);
 
     }
 
@@ -31,7 +31,7 @@ public final class AFormal extends PFormal
     {
         return new AFormal(
             cloneNode(this._type_),
-            cloneNode(this._id_));
+            cloneNode(this._name_));
     }
 
     public void apply(Switch sw)
@@ -64,16 +64,16 @@ public final class AFormal extends PFormal
         this._type_ = node;
     }
 
-    public TId getId()
+    public TId getName()
     {
-        return this._id_;
+        return this._name_;
     }
 
-    public void setId(TId node)
+    public void setName(TId node)
     {
-        if(this._id_ != null)
+        if(this._name_ != null)
         {
-            this._id_.parent(null);
+            this._name_.parent(null);
         }
 
         if(node != null)
@@ -86,7 +86,7 @@ public final class AFormal extends PFormal
             node.parent(this);
         }
 
-        this._id_ = node;
+        this._name_ = node;
     }
 
     @Override
@@ -94,7 +94,7 @@ public final class AFormal extends PFormal
     {
         return ""
             + toString(this._type_)
-            + toString(this._id_);
+            + toString(this._name_);
     }
 
     @Override
@@ -107,9 +107,9 @@ public final class AFormal extends PFormal
             return;
         }
 
-        if(this._id_ == child)
+        if(this._name_ == child)
         {
-            this._id_ = null;
+            this._name_ = null;
             return;
         }
 
@@ -126,9 +126,9 @@ public final class AFormal extends PFormal
             return;
         }
 
-        if(this._id_ == oldChild)
+        if(this._name_ == oldChild)
         {
-            setId((TId) newChild);
+            setName((TId) newChild);
             return;
         }
 

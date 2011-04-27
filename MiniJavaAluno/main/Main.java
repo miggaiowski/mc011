@@ -19,8 +19,9 @@ import frame.Proc;
 
 import semant.Env;
 import semant.TypeChecker;
-import syntaxtree.Program;
 import syntaxtree.PrettyPrint;
+import syntaxtree.Program;
+import syntaxtree.PrettyPrintProfessor;
 import translate.Frag;
 import translate.ProcFrag;
 import translate.Translate;
@@ -30,6 +31,7 @@ import util.conversor.SyntaxTreeGenerator;
 
 import minijava.lexer.Lexer;
 import minijava.node.Start;
+import minijava.node.Switch;
 import minijava.parser.Parser;
 
 // Uma coisa nao especificada em minijava eh se
@@ -56,8 +58,10 @@ public final class Main
 			Start s = parser.parse();
 			
              		//Uncomment this to print sablecc's AST.
-			System.out.println(s);
-            
+			//System.out.println(s);
+			PrettyPrint v1 = new PrettyPrint();
+			s.apply(v1);
+			
 			// ... up until here, classes and package organization
 			// are decided by SableCC
 			

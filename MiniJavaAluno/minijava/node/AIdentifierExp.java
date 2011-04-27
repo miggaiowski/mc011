@@ -7,7 +7,7 @@ import minijava.analysis.*;
 @SuppressWarnings("nls")
 public final class AIdentifierExp extends PExp
 {
-    private TId _id_;
+    private TId _name_;
 
     public AIdentifierExp()
     {
@@ -15,10 +15,10 @@ public final class AIdentifierExp extends PExp
     }
 
     public AIdentifierExp(
-        @SuppressWarnings("hiding") TId _id_)
+        @SuppressWarnings("hiding") TId _name_)
     {
         // Constructor
-        setId(_id_);
+        setName(_name_);
 
     }
 
@@ -26,7 +26,7 @@ public final class AIdentifierExp extends PExp
     public Object clone()
     {
         return new AIdentifierExp(
-            cloneNode(this._id_));
+            cloneNode(this._name_));
     }
 
     public void apply(Switch sw)
@@ -34,16 +34,16 @@ public final class AIdentifierExp extends PExp
         ((Analysis) sw).caseAIdentifierExp(this);
     }
 
-    public TId getId()
+    public TId getName()
     {
-        return this._id_;
+        return this._name_;
     }
 
-    public void setId(TId node)
+    public void setName(TId node)
     {
-        if(this._id_ != null)
+        if(this._name_ != null)
         {
-            this._id_.parent(null);
+            this._name_.parent(null);
         }
 
         if(node != null)
@@ -56,23 +56,23 @@ public final class AIdentifierExp extends PExp
             node.parent(this);
         }
 
-        this._id_ = node;
+        this._name_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._id_);
+            + toString(this._name_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._id_ == child)
+        if(this._name_ == child)
         {
-            this._id_ = null;
+            this._name_ = null;
             return;
         }
 
@@ -83,9 +83,9 @@ public final class AIdentifierExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._id_ == oldChild)
+        if(this._name_ == oldChild)
         {
-            setId((TId) newChild);
+            setName((TId) newChild);
             return;
         }
 

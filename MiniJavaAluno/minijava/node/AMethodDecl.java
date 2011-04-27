@@ -8,12 +8,12 @@ import minijava.analysis.*;
 @SuppressWarnings("nls")
 public final class AMethodDecl extends PMethodDecl
 {
-    private PType _type_;
-    private TId _methodName_;
-    private final LinkedList<PFormal> _parameters_ = new LinkedList<PFormal>();
-    private final LinkedList<PVarDecl> _varDecl_ = new LinkedList<PVarDecl>();
-    private final LinkedList<PStatement> _statements_ = new LinkedList<PStatement>();
-    private PExp _returnExpression_;
+    private PType _returnType_;
+    private TId _name_;
+    private final LinkedList<PFormal> _formals_ = new LinkedList<PFormal>();
+    private final LinkedList<PVarDecl> _locals_ = new LinkedList<PVarDecl>();
+    private final LinkedList<PStatement> _body_ = new LinkedList<PStatement>();
+    private PExp _returnExp_;
 
     public AMethodDecl()
     {
@@ -21,25 +21,25 @@ public final class AMethodDecl extends PMethodDecl
     }
 
     public AMethodDecl(
-        @SuppressWarnings("hiding") PType _type_,
-        @SuppressWarnings("hiding") TId _methodName_,
-        @SuppressWarnings("hiding") List<PFormal> _parameters_,
-        @SuppressWarnings("hiding") List<PVarDecl> _varDecl_,
-        @SuppressWarnings("hiding") List<PStatement> _statements_,
-        @SuppressWarnings("hiding") PExp _returnExpression_)
+        @SuppressWarnings("hiding") PType _returnType_,
+        @SuppressWarnings("hiding") TId _name_,
+        @SuppressWarnings("hiding") List<PFormal> _formals_,
+        @SuppressWarnings("hiding") List<PVarDecl> _locals_,
+        @SuppressWarnings("hiding") List<PStatement> _body_,
+        @SuppressWarnings("hiding") PExp _returnExp_)
     {
         // Constructor
-        setType(_type_);
+        setReturnType(_returnType_);
 
-        setMethodName(_methodName_);
+        setName(_name_);
 
-        setParameters(_parameters_);
+        setFormals(_formals_);
 
-        setVarDecl(_varDecl_);
+        setLocals(_locals_);
 
-        setStatements(_statements_);
+        setBody(_body_);
 
-        setReturnExpression(_returnExpression_);
+        setReturnExp(_returnExp_);
 
     }
 
@@ -47,12 +47,12 @@ public final class AMethodDecl extends PMethodDecl
     public Object clone()
     {
         return new AMethodDecl(
-            cloneNode(this._type_),
-            cloneNode(this._methodName_),
-            cloneList(this._parameters_),
-            cloneList(this._varDecl_),
-            cloneList(this._statements_),
-            cloneNode(this._returnExpression_));
+            cloneNode(this._returnType_),
+            cloneNode(this._name_),
+            cloneList(this._formals_),
+            cloneList(this._locals_),
+            cloneList(this._body_),
+            cloneNode(this._returnExp_));
     }
 
     public void apply(Switch sw)
@@ -60,16 +60,16 @@ public final class AMethodDecl extends PMethodDecl
         ((Analysis) sw).caseAMethodDecl(this);
     }
 
-    public PType getType()
+    public PType getReturnType()
     {
-        return this._type_;
+        return this._returnType_;
     }
 
-    public void setType(PType node)
+    public void setReturnType(PType node)
     {
-        if(this._type_ != null)
+        if(this._returnType_ != null)
         {
-            this._type_.parent(null);
+            this._returnType_.parent(null);
         }
 
         if(node != null)
@@ -82,19 +82,19 @@ public final class AMethodDecl extends PMethodDecl
             node.parent(this);
         }
 
-        this._type_ = node;
+        this._returnType_ = node;
     }
 
-    public TId getMethodName()
+    public TId getName()
     {
-        return this._methodName_;
+        return this._name_;
     }
 
-    public void setMethodName(TId node)
+    public void setName(TId node)
     {
-        if(this._methodName_ != null)
+        if(this._name_ != null)
         {
-            this._methodName_.parent(null);
+            this._name_.parent(null);
         }
 
         if(node != null)
@@ -107,18 +107,18 @@ public final class AMethodDecl extends PMethodDecl
             node.parent(this);
         }
 
-        this._methodName_ = node;
+        this._name_ = node;
     }
 
-    public LinkedList<PFormal> getParameters()
+    public LinkedList<PFormal> getFormals()
     {
-        return this._parameters_;
+        return this._formals_;
     }
 
-    public void setParameters(List<PFormal> list)
+    public void setFormals(List<PFormal> list)
     {
-        this._parameters_.clear();
-        this._parameters_.addAll(list);
+        this._formals_.clear();
+        this._formals_.addAll(list);
         for(PFormal e : list)
         {
             if(e.parent() != null)
@@ -130,15 +130,15 @@ public final class AMethodDecl extends PMethodDecl
         }
     }
 
-    public LinkedList<PVarDecl> getVarDecl()
+    public LinkedList<PVarDecl> getLocals()
     {
-        return this._varDecl_;
+        return this._locals_;
     }
 
-    public void setVarDecl(List<PVarDecl> list)
+    public void setLocals(List<PVarDecl> list)
     {
-        this._varDecl_.clear();
-        this._varDecl_.addAll(list);
+        this._locals_.clear();
+        this._locals_.addAll(list);
         for(PVarDecl e : list)
         {
             if(e.parent() != null)
@@ -150,15 +150,15 @@ public final class AMethodDecl extends PMethodDecl
         }
     }
 
-    public LinkedList<PStatement> getStatements()
+    public LinkedList<PStatement> getBody()
     {
-        return this._statements_;
+        return this._body_;
     }
 
-    public void setStatements(List<PStatement> list)
+    public void setBody(List<PStatement> list)
     {
-        this._statements_.clear();
-        this._statements_.addAll(list);
+        this._body_.clear();
+        this._body_.addAll(list);
         for(PStatement e : list)
         {
             if(e.parent() != null)
@@ -170,16 +170,16 @@ public final class AMethodDecl extends PMethodDecl
         }
     }
 
-    public PExp getReturnExpression()
+    public PExp getReturnExp()
     {
-        return this._returnExpression_;
+        return this._returnExp_;
     }
 
-    public void setReturnExpression(PExp node)
+    public void setReturnExp(PExp node)
     {
-        if(this._returnExpression_ != null)
+        if(this._returnExp_ != null)
         {
-            this._returnExpression_.parent(null);
+            this._returnExp_.parent(null);
         }
 
         if(node != null)
@@ -192,55 +192,55 @@ public final class AMethodDecl extends PMethodDecl
             node.parent(this);
         }
 
-        this._returnExpression_ = node;
+        this._returnExp_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._type_)
-            + toString(this._methodName_)
-            + toString(this._parameters_)
-            + toString(this._varDecl_)
-            + toString(this._statements_)
-            + toString(this._returnExpression_);
+            + toString(this._returnType_)
+            + toString(this._name_)
+            + toString(this._formals_)
+            + toString(this._locals_)
+            + toString(this._body_)
+            + toString(this._returnExp_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._type_ == child)
+        if(this._returnType_ == child)
         {
-            this._type_ = null;
+            this._returnType_ = null;
             return;
         }
 
-        if(this._methodName_ == child)
+        if(this._name_ == child)
         {
-            this._methodName_ = null;
+            this._name_ = null;
             return;
         }
 
-        if(this._parameters_.remove(child))
-        {
-            return;
-        }
-
-        if(this._varDecl_.remove(child))
+        if(this._formals_.remove(child))
         {
             return;
         }
 
-        if(this._statements_.remove(child))
+        if(this._locals_.remove(child))
         {
             return;
         }
 
-        if(this._returnExpression_ == child)
+        if(this._body_.remove(child))
         {
-            this._returnExpression_ = null;
+            return;
+        }
+
+        if(this._returnExp_ == child)
+        {
+            this._returnExp_ = null;
             return;
         }
 
@@ -251,19 +251,19 @@ public final class AMethodDecl extends PMethodDecl
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._type_ == oldChild)
+        if(this._returnType_ == oldChild)
         {
-            setType((PType) newChild);
+            setReturnType((PType) newChild);
             return;
         }
 
-        if(this._methodName_ == oldChild)
+        if(this._name_ == oldChild)
         {
-            setMethodName((TId) newChild);
+            setName((TId) newChild);
             return;
         }
 
-        for(ListIterator<PFormal> i = this._parameters_.listIterator(); i.hasNext();)
+        for(ListIterator<PFormal> i = this._formals_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {
@@ -281,7 +281,7 @@ public final class AMethodDecl extends PMethodDecl
             }
         }
 
-        for(ListIterator<PVarDecl> i = this._varDecl_.listIterator(); i.hasNext();)
+        for(ListIterator<PVarDecl> i = this._locals_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {
@@ -299,7 +299,7 @@ public final class AMethodDecl extends PMethodDecl
             }
         }
 
-        for(ListIterator<PStatement> i = this._statements_.listIterator(); i.hasNext();)
+        for(ListIterator<PStatement> i = this._body_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {
@@ -317,9 +317,9 @@ public final class AMethodDecl extends PMethodDecl
             }
         }
 
-        if(this._returnExpression_ == oldChild)
+        if(this._returnExp_ == oldChild)
         {
-            setReturnExpression((PExp) newChild);
+            setReturnExp((PExp) newChild);
             return;
         }
 
