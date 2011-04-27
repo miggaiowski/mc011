@@ -129,12 +129,12 @@ Productions
       {stm_without_trailing_substm} stm_without_trailing_substm
       {-> stm_without_trailing_substm.statement}
     | {if} if l_parenthese [condition]:exp r_parenthese [ifstatement]:statement
-      {-> New statement.if(condition.exp, ifstatement.statement, Null)} |
-    | {ifelse} if l_parenthese [ifexp]:exp r_parenthese 
+      {-> New statement.if(condition.exp, ifstatement.statement)}
+    | {if_else} if l_parenthese [ifexp]:exp r_parenthese 
       	       	  [ifstatement]:stm_no_short_if 
 	       else 
 	       	  [elsestatement]:statement 
-      {-> New statement.if(ifexp.exp, ifstatement.statement, elsestatement.statement)}
+      {-> New statement.if_else(ifexp.exp, ifstatement.statement, elsestatement.statement)}
     | {while} while l_parenthese [whileexp]:exp r_parenthese [whilestatement]:statement 
       {-> New statement.while(whileexp.exp, whilestatement.statement)};
 
@@ -154,7 +154,7 @@ Productions
     | {while_no_short_if} while l_parenthese exp r_parenthese stm_no_short_if
       {-> New statement.while(exp.exp, stm_no_short_if.statement)}
     | {if_else_no_short_if} if l_parenthese [condition]:exp r_parenthese [ifstatement]:stm_no_short_if else [elsestatement]:stm_no_short_if
-      {-> New statement.if(condition.exp, ifstatement.statement, elsestatement.statement)};
+      {-> New statement.if_else(condition.exp, ifstatement.statement, elsestatement.statement)};
 
   exp {-> exp} = 
       {and} exp and less_than {-> New exp.and(exp.exp, less_than.exp)}
@@ -237,7 +237,8 @@ Abstract Syntax Tree
 
   statement =
       {block} [statementlist]:statement*
-    | {if} [ifexp]:exp [ifstatement]: statement [elsestatement]:statement?
+    | {if} [ifexp]:exp [ifstatement]: statement
+    | {if_else} [ifexp]:exp [ifstatement]:statement [elsestatement]:statement
     | {while} [whileexp]:exp [statement]:statement
     | {print} [exp]:exp
     | {assign} [id]:id [exp]:exp

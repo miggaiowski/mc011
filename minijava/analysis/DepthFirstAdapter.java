@@ -385,11 +385,36 @@ public class DepthFirstAdapter extends AnalysisAdapter
         {
             node.getIfstatement().apply(this);
         }
+        outAIfStatement(node);
+    }
+
+    public void inAIfElseStatement(AIfElseStatement node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAIfElseStatement(AIfElseStatement node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAIfElseStatement(AIfElseStatement node)
+    {
+        inAIfElseStatement(node);
+        if(node.getIfexp() != null)
+        {
+            node.getIfexp().apply(this);
+        }
+        if(node.getIfstatement() != null)
+        {
+            node.getIfstatement().apply(this);
+        }
         if(node.getElsestatement() != null)
         {
             node.getElsestatement().apply(this);
         }
-        outAIfStatement(node);
+        outAIfElseStatement(node);
     }
 
     public void inAWhileStatement(AWhileStatement node)
