@@ -8,19 +8,19 @@ import symbol.VarInfo;
 import syntaxtree.VarDecl;
 import syntaxtree.VisitorAdapter;
 
-public class AttributeHandler extends VisitorAdapter {
+public class LocalsHandler extends VisitorAdapter {
 
     private Env env;
-    private ClassInfo info;
+    private MethodInfo info;
     
-    private AttributeHandler(Env e, ClassInfo i) {
+    private LocalsHandler(Env e, MethodInfo i) {
         super();
         env = e;
         info = i;
     }
 
-    public static void firstPass(Env e, ClassInfo classInfo, VarDecl vd) {
-        AttributeHandler handler = new AttributeHandler(e, classInfo);
+    public static void firstPass(Env e, MethodInfo methodInfo, VarDecl vd) {
+        LocalsHandler handler = new LocalsHandler(e, methodInfo);
         vd.accept(handler);        
     }
 
@@ -29,13 +29,12 @@ public class AttributeHandler extends VisitorAdapter {
         VarInfo varInfo = new VarInfo(node.type, name);
         
         // inserindo nova declaracao na tabela de simbolos
-        if (!info.addAttribute(varInfo)) {
-            VarInfo previousInfo = info.attributes.get(name);
+        if (!info.addLocal(varInfo)) {
+            VarInfo previousInfo = info.localsTable.get(name);
             env.err.Error(node.name, new Object[]{
-                    "Atributo \'" + name 
-                    + "\' redefinido para classe \'" + info.name + "\'", 
+                    "Variável local \'" + name 
+                    + "\' redefinida no método \'" + info.name + "\'", 
                     "Declaracao anterior em: [" + previousInfo.type.line + "," + previousInfo.type.row + "]"});
         }
-        
     }
 }
