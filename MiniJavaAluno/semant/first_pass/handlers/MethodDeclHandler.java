@@ -1,7 +1,5 @@
 package semant.first_pass.handlers;
 
-import com.sun.java.util.jar.pack.Package.Class.Method;
-
 import semant.Env;
 import symbol.ClassInfo;
 import symbol.MethodInfo;
@@ -29,10 +27,17 @@ public class MethodDeclHandler extends VisitorAdapter {
         Symbol name = Symbol.symbol(node.name.s);
         MethodInfo methodInfo = new MethodInfo(node.returnType, name, classInfo.name);
         
-        // Colocar aqui os firstPass dos elementos de um método
+        // TODO: Colocar aqui os firstPass dos elementos de um método
                 
+        // Parametros do metodo
+        FormalsListHandler.firstPass(env, methodInfo, node.formals);
+        
         // Declaracao de variaveis locais
         LocalsListHandler.firstPass(env, methodInfo, node.locals);
+        
+        
+        
+        
                 
         // Inserindo método na sua classe
         if (!classInfo.addMethod(methodInfo)) {
