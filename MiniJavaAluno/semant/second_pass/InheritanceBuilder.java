@@ -6,10 +6,15 @@ import graph.Node;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
+
 import semant.Env;
+import sun.misc.Queue;
 import symbol.ClassInfo;
 import symbol.Symbol;
 import syntaxtree.Program;
+import util.List;
 
 public class InheritanceBuilder {
 
@@ -47,6 +52,46 @@ public class InheritanceBuilder {
 
 		// imprime uma lista de adjacencias do grafo
 		inheritanceGraph.show(System.out);
+		
+		Boolean visited[] = new Boolean[inheritanceGraph.nodes().size()];
+		for (int i = 0; i < visited.length; i++) {
+			visited[i] = false;
+		}
+		
+		Enumeration<String> strkeys = classNodes.keys();
+		String strkey;
+		Node node;
+		Queue q = new Queue();
+		while (strkeys.hasMoreElements()) {
+			strkey = strkeys.nextElement();
+			node = classNodes.get(strkey);
+			q.enqueue(node); // coloca primeiro nó na fila
+			while (!q.isEmpty()) {
+				
+				// todo esse bloco é o java sendo chato para eu tirar um elemento da fila
+				Object o = new Object();
+				try {
+					o = q.dequeue();
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				if (o instanceof Node)
+					node = (Node) o;
+				visited[Integer.decode(node.toString())] = true;
+				
+				// todos adjacentes vao para a fila
+				List<Node> adjs = node.adj();
+				while (adjs != null) {
+					if (visited[Integer.decode(adjs.head.toString())]) {
+						System.out.println("Ciclo com classe: " + adjs.head.toString());
+					}
+					q.enqueue(adjs.head);
+					adjs = adjs.tail;
+				}
+				
+			}
+		}
 		
 		
 	}
