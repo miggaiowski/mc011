@@ -27,17 +27,12 @@ public class MethodDeclHandler extends VisitorAdapter {
         Symbol name = Symbol.symbol(node.name.s);
         MethodInfo methodInfo = new MethodInfo(node.returnType, name, classInfo.name);
         
-        // TODO: Colocar aqui os firstPass dos elementos de um método
-                
+        // firstPass dos elementos de um método
         // Parametros do metodo
         FormalsListHandler.firstPass(env, methodInfo, node.formals);
         
         // Declaracao de variaveis locais
         LocalsListHandler.firstPass(env, methodInfo, node.locals);
-        
-        
-        
-        
                 
         // Inserindo método na sua classe
         if (!classInfo.addMethod(methodInfo)) {

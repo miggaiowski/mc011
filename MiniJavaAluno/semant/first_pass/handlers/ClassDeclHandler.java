@@ -35,7 +35,6 @@ public class ClassDeclHandler extends VisitorAdapter {
         
         // inserindo nova classe na tabela de simbolos
         if (!env.classes.put(name, info)) {
-        	ClassInfo previous = env.classes.get(name);
             env.err.Error(node, new Object[]{"Redefinição da classe \'" + name + "\'"});
         }
     }
