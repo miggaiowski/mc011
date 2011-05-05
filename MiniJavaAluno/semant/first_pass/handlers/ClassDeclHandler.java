@@ -4,6 +4,7 @@ import semant.Env;
 import symbol.ClassInfo;
 import symbol.Symbol;
 import syntaxtree.ClassDecl;
+import syntaxtree.ClassDeclExtends;
 import syntaxtree.ClassDeclSimple;
 import syntaxtree.VisitorAdapter;
 
@@ -25,6 +26,26 @@ public class ClassDeclHandler extends VisitorAdapter {
         Symbol name = Symbol.symbol(node.name.s);
         ClassInfo info = new ClassInfo(name);
         
+        // verificando as partes de dentro da classe, atributos e metodos
+        // Atributos
+        AttributeListHandler.firstPass(env, info, node.varList);
+        
+        // Metodos
+        MethodDeclListHandler.firstPass(env, info, node.methodList);
+        
+        // inserindo nova classe na tabela de simbolos
+        if (!env.classes.put(name, info)) {
+        	ClassInfo previous = env.classes.get(name);
+            env.err.Error(node, new Object[]{"Redefinição da classe \'" + name + "\'"});
+        }
+    }
+    
+    public void visit(ClassDeclExtends node) {
+        Symbol name = Symbol.symbol(node.name.s);
+        Symbol baseName = Symbol.symbol(node.superClass.s);
+        ClassInfo baseInfo = new ClassInfo(baseName);
+        ClassInfo info = new ClassInfo(name, baseInfo);
+                
         // verificando as partes de dentro da classe, atributos e metodos
         // Atributos
         AttributeListHandler.firstPass(env, info, node.varList);

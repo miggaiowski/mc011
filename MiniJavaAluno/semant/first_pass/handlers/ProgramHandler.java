@@ -14,7 +14,7 @@ public class ProgramHandler extends VisitorAdapter {
         result = new Env(err);
     }
     
-    static Env firstPass(ErrorEchoer err, Program p) {
+    public static Env firstPass(ErrorEchoer err, Program p) {
         // Cria novo objeto visitor
         ProgramHandler h = new ProgramHandler(err);
         
@@ -29,7 +29,9 @@ public class ProgramHandler extends VisitorAdapter {
         // Fazendo firstPass na classe principal
         MainClassHandler.firstPass(result, node.mainClass);
         
+
         // Agora nas outras classes
         ClassDeclListHandler.firstPass(result, node.classList);
+
     }
 }
