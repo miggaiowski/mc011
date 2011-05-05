@@ -10,9 +10,9 @@ import minijava.node.Start;
 import minijava.parser.Parser;
 import semant.Env;
 import semant.TypeChecker;
-import symbol.Symbol;
 import syntaxtree.PrettyPrint;
 import syntaxtree.Program;
+import util.EnvPrint;
 import util.conversor.SyntaxTreeGenerator;
 import errors.ErrorEchoer;
 
@@ -74,6 +74,11 @@ public final class Main
            // now we've got to apply the 2-pass semant analyser.
             ErrorEchoer err = new SimpleError(name);
             Env env = TypeChecker.TypeCheck(err, program);
+            
+            EnvPrint envPrinter = new EnvPrint(env);
+            envPrinter.print();
+
+            //System.out.println(env.classes.env.peek().elements().nextElement().attributes.elements().nextElement().);
 
             if ( err.ErrorCount() != 0 )
             {
