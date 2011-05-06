@@ -6,7 +6,7 @@ import java.util.Stack;
 
 public class Table<B>
 {
-	private Stack<Hashtable<Symbol,B>> env;
+	public Stack<Hashtable<Symbol,B>> env;
 	
 	public Table()
 	{
