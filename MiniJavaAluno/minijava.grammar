@@ -1,0 +1,270 @@
+Package minijava;
+
+Helpers
+  letter = [['a' .. 'z'] + ['A' .. 'Z']];
+  digit = ['0' .. '9'];
+  all = [1 .. 127];
+  all_but_newline = [all - 10];
+  not_star = [all - '*'];
+  not_star_slash = [not_star - '/'];
+
+
+
+
+
+Tokens 
+  classn = 'class';
+  extends = 'extends';
+  public = 'public';
+  static = 'static';
+  void = 'void';
+  main = 'main';
+  string = 'String';
+  int = 'int';
+  boolean = 'boolean';
+  if = 'if';
+  else = 'else';
+  while = 'while';
+  length = 'length' ;
+  new = 'new';
+  true = 'true';
+  false = 'false';
+  return = 'return';
+  this = 'this';
+
+  id = letter (letter | digit | '_')*;
+  number = digit (digit)*;
+
+  plusop = '+';
+  minusop = '-';
+  timesop = '*';
+  and = '&&';
+  less = '<';
+
+  equalop = '==';
+  attr = '=';
+  not = '!';
+  l_bracket = '[';
+  r_bracket = ']';
+  l_brace = '{';
+  r_brace = '}';
+  l_parenthese = '(';
+  r_parenthese = ')';
+  dot = '.';
+  semicolon = ';';
+  comma = ',' ;
+
+  blank = (' ' | 10 | 13 | 9)*;
+
+  print = 'System.out.println';
+
+  comment = '//' all_but_newline* 10 
+         |  '/*' not_star* '*'+ (not_star_slash not_star* '*'+)* '/';
+
+
+
+
+
+Ignored Tokens
+  comment,
+  blank;
+
+
+
+
+
+Productions
+  program = 
+     main_class class_decl*;
+
+  main_class {-> main_class} = 
+     classn [classname]:id l_brace 
+       public static void main l_parenthese string l_bracket r_bracket [paramname]:id r_parenthese 
+       [startmainmethod]:l_brace 
+          [statements]:statement 
+       [endmainmethod]:r_brace 
+     r_brace 
+     {-> New main_class(classname, paramname, statements.statement)};
+
+  class_decl = 
+     {simple} classn [classname]:id
+                      l_brace
+                          [vars]:var_decl* 
+                          [methods]:method_decl*
+		      r_brace
+     {-> New class_decl(classname, Null, [vars.var_decl], [methods.method_decl])}
+   | {extends} classn [classname]:id extends [super]:id 
+                      l_brace
+                          [vars]:var_decl* 
+                          [methods]:method_decl*
+		      r_brace 
+     {-> New class_decl(classname, super, [vars.var_decl], [methods.method_decl])};
+
+  var_decl {-> var_decl} = 
+    type [varname]:id semicolon {-> New var_decl(type.type, varname)};
+
+  method_decl {-> method_decl} =
+    public type [methodname]:id l_parenthese [parameters]:formallist r_parenthese 
+        l_brace
+	     [vars]:var_decl* 
+	     [statements]:statement* 
+	     return [returnexpression]:exp semicolon 
+        r_brace
+    {-> New method_decl(type, methodname, [parameters.formal], [vars.var_decl], [statements.statement], returnexpression.exp)};
+
+  formallist {-> formal*} = 
+      {firstparameter} formal formalrest* {-> [formal, formalrest.formal]}
+    | {empty} {-> []};
+
+  formalrest {-> formal} =
+    {anotherparameter} comma type id {-> New formal(type, id)};
+
+  formal {-> formal} = 
+    type id {-> New formal(type.type, id)};
+
+  type {-> type} = 
+      {intvector} int l_bracket r_bracket {-> New type.array(l_bracket)}
+    | {boolean} boolean {-> New type.boolean(boolean)}
+    | {int} int {-> New type.int(int)}
+    | {id} id {-> New type.object(id)};
+
+  statement {-> statement} =
+      {stm_without_trailing_substm} stm_without_trailing_substm
+      {-> stm_without_trailing_substm.statement}
+    | {if} if l_parenthese [condition]:exp r_parenthese [ifstatement]:statement
+      {-> New statement.if(if, condition.exp, ifstatement.statement, Null)}
+    | {if_else} if l_parenthese [ifexp]:exp r_parenthese 
+      	       	  [ifstatement]:stm_no_short_if 
+	       else 
+	       	  [elsestatement]:statement 
+      {-> New statement.if(if, ifexp.exp, ifstatement.statement, elsestatement.statement)}
+    | {while} while l_parenthese [whileexp]:exp r_parenthese [whilestatement]:statement 
+      {-> New statement.while(while, whileexp.exp, whilestatement.statement)};
+
+  stm_without_trailing_substm {-> statement} =
+      {statementlist} l_brace [statementlist]:statement* r_brace 
+      {-> New statement.block(l_brace, [statementlist.statement])}
+    | {print} print l_parenthese exp r_parenthese semicolon
+      {-> New statement.print(print, exp.exp)}
+    | {attr} id attr exp semicolon
+      {-> New statement.assign(attr, id, exp.exp)} 
+    | {arrayattr} id l_bracket [arrayindex]:exp r_bracket attr [righthandside]:exp semicolon
+      {-> New statement.array_assign(attr, id, arrayindex.exp, righthandside.exp)};
+
+  stm_no_short_if {-> statement} =
+      {stm_without_trailing_substm} stm_without_trailing_substm
+      {-> stm_without_trailing_substm.statement}
+    | {while_no_short_if} while l_parenthese exp r_parenthese stm_no_short_if
+      {-> New statement.while(while, exp.exp, stm_no_short_if.statement)}
+    | {if_else_no_short_if} if l_parenthese [condition]:exp r_parenthese [ifstatement]:stm_no_short_if else [elsestatement]:stm_no_short_if
+      {-> New statement.if(if, condition.exp, ifstatement.statement, elsestatement.statement)};
+ 
+  exp {-> exp} = 
+      {and} exp and equal {-> New exp.and(and, exp.exp, equal.exp)}
+    | {equal} equal {-> equal.exp};
+
+  equal {-> exp} = 
+      {equal} equal equalop less_than {-> New exp.equal(equalop, equal.exp, less_than.exp)}
+    | {less_than} less_than {-> less_than.exp};
+
+  less_than {-> exp} = 
+      {less_than} less_than less plus_minus {-> New exp.less_than(less, less_than.exp, plus_minus.exp)}  
+    | {plus_minus} plus_minus {-> plus_minus.exp};
+
+  plus_minus {-> exp} =
+      {plus} plus_minus plusop times {-> New exp.plus(plusop, plus_minus.exp, times.exp)}
+    | {minus} plus_minus minusop times {-> New exp.minus(minusop, plus_minus.exp, times.exp)}
+    | {times} times {-> times.exp};
+
+  times {-> exp} = 
+      {times} times timesop not_exp {-> New exp.times(timesop, times.exp, not_exp.exp)}
+    | {notexp} not_exp {-> not_exp.exp};
+
+  not_exp {-> exp} = 
+      {notexp} not not_exp {-> New exp.not(not, not_exp.exp)}
+    | {postfixexp} postfix_exp {-> postfix_exp.exp};
+
+  postfix_exp {-> exp} =
+      {arrayget} postfix_exp l_bracket exp r_bracket {-> New exp.array_lookup(l_bracket, postfix_exp.exp, exp.exp)}
+    | {methodcall} postfix_exp dot id l_parenthese explist r_parenthese {-> New exp.call(postfix_exp.exp, id, [explist.exp])}
+    | {length} postfix_exp dot length {-> New exp.array_length(length, postfix_exp.exp)}
+    | {primaryexp} primary_exp {-> primary_exp.exp};
+ 
+  primary_exp {-> exp} = 
+      {number} number {-> New exp.integer_literal(number)}
+    | {true} true {-> New exp.true(true)}
+    | {false} false {-> New exp.false(false)}
+    | {id} id {-> New exp.identifier(id)}
+    | {this} this {-> New exp.this(this)}
+    | {newintarray} new int l_bracket exp r_bracket {-> New exp.new_array(l_bracket, exp)}
+    | {newid} new id l_parenthese r_parenthese {-> New exp.new_object(id)}
+    | {lparexprpar} l_parenthese exp r_parenthese {-> New exp.parenthese(exp)};
+
+  explist {-> exp*} = 
+      {explisthead} exp exprest* {-> [exp, exprest.exp]}
+    | {blank} {-> []};
+
+  exprest {-> exp} = 
+    comma exp {-> exp};
+
+
+
+
+
+
+
+Abstract Syntax Tree
+  program = 
+     main_class [classes]:class_decl*;	
+
+  main_class = 
+    [name]:id [main_args]:id [statement]:statement;
+
+  class_decl = [name]:id  [super]:id?  [attributes]:var_decl*  [methods]:method_decl*;
+ 
+  var_decl = 
+    type [name]:id;
+
+  method_decl =
+    [return_type]:type [name]:id [formals]:formal*
+         [locals]:var_decl*
+ 	 [body]:statement* 
+	 [return_exp]:exp;
+
+  formal = 
+    type [name]:id;
+
+  type =
+      {array} [token]:l_bracket
+    | {boolean} [token]:boolean
+    | {int} [token]:int
+    | {object} [name]:id ;
+
+  statement =
+      {block} [token]:l_brace [statements]:statement*
+    | {if} [token]:if [condition]:exp [then_clause]:statement [else_clause]:statement?
+    | {while} [token]:while [condition]:exp [body]:statement
+    | {print} [token]:print [value]:exp
+    | {assign} [token]:attr [target]:id [value]:exp
+    | {array_assign} [token]:attr [target]:id [index]:exp [value]:exp;
+
+  exp =
+      {and} [token]: and [lhs]:exp [rhs]:exp
+    | {equal} [token]: equalop [lhs]:exp [rhs]:exp
+    | {less_than} [token]:less [lhs]:exp [rhs]:exp
+    | {times} [token]:timesop [lhs]:exp [rhs]:exp
+    | {plus} [token]:plusop [lhs]:exp [rhs]:exp
+    | {minus} [token]:minusop [lhs]:exp [rhs]:exp
+    | {array_lookup} [token]:l_bracket [array]:exp [index]:exp
+    | {array_length} [token]:length [array]:exp
+    | {call} [object]:exp [method]:id [actuals]:exp*
+    | {integer_literal} [value]:number
+    | {true} [token]:true
+    | {false} [token]:false
+    | {identifier} [name]:id
+    | {this} [token]:this
+    | {new_array} [token]:l_bracket [size]:exp
+    | {new_object} [name]:id
+    | {not} [token]:not [value]:exp
+    | {parenthese} [exp]:exp;
+
