@@ -121,8 +121,8 @@ public class PrettyPrint extends DepthFirstAdapter
 		outAExtendsClassDecl(node);
 	}
 
-	public void caseAIfElseStatement(AIfElseStatement node) {
-		inAIfElseStatement(node);
+	public void caseAIfStatement(AIfStatement node) {
+		inAIfStatement(node);
 		print( "if (" );
 		if (node.getIfexp() != null) {
 			node.getIfexp().apply(this);
@@ -141,25 +141,9 @@ public class PrettyPrint extends DepthFirstAdapter
 		}
 		endNest();
 		println("}");
-		outAIfElseStatement(node);
+		outAIfStatement(node);
 	}
 
-	public void caseAIfStatement(AIfStatement node)
-    {
-        inAIfStatement(node);
-        print( "if (" );
-        if(node.getIfexp() != null) {
-            node.getIfexp().apply(this);
-        }
-        beginNest();
-        if(node.getIfstatement() != null) {
-            node.getIfstatement().apply(this);
-        }
-        endNest();
-        println("}");
-        outAIfStatement(node);
-    }
-	
 	public void caseAArrayLengthExp(AArrayLengthExp node)
 	{
 		inAArrayLengthExp(node);
