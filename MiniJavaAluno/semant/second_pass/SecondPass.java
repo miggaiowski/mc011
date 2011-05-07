@@ -11,6 +11,7 @@ public final class SecondPass {
     }
     
     public static void secondPass(Env e, Program p) {
+    	//First we must find any possible cyclic inheritances that could mess things up
     	InheritanceBuilder.secondPass(e, p);
     		
 

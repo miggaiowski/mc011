@@ -39,8 +39,7 @@ public final class Main
 			
 			Start s = parser.parse();
 			
-             		//Uncomment this to print sablecc's AST.
-			//System.out.println(s);
+            //Uncomment this to print sablecc's AST.
 			PrettyPrint v1 = new PrettyPrint();
 			s.apply(v1);
 			
@@ -64,21 +63,15 @@ public final class Main
 			System.gc();
 			
 			// Now, we're using Appel's data structure.
-			// Uncomment this if you wanto to print it here for debugging purposes.
-			//PrettyPrint v1 = new PrettyPrint(System.err);
-			//program.accept(v1);
 
             //----PROJETO-1: Chamada do pacote semantico ----------------------------------------------
-			
-	        	//        System.out.println(program.classList.head.name.s);		
+				
            // now we've got to apply the 2-pass semant analyser.
             ErrorEchoer err = new SimpleError(name);
             Env env = TypeChecker.TypeCheck(err, program);
             
             EnvPrint envPrinter = new EnvPrint(env);
             envPrinter.print();
-
-            //System.out.println(env.classes.env.peek().elements().nextElement().attributes.elements().nextElement().);
 
             if ( err.ErrorCount() != 0 )
             {

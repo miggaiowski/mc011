@@ -35,12 +35,13 @@ public class MainClassHandler extends VisitorAdapter {
     	Symbol name = Symbol.symbol(node.className.s);
     	ClassInfo info = new ClassInfo(name);
     	
+    	//Since the MainClass is a special class, the main method declaration is created separatedly and inserted in the symbol table
     	Formal mainArg = new Formal(node.line, node.row, (Type) new IdentifierType(node.line, node.row, "String [] "), node.mainArgName);
     	List<Formal> fl = new List<Formal>(mainArg,null);
     	List<Statement> sl = new List<Statement>(node.s,null);
-    	
     	MethodDecl md = new MethodDecl(node.line, node.row,(Type) new IdentifierType(node.line, node.row, "void "), new Identifier(node.line, node.row, "main "), fl, (List<VarDecl>) null , sl, (Exp)null);
     	
+    	//Apply the first pass in the main method
     	MethodDeclHandler.firstPass(env, info, md);
     	
     	

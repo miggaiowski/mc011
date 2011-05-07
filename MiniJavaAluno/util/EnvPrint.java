@@ -27,7 +27,10 @@ public class EnvPrint {
 	
 	//***** Methods *****//
 	public void print(){
-		printEnvClasses(initStack);
+		while (!initStack.isEmpty()){
+			printEnvClasses(initStack);
+			initStack.pop();
+		}
 	}
 
 
