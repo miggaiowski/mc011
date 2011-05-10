@@ -198,7 +198,7 @@ Productions
     | {this} this {-> New exp.this(this)}
     | {newintarray} new int l_bracket exp r_bracket {-> New exp.new_array(l_bracket, exp)}
     | {newid} new id l_parenthese r_parenthese {-> New exp.new_object(id)}
-    | {lparexprpar} l_parenthese exp r_parenthese {-> New exp.parenthese(exp)};
+    | {lparexprpar} l_parenthese exp r_parenthese {-> exp.exp};
 
   explist {-> exp*} = 
       {explisthead} exp exprest* {-> [exp, exprest.exp]}
@@ -265,6 +265,5 @@ Abstract Syntax Tree
     | {this} [token]:this
     | {new_array} [token]:l_bracket [size]:exp
     | {new_object} [name]:id
-    | {not} [token]:not [value]:exp
-    | {parenthese} [exp]:exp;
+    | {not} [token]:not [value]:exp;
 

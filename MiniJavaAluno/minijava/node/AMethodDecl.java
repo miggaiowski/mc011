@@ -2,8 +2,11 @@
 
 package minijava.node;
 
-import java.util.*;
-import minijava.analysis.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+
+import minijava.analysis.Analysis;
 
 @SuppressWarnings("nls")
 public final class AMethodDecl extends PMethodDecl

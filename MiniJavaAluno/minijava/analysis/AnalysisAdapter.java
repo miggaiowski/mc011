@@ -2,8 +2,84 @@
 
 package minijava.analysis;
 
-import java.util.*;
-import minijava.node.*;
+import java.util.Hashtable;
+
+import minijava.node.AAndExp;
+import minijava.node.AArrayAssignStatement;
+import minijava.node.AArrayLengthExp;
+import minijava.node.AArrayLookupExp;
+import minijava.node.AArrayType;
+import minijava.node.AAssignStatement;
+import minijava.node.ABlockStatement;
+import minijava.node.ABooleanType;
+import minijava.node.ACallExp;
+import minijava.node.AClassDecl;
+import minijava.node.AEqualExp;
+import minijava.node.AFalseExp;
+import minijava.node.AFormal;
+import minijava.node.AIdentifierExp;
+import minijava.node.AIfStatement;
+import minijava.node.AIntType;
+import minijava.node.AIntegerLiteralExp;
+import minijava.node.ALessThanExp;
+import minijava.node.AMainClass;
+import minijava.node.AMethodDecl;
+import minijava.node.AMinusExp;
+import minijava.node.ANewArrayExp;
+import minijava.node.ANewObjectExp;
+import minijava.node.ANotExp;
+import minijava.node.AObjectType;
+import minijava.node.APlusExp;
+import minijava.node.APrintStatement;
+import minijava.node.AProgram;
+import minijava.node.AThisExp;
+import minijava.node.ATimesExp;
+import minijava.node.ATrueExp;
+import minijava.node.AVarDecl;
+import minijava.node.AWhileStatement;
+import minijava.node.EOF;
+import minijava.node.Node;
+import minijava.node.Start;
+import minijava.node.TAnd;
+import minijava.node.TAttr;
+import minijava.node.TBlank;
+import minijava.node.TBoolean;
+import minijava.node.TClassn;
+import minijava.node.TComma;
+import minijava.node.TComment;
+import minijava.node.TDot;
+import minijava.node.TElse;
+import minijava.node.TEqualop;
+import minijava.node.TExtends;
+import minijava.node.TFalse;
+import minijava.node.TId;
+import minijava.node.TIf;
+import minijava.node.TInt;
+import minijava.node.TLBrace;
+import minijava.node.TLBracket;
+import minijava.node.TLParenthese;
+import minijava.node.TLength;
+import minijava.node.TLess;
+import minijava.node.TMain;
+import minijava.node.TMinusop;
+import minijava.node.TNew;
+import minijava.node.TNot;
+import minijava.node.TNumber;
+import minijava.node.TPlusop;
+import minijava.node.TPrint;
+import minijava.node.TPublic;
+import minijava.node.TRBrace;
+import minijava.node.TRBracket;
+import minijava.node.TRParenthese;
+import minijava.node.TReturn;
+import minijava.node.TSemicolon;
+import minijava.node.TStatic;
+import minijava.node.TString;
+import minijava.node.TThis;
+import minijava.node.TTimesop;
+import minijava.node.TTrue;
+import minijava.node.TVoid;
+import minijava.node.TWhile;
 
 public class AnalysisAdapter implements Analysis
 {
@@ -230,11 +306,6 @@ public class AnalysisAdapter implements Analysis
     }
 
     public void caseANotExp(ANotExp node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAParentheseExp(AParentheseExp node)
     {
         defaultCase(node);
     }

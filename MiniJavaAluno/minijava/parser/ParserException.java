@@ -2,7 +2,7 @@
 
 package minijava.parser;
 
-import minijava.node.*;
+import minijava.node.Token;
 
 @SuppressWarnings("serial")
 public class ParserException extends Exception

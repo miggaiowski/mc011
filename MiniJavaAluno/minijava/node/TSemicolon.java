@@ -2,7 +2,7 @@
 
 package minijava.node;
 
-import minijava.analysis.*;
+import minijava.analysis.Analysis;
 
 @SuppressWarnings("nls")
 public final class TSemicolon extends Token

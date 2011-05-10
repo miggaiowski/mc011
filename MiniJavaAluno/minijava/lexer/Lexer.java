@@ -2,8 +2,53 @@
 
 package minijava.lexer;
 
-import java.io.*;
-import minijava.node.*;
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.PushbackReader;
+
+import minijava.node.EOF;
+import minijava.node.TAnd;
+import minijava.node.TAttr;
+import minijava.node.TBlank;
+import minijava.node.TBoolean;
+import minijava.node.TClassn;
+import minijava.node.TComma;
+import minijava.node.TComment;
+import minijava.node.TDot;
+import minijava.node.TElse;
+import minijava.node.TEqualop;
+import minijava.node.TExtends;
+import minijava.node.TFalse;
+import minijava.node.TId;
+import minijava.node.TIf;
+import minijava.node.TInt;
+import minijava.node.TLBrace;
+import minijava.node.TLBracket;
+import minijava.node.TLParenthese;
+import minijava.node.TLength;
+import minijava.node.TLess;
+import minijava.node.TMain;
+import minijava.node.TMinusop;
+import minijava.node.TNew;
+import minijava.node.TNot;
+import minijava.node.TNumber;
+import minijava.node.TPlusop;
+import minijava.node.TPrint;
+import minijava.node.TPublic;
+import minijava.node.TRBrace;
+import minijava.node.TRBracket;
+import minijava.node.TRParenthese;
+import minijava.node.TReturn;
+import minijava.node.TSemicolon;
+import minijava.node.TStatic;
+import minijava.node.TString;
+import minijava.node.TThis;
+import minijava.node.TTimesop;
+import minijava.node.TTrue;
+import minijava.node.TVoid;
+import minijava.node.TWhile;
+import minijava.node.Token;
 
 @SuppressWarnings("nls")
 public class Lexer

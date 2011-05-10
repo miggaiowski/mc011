@@ -2,8 +2,51 @@
 
 package minijava.analysis;
 
-import java.util.*;
-import minijava.node.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import minijava.node.AAndExp;
+import minijava.node.AArrayAssignStatement;
+import minijava.node.AArrayLengthExp;
+import minijava.node.AArrayLookupExp;
+import minijava.node.AArrayType;
+import minijava.node.AAssignStatement;
+import minijava.node.ABlockStatement;
+import minijava.node.ABooleanType;
+import minijava.node.ACallExp;
+import minijava.node.AClassDecl;
+import minijava.node.AEqualExp;
+import minijava.node.AFalseExp;
+import minijava.node.AFormal;
+import minijava.node.AIdentifierExp;
+import minijava.node.AIfStatement;
+import minijava.node.AIntType;
+import minijava.node.AIntegerLiteralExp;
+import minijava.node.ALessThanExp;
+import minijava.node.AMainClass;
+import minijava.node.AMethodDecl;
+import minijava.node.AMinusExp;
+import minijava.node.ANewArrayExp;
+import minijava.node.ANewObjectExp;
+import minijava.node.ANotExp;
+import minijava.node.AObjectType;
+import minijava.node.APlusExp;
+import minijava.node.APrintStatement;
+import minijava.node.AProgram;
+import minijava.node.AThisExp;
+import minijava.node.ATimesExp;
+import minijava.node.ATrueExp;
+import minijava.node.AVarDecl;
+import minijava.node.AWhileStatement;
+import minijava.node.Node;
+import minijava.node.PClassDecl;
+import minijava.node.PExp;
+import minijava.node.PFormal;
+import minijava.node.PMethodDecl;
+import minijava.node.PStatement;
+import minijava.node.PVarDecl;
+import minijava.node.Start;
 
 public class ReversedDepthFirstAdapter extends AnalysisAdapter
 {
@@ -935,26 +978,5 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
             node.getToken().apply(this);
         }
         outANotExp(node);
-    }
-
-    public void inAParentheseExp(AParentheseExp node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAParentheseExp(AParentheseExp node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAParentheseExp(AParentheseExp node)
-    {
-        inAParentheseExp(node);
-        if(node.getExp() != null)
-        {
-            node.getExp().apply(this);
-        }
-        outAParentheseExp(node);
     }
 }

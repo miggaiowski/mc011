@@ -1,10 +1,46 @@
 package syntaxtree;
 
-import java.util.*;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import minijava.analysis.DepthFirstAdapter;
-import minijava.node.*;
+import minijava.node.AAndExp;
+import minijava.node.AArrayAssignStatement;
+import minijava.node.AArrayLengthExp;
+import minijava.node.AArrayLookupExp;
+import minijava.node.AArrayType;
+import minijava.node.AAssignStatement;
+import minijava.node.ABlockStatement;
+import minijava.node.ABooleanType;
+import minijava.node.ACallExp;
+import minijava.node.AClassDecl;
+import minijava.node.AFalseExp;
+import minijava.node.AFormal;
+import minijava.node.AIdentifierExp;
+import minijava.node.AIfStatement;
+import minijava.node.AIntType;
+import minijava.node.AIntegerLiteralExp;
+import minijava.node.ALessThanExp;
+import minijava.node.AMainClass;
+import minijava.node.AMethodDecl;
+import minijava.node.AMinusExp;
+import minijava.node.ANewArrayExp;
+import minijava.node.ANewObjectExp;
+import minijava.node.ANotExp;
+import minijava.node.AObjectType;
+import minijava.node.APlusExp;
+import minijava.node.APrintStatement;
+import minijava.node.AThisExp;
+import minijava.node.ATimesExp;
+import minijava.node.ATrueExp;
+import minijava.node.AVarDecl;
+import minijava.node.AWhileStatement;
+import minijava.node.PExp;
+import minijava.node.PFormal;
+import minijava.node.PMethodDecl;
+import minijava.node.PStatement;
+import minijava.node.PVarDecl;
 
 public class PrettyPrint extends DepthFirstAdapter
 {
@@ -465,18 +501,6 @@ public class PrettyPrint extends DepthFirstAdapter
 	{
 		print(node.getName().getText());
 	}
-	
-    @Override
-	public void inAParentheseExp(AParentheseExp node)
-    {
-		print("(");
-    }
-
-    @Override
-    public void outAParentheseExp(AParentheseExp node)
-    {
-    	print(")");
-    }
 
 	private void print(String s)
 	{

@@ -6,9 +6,11 @@ import symbol.MethodInfo;
 import syntaxtree.ArrayAssign;
 import syntaxtree.Assign;
 import syntaxtree.Block;
+import syntaxtree.BooleanType;
 import syntaxtree.If;
 import syntaxtree.Print;
 import syntaxtree.Statement;
+import syntaxtree.Type;
 import syntaxtree.VisitorAdapter;
 import syntaxtree.While;
 
@@ -39,7 +41,19 @@ public class StatementHandler extends VisitorAdapter{
 	}
 	
 	public void visit (While node){
-		//TODO: implement
+		//First we do the secondpass in the condition expression
+		Type condition = ExpHandler.secondpass(env,classInfo,methodInfo,node.condition);
+		
+		//The condition type must be boolean, if not, an error message is shown
+		if (!(condition instanceof BooleanType) ){
+			env.err.Error(node, new Object[]{"Tipo invalido para condicao do \'while\'.",
+					                         "Esperado: boolean",
+					                         "Encontrado: " + condition }
+			);
+		}
+		
+		//Returning an error or not, we assume its ok to continue the type checking
+		StatementHandler.secondpass(env, classInfo, methodInfo, node.body);
 	}
 	
 	public void visit (Print node){
