@@ -3,6 +3,8 @@ package semant.second_pass.handlers;
 import semant.Env;
 import symbol.ClassInfo;
 import symbol.MethodInfo;
+import symbol.Symbol;
+import symbol.VarInfo;
 import syntaxtree.ArrayAssign;
 import syntaxtree.Assign;
 import syntaxtree.Block;
@@ -32,14 +34,17 @@ public class StatementHandler extends VisitorAdapter{
 		stm.accept(handler);
 	}
 	
+	//***** BLOCK *****//
 	public void visit (Block node){
 		//TODO: implement
 	}
 	
+	//***** IF *****//
 	public void visit (If node){
 		//TODO: implement
 	}
 	
+	//***** WHILE *****//
 	public void visit (While node){
 		//First we do the secondpass in the condition expression
 		Type condition = ExpHandler.secondpass(env,classInfo,methodInfo,node.condition);
@@ -56,15 +61,66 @@ public class StatementHandler extends VisitorAdapter{
 		StatementHandler.secondpass(env, classInfo, methodInfo, node.body);
 	}
 	
+	//***** PRINT *****//
 	public void visit (Print node){
 		//TODO: implement
 	}
 	
+	//***** ASSIGN *****//
 	public void visit (Assign node){
-		//TODO: implement
+		
+		Symbol name = Symbol.symbol(node.var.s);
+		VarInfo varinfo = StatementHandler.getVariable(classInfo,methodInfo,name);
+		
+		if (varinfo == null)
+			env.err.Error(node, new Object[]{"Variavel nao declarada.",
+					                         "Simbolo: " + name}
+			);
+		
+		Type type = ExpHandler.secondpass(env, classInfo, methodInfo, node.exp);
+		
+		if (varinfo != null && !TypeHandler.compatible(env, varinfo.type, type))
+			env.err.Error(node, new Object[]{"Expressao da atribuicao incompativel com o tipo da variavel.",
+                                             "Esperado: " + varinfo.type,
+                                             "Encontrado: " + type}
+            );
 	}
 
+	//***** ARRAY ASSIGN *****//
 	public void visit (ArrayAssign node){
 		//TODO: implement
+	}
+	
+	
+	
+	
+    //***** Auxiliar Method *****//
+	
+	//Get variables according to the context, call it with care
+	static VarInfo getVariable(ClassInfo cinfo, MethodInfo minfo, Symbol symbol) {
+		
+		VarInfo varinfo = null;
+		
+		//TODO: Essa sequencia procura com a seguinte prioridade: local > parametro > atributo, tá certo isso?
+		
+		//If there is a method...
+		if (minfo != null){
+			//First we check if the variable is a local of the method
+			if (minfo.localsTable.containsKey(symbol)){
+				varinfo = minfo.localsTable.get(symbol);
+				return varinfo;
+			}
+			//If its not a local, maybe its a formal of the method
+			else if (minfo.formalsTable.containsKey(symbol)){
+				varinfo = minfo.formalsTable.get(symbol);
+				return varinfo;
+			}
+		}
+		
+		//Well, if its has nothing to do with a method, maybe is an attribute of the class
+		if (cinfo.attributes.containsKey(symbol) )
+				varinfo = cinfo.attributes.get(symbol);
+    		
+		return varinfo;
 	}
 }

@@ -11,13 +11,13 @@ public class AttributeListHandler extends VisitorAdapter {
         super();
     }
     
-    public static void secondPass(Env e, List<VarDecl> varList) {
+    public static void secondpass(Env e, List<VarDecl> varList) {
         
         // percorre lista ligada varList das VarDecl
         VarDecl vd;
         while (varList != null) {
             vd = varList.head;
-            //TODO: Create this class: AttributeHandler.secondpass(e, vd); // chama secondPass para poder visitar cada VarDecl
+            AttributeHandler.secondpass(e, vd); // chama secondPass para poder visitar cada VarDecl
             varList = varList.tail;
         }
     }

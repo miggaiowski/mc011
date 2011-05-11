@@ -47,17 +47,17 @@ public class ExpHandler extends TypeVisitorAdapter{
 		return exp.accept(handler);
 	}
 	
-	
+	//***** AND *****//
 	public Type visit(And node){
 		//TODO: implement
-		return node.type; //DELETE THIS!, its just here to avoid the annoying error messages
 	}
 	
+	//***** EQUAL *****//
 	public Type visit(Equal node){
 		//TODO: implement
-		return node.type; //DELETE THIS!, its just here to avoid the annoying error messages
 	}
 	
+	//***** LESS THAN *****//
 	public Type visit(LessThan node){
 		//First we do a secondpass in the left and right statements
 		Type leftStatement = ExpHandler.secondpass(env, classInfo, methodInfo, node.lhs);
@@ -81,51 +81,52 @@ public class ExpHandler extends TypeVisitorAdapter{
 		return node.type = new BooleanType(node.line, node.row);
 	}
 	
+	//***** TIMES *****//
 	public Type visit(Times node){
 		//TODO: implement
-		return node.type; //DELETE THIS!, its just here to avoid the annoying error messages
 	}
 	
+	//***** PLUS *****//
 	public Type visit(Plus node){
 		//TODO: implement
-		return node.type; //DELETE THIS!, its just here to avoid the annoying error messages
 	}
 	
+	//***** MINUS *****//
 	public Type visit(Minus node){
 		//TODO: implement
-		return node.type; //DELETE THIS!, its just here to avoid the annoying error messages
 	}
 	
+	//***** ARRAY LOOKUP *****//
 	public Type visit(ArrayLookup node){
 		//TODO: implement
-		return node.type; //DELETE THIS!, its just here to avoid the annoying error messages
 	}
 	
+	//***** ARRAY LENGTH *****//
 	public Type visit(ArrayLength node){
 		//TODO: implement
-		return node.type; //DELETE THIS!, its just here to avoid the annoying error messages
 	}
 	
+	//***** CALL *****//
 	public Type visit(Call node){
 		//TODO: implement
-		return node.type; //DELETE THIS!, its just here to avoid the annoying error messages
 	}
 	
+	//***** INTEGER LITERAL *****//
 	public Type visit(IntegerLiteral node){
 		//TODO: implement
-		return node.type; //DELETE THIS!, its just here to avoid the annoying error messages
 	}
 	
+	//***** TRUE *****//
 	public Type visit(True node){
 		//TODO: implement
-		return node.type; //DELETE THIS!, its just here to avoid the annoying error messages
 	}
 	
+	//***** FALSE *****//
 	public Type visit(False node){
 		//TODO: implement
-		return node.type; //DELETE THIS!, its just here to avoid the annoying error messages
 	}
 	
+	//***** IDENTIFIER EXP *****//
 	public Type visit(IdentifierExp node){
 		//Look if the identifier exists in the method or class
 		Symbol name = Symbol.symbol(node.name.s);
@@ -144,26 +145,27 @@ public class ExpHandler extends TypeVisitorAdapter{
 		return node.type = varinfo.type;
 	}
 	
+	//***** THIS *****//
 	public Type visit(This node){
 		//TODO: implement
-		return node.type; //DELETE THIS!, its just here to avoid the annoying error messages
 	}
 	
+	//***** NEW ARRAY *****//
 	public Type visit(NewArray node){
 		//TODO: implement
-		return node.type; //DELETE THIS!, its just here to avoid the annoying error messages
 	}
 	
+	//***** NEW OBJECT *****//
 	public Type visit(NewObject node){
 		//TODO: implement
-		return node.type; //DELETE THIS!, its just here to avoid the annoying error messages
 	}
 	
+	//***** NOT *****//
 	public Type visit(Not node){
 		//TODO: implement
-		return node.type; //DELETE THIS!, its just here to avoid the annoying error messages
 	}
 
+	
 	
 	
 	//***** Auxiliar Method *****//
