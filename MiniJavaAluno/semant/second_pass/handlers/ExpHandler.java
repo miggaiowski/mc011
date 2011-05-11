@@ -77,20 +77,20 @@ public class ExpHandler extends TypeVisitorAdapter{
 	//***** LESS THAN *****//
 	public Type visit(LessThan node){	    
 		//First we do a secondpass in the left and right statements
-		Type leftStatement = ExpHandler.secondpass(env, classInfo, methodInfo, node.lhs);
-		Type rightStatement = ExpHandler.secondpass(env, classInfo, methodInfo, node.rhs);
+		Type leftExp = ExpHandler.secondpass(env, classInfo, methodInfo, node.lhs);
+		Type rightExp = ExpHandler.secondpass(env, classInfo, methodInfo, node.rhs);
 		
 		//The statements types must be IntegerType, if not, an error message is shown
-		if(!(leftStatement instanceof IntegerType)){
+		if(!(leftExp instanceof IntegerType)){
 			env.err.Error(node.lhs, new Object[]{"Tipo invalido para o lado esquerdo do operador \'<\'.",
 					                             "Esperado: int," +
-					                             "Encontrado: " + leftStatement}
+					                             "Encontrado: " + leftExp}
 			);
 		}	
-		if(!(rightStatement instanceof IntegerType)){
+		if(!(rightExp instanceof IntegerType)){
 			env.err.Error(node.rhs, new Object[]{"Tipo invalido para o lado direito do operador \'<\'.",
 					                             "Esperado: int," +
-					                             "Encontrado: " + leftStatement}
+					                             "Encontrado: " + leftExp}
 			);
 		}
 		
