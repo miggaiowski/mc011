@@ -88,7 +88,7 @@ public class StatementHandler extends VisitorAdapter{
 	    
 	    if (!(exp instanceof IntegerType) ){
 	        env.err.Error(node, new Object[]{"Tipo invalido para expressão do \'print\'.",
-	                "Esperado: IntegerType",
+	                "Esperado: int",
 	                "Encontrado: " + exp }
 	        );
 	    }
@@ -119,7 +119,33 @@ public class StatementHandler extends VisitorAdapter{
 
 	//***** ARRAY ASSIGN *****//
 	public void visit (ArrayAssign node){
-		//TODO: implement
+		//Get the variable that is the left hand side of the assignment
+		Symbol name = Symbol.symbol(node.var.s);
+		VarInfo varinfo = StatementHandler.getVariable(classInfo,methodInfo,name);
+		
+		//If the variable doesnt exist, an error message is shown and the secondpass continues
+		if (varinfo == null)
+			env.err.Error(node, new Object[]{"Variavel nao declarada.",
+					                         "Simbolo: " + name}
+			);
+		
+		//Get the type of the index expression
+		Type indexType = ExpHandler.secondpass(env, classInfo, methodInfo, node.index);
+		//If the index is not a integer, an error message is shown and the secondpass continues
+		if (!(indexType instanceof IntegerType))
+			env.err.Error(node, new Object[]{"O indice do vetor eh de um tipo invalido.",
+                                             "Esperado: int",
+                                             "Encontrado: " + indexType}
+			);
+		
+		//Get the type of the right hand side expression
+		Type rhsType = ExpHandler.secondpass(env, classInfo, methodInfo, node.value);
+		//If the type of the right expression is not integer, an error message is shown and the secondpass continues
+		if (!(indexType instanceof IntegerType))
+			env.err.Error(node, new Object[]{"Expressao da atribuicao incompativel com o tipo do vetor.",
+                                             "Esperado: int",
+                                             "Encontrado: " + rhsType}
+			);
 	}
 	
 	
@@ -131,10 +157,6 @@ public class StatementHandler extends VisitorAdapter{
 	static VarInfo getVariable(ClassInfo cinfo, MethodInfo minfo, Symbol symbol) {
 		
 		VarInfo varinfo = null;
-		
-		erro: miguel, veja esse comentario
-		//TODO: Essa sequencia procura com a seguinte prioridade: local > parametro > atributo, tá certo isso?
-		// Nao seria aki que deveriamos checar se ha variaveis com o mesmo nome?
 		
 		//If there is a method...
 		if (minfo != null){
