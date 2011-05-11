@@ -71,7 +71,18 @@ public class ExpHandler extends TypeVisitorAdapter{
 	
 	//***** EQUAL *****//
 	public Type visit(Equal node){
-		//TODO: implement
+	    // Second pass on both left and right hand side expressions
+        Type leftExp = ExpHandler.secondpass(env, classInfo, methodInfo, node.lhs);
+        Type rightExp = ExpHandler.secondpass(env, classInfo, methodInfo, node.rhs);
+        
+        // The expressions must have the same Type
+        if (!(leftExp.getClass() == rightExp.getClass())) {
+            env.err.Error(node.lhs, new Object[]{"Tipos diferentes sendo comparados com operador \'==\'.",
+                    "Tipo do LHS: " + leftExp,
+                    "Tipo do RHS: " + rightExp}
+            );
+        }
+        return node.type = new BooleanType(node.line, node.row);
 	}
 	
 	//***** LESS THAN *****//
@@ -151,7 +162,8 @@ public class ExpHandler extends TypeVisitorAdapter{
 	
 	//***** INTEGER LITERAL *****//
 	public Type visit(IntegerLiteral node){
-		//TODO: implement
+		// só retorna o tipo do nó
+	    return node.type = new IntegerType(node.line, node.row);
 	}
 	
 	//***** TRUE *****//

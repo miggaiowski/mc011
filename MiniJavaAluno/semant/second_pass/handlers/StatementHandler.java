@@ -35,19 +35,38 @@ public class StatementHandler extends VisitorAdapter{
 	}
 	
 	//***** BLOCK *****//
-	public void visit (Block node){
-		//TODO: implement
+	public void visit (Block node) {  
+	    // Check each statement from the list
+	    while (node.body != null) {
+	        StatementHandler.secondpass(env, classInfo, methodInfo, node.body.head);
+	        node.body = node.body.tail;
+	    }
 	}
 	
 	//***** IF *****//
-	public void visit (If node){
-		//TODO: implement
+	public void visit (If node) {
+	    // Second pass on the condition expression
+        Type condition = ExpHandler.secondpass(env,classInfo,methodInfo,node.condition);
+        
+        // This condition must be of type BooleanType
+        if (!(condition instanceof BooleanType) ){
+            env.err.Error(node, new Object[]{"Tipo invalido para condicao do \'while\'.",
+                                             "Esperado: boolean",
+                                             "Encontrado: " + condition }
+            );
+        }
+
+        // Checking the statements from thenClause
+        StatementHandler.secondpass(env, classInfo, methodInfo, node.thenClause);
+
+        // Must also check the statement from elseClause
+        StatementHandler.secondpass(env, classInfo, methodInfo, node.elseClause);        
 	}
 	
 	//***** WHILE *****//
 	public void visit (While node){
-		//First we do the secondpass in the condition expression
-		Type condition = ExpHandler.secondpass(env,classInfo,methodInfo,node.condition);
+	    //First we do the secondpass in the condition expression
+	    Type condition = ExpHandler.secondpass(env,classInfo,methodInfo,node.condition);
 		
 		//The condition type must be boolean, if not, an error message is shown
 		if (!(condition instanceof BooleanType) ){
