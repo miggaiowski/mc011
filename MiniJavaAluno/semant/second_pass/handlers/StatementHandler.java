@@ -96,17 +96,20 @@ public class StatementHandler extends VisitorAdapter{
 	
 	//***** ASSIGN *****//
 	public void visit (Assign node){
-		
+		//Get the variable that is the left hand side of the assignment
 		Symbol name = Symbol.symbol(node.var.s);
 		VarInfo varinfo = StatementHandler.getVariable(classInfo,methodInfo,name);
 		
+		//If the variable doesnt exist, an error message is shown and the secondpass continues
 		if (varinfo == null)
 			env.err.Error(node, new Object[]{"Variavel nao declarada.",
 					                         "Simbolo: " + name}
 			);
 		
+		//Get the type of the right hand side expression
 		Type type = ExpHandler.secondpass(env, classInfo, methodInfo, node.exp);
 		
+		//If the lhs and rhs terms are not compatible, it's an error
 		if (varinfo != null && !TypeHandler.compatible(env, varinfo.type, type))
 			env.err.Error(node, new Object[]{"Expressao da atribuicao incompativel com o tipo da variavel.",
                                              "Esperado: " + varinfo.type,
