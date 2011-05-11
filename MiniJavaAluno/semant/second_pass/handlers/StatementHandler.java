@@ -129,7 +129,9 @@ public class StatementHandler extends VisitorAdapter{
 		
 		VarInfo varinfo = null;
 		
+		erro: miguel, veja esse comentario
 		//TODO: Essa sequencia procura com a seguinte prioridade: local > parametro > atributo, tá certo isso?
+		// Nao seria aki que deveriamos checar se ha variaveis com o mesmo nome?
 		
 		//If there is a method...
 		if (minfo != null){

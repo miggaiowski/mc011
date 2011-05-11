@@ -17,7 +17,7 @@ public class AttributeListHandler extends VisitorAdapter {
         VarDecl vd;
         while (varList != null) {
             vd = varList.head;
-            AttributeHandler.secondpass(e, vd); // chama secondPass para poder visitar cada VarDecl
+            AttributeHandler.secondpass(e, vd); // chama secondpass para poder visitar cada VarDecl
             varList = varList.tail;
         }
     }

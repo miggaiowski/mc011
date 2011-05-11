@@ -21,7 +21,7 @@ public class ClassDeclHandler extends VisitorAdapter{
 	public void visit(ClassDecl node){
 		
 		//Do a secondpass in all the attributes of the class
-		//TODO: Nao precisamos disso certo???   AttributeListHandler.secondpass(env,node.varList);
+		AttributeListHandler.secondpass(env,node.varList);
 		
 		//Do a secondpass in all the methods of the class
 		MethodDeclListHandler.secondpass(env,node.methodList);
