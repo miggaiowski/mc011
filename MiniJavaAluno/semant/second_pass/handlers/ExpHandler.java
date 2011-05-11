@@ -49,7 +49,24 @@ public class ExpHandler extends TypeVisitorAdapter{
 	
 	//***** AND *****//
 	public Type visit(And node){
-		//TODO: implement
+	    // Second pass on both left and right hand side expressions
+        Type leftExp = ExpHandler.secondpass(env, classInfo, methodInfo, node.lhs);
+        Type rightExp = ExpHandler.secondpass(env, classInfo, methodInfo, node.rhs);
+        
+        // The expressions must return a type BooleanType!
+        if (!(leftExp instanceof BooleanType)) {
+            env.err.Error(node.lhs, new Object[]{"Tipo invalido para o lado esquerdo do operador \'&&\'.",
+                    "Esperado: boolean," +
+                    "Encontrado: " + leftExp}
+            );
+        }
+        if(!(rightExp instanceof BooleanType)){
+            env.err.Error(node.rhs, new Object[]{"Tipo invalido para o lado direito do operador \'<\'.",
+                                                 "Esperado: int," +
+                                                 "Encontrado: " + leftExp}
+            );
+        }
+        return node.type = new BooleanType(node.line, node.row);
 	}
 	
 	//***** EQUAL *****//
@@ -58,7 +75,7 @@ public class ExpHandler extends TypeVisitorAdapter{
 	}
 	
 	//***** LESS THAN *****//
-	public Type visit(LessThan node){
+	public Type visit(LessThan node){	    
 		//First we do a secondpass in the left and right statements
 		Type leftStatement = ExpHandler.secondpass(env, classInfo, methodInfo, node.lhs);
 		Type rightStatement = ExpHandler.secondpass(env, classInfo, methodInfo, node.rhs);
