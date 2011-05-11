@@ -35,12 +35,16 @@ public class StatementHandler extends VisitorAdapter{
 	}
 	
 	//***** BLOCK *****//
-	public void visit (Block node){
-		//TODO: implement
+	public void visit (Block node) {  
+	    // Check each statement from the list
+	    while (node.body != null) {
+	        StatementHandler.secondpass(env, classInfo, methodInfo, node.body.head);
+	        node.body = node.body.tail;
+	    }
 	}
 	
 	//***** IF *****//
-	public void visit (If node){
+	public void visit (If node) {
 	    // Second pass on the condition expression
         Type condition = ExpHandler.secondpass(env,classInfo,methodInfo,node.condition);
         
@@ -61,8 +65,8 @@ public class StatementHandler extends VisitorAdapter{
 	
 	//***** WHILE *****//
 	public void visit (While node){
-		//First we do the secondpass in the condition expression
-        Type condition = ExpHandler.secondpass(env,classInfo,methodInfo,node.condition);
+	    //First we do the secondpass in the condition expression
+	    Type condition = ExpHandler.secondpass(env,classInfo,methodInfo,node.condition);
 		
 		//The condition type must be boolean, if not, an error message is shown
 		if (!(condition instanceof BooleanType) ){
