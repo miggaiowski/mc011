@@ -14,6 +14,7 @@ import syntaxtree.Equal;
 import syntaxtree.Exp;
 import syntaxtree.False;
 import syntaxtree.IdentifierExp;
+import syntaxtree.IdentifierType;
 import syntaxtree.IntegerLiteral;
 import syntaxtree.IntegerType;
 import syntaxtree.LessThan;
@@ -27,6 +28,7 @@ import syntaxtree.Times;
 import syntaxtree.True;
 import syntaxtree.Type;
 import syntaxtree.TypeVisitorAdapter;
+import util.List;
 
 public class ExpHandler extends TypeVisitorAdapter{
 	
@@ -157,7 +159,54 @@ public class ExpHandler extends TypeVisitorAdapter{
 	
 	//***** CALL *****//
 	public Type visit(Call node){
-		//TODO: implement
+		//Get the type of the caller of the method
+		Type type = ExpHandler.secondpass(env, classInfo, methodInfo, node.object);
+		Symbol methodName = Symbol.symbol(node.method.s);
+		
+		//If the type returned is not an IdentifierType, then it's not class
+		if ( !(type instanceof IdentifierType)){
+			env.err.Error(node, new Object[]{"Chamada de metodo aplicada a tipo invalido",
+					                         "Esperado: <class>",
+					                         "Encontrado: " + type}
+			);
+			//After the error, suppose this call returns an integer type to continue the secondpass
+			return node.type = new IntegerType(node.line, node.row);
+		}
+		
+		//Well so the caller is a class
+		IdentifierType classId = (IdentifierType) type;
+		
+		//Try to find out if the method called exists in this class
+		MethodInfo method = getMethod(Symbol.symbol(classId.name), methodName);
+		
+		//If it doesn't exists, an error message is shown and we suposse the call returned an IntegerType 
+		if (method == null){
+			env.err.Error(node, new Object[]{"Metodo " + method + " nao definido para a classe \'" + classId.name + "\'"});
+			return node.type = new IntegerType(node.line, node.row);
+		}
+		
+		//Now we know that the method can be called in the given class, but we must check the parameters too
+		List<Type> actuals = ExpListHandler.secondpass(env, classInfo, methodInfo, node.actuals); //actual parameters
+		List<VarInfo> formals; //formal parameters
+		int i;
+		
+		//Check if all the parameters are compatible
+		for (formals = method.formals, i = 1; actuals != null && formals != null; actuals = actuals.tail, formals = formals.tail, i++){
+			if (!(TypeHandler.compatible(env, formals.head.type, actuals.head))){
+				env.err.Error(node, new Object[]{"Tipo do argumento #" + i + " para o metodo " + classId.name + "." + method.name + "nao eh compativel.",
+                                                 "Esperado: " + formals.head.type,
+                                                 "Encontrado: " + actuals.head}
+				);
+			}
+		}
+		
+		//If the parameters check finished but there stil are actuals or formals, then the # of args are invalid
+		if (actuals != null || formals != null)
+			env.err.Error(node, new Object[]{"Numero de parametros invalido para o metodo " + classId.name + "." + method.name + "."});
+		
+		//If everything is all right, the method called returns its standard return Type
+		return node.type = method.type;
+		
 	}
 	
 	//***** INTEGER LITERAL *****//
@@ -199,17 +248,7 @@ public class ExpHandler extends TypeVisitorAdapter{
 	
 	//***** THIS *****//
 	public Type visit(This node){
-	    // Check is 'this' was used inside the mainclass
-	    // The methodinfo should be null if this comes from the mainclass
-	    
-	    if (this.methodInfo == null) {
-	        env.err.Error(node, new Object[]{"Expressão \'this\' usada dentro da MainClass."});
-	        return null;
-	    }
-	    
-	    //TODO: Falta coisa aqui, só fiz esse erro da mainclass!!!
-	    
-	    return null; // arrumar isso, nao é sempre null nao!
+		//TODO: implement
 	}
 	
 	//***** NEW ARRAY *****//
@@ -230,7 +269,7 @@ public class ExpHandler extends TypeVisitorAdapter{
 	
 	
 	
-	//***** Auxiliar Method *****//
+	//***** Auxiliar Methods *****//
 	
 	//Get variables according to the context, call it with care
 	static VarInfo getVariable(ClassInfo cinfo, MethodInfo minfo, Symbol symbol) {
@@ -258,6 +297,12 @@ public class ExpHandler extends TypeVisitorAdapter{
 				varinfo = cinfo.attributes.get(symbol);
     		
 		return varinfo;
+	}
+	
+	private MethodInfo getMethod(Symbol className, Symbol methodName){
+		//Return null if the class doesnt exists
+		//Return null if the method doesnt exists in the specified class
+		return env.classes.env.peek().get(className).methods.get(methodName);
 	}
 	
 }

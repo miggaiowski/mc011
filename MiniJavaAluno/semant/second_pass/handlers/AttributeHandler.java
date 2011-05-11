@@ -4,8 +4,9 @@ import semant.Env;
 import syntaxtree.Type;
 import syntaxtree.TypeVisitorAdapter;
 import syntaxtree.VarDecl;
+import syntaxtree.VisitorAdapter;
 
-public class AttributeHandler extends TypeVisitorAdapter{
+public class AttributeHandler extends VisitorAdapter{
 	
 	Env env;
 	
@@ -15,9 +16,9 @@ public class AttributeHandler extends TypeVisitorAdapter{
 	}
 	
 	
-	public static Type secondpass(Env e, VarDecl v){
+	public static void secondpass(Env e, VarDecl v){
 		AttributeHandler handler = new AttributeHandler(e);
-		return v.accept(handler);
+		v.accept(handler);
 	}
 	
 	public Type visit(VarDecl node){
