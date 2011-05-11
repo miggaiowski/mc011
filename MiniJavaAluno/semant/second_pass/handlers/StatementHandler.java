@@ -10,6 +10,7 @@ import syntaxtree.Assign;
 import syntaxtree.Block;
 import syntaxtree.BooleanType;
 import syntaxtree.If;
+import syntaxtree.IntegerType;
 import syntaxtree.Print;
 import syntaxtree.Statement;
 import syntaxtree.Type;
@@ -82,7 +83,15 @@ public class StatementHandler extends VisitorAdapter{
 	
 	//***** PRINT *****//
 	public void visit (Print node){
-		//TODO: implement
+	    // Check the expression to be printed out
+	    Type exp = ExpHandler.secondpass(env,classInfo,methodInfo,node.exp);
+	    
+	    if (!(exp instanceof IntegerType) ){
+	        env.err.Error(node, new Object[]{"Tipo invalido para expressão do \'print\'.",
+	                "Esperado: IntegerType",
+	                "Encontrado: " + exp }
+	        );
+	    }
 	}
 	
 	//***** ASSIGN *****//
