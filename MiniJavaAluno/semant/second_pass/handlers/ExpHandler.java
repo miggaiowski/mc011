@@ -83,17 +83,38 @@ public class ExpHandler extends TypeVisitorAdapter{
 	
 	//***** TIMES *****//
 	public Type visit(Times node){
-		//TODO: implement
+		//Both sides of the expression must be IntegerTypes
+		if (!(node.lhs.accept(this) instanceof IntegerType))
+			env.err.Error(node, new Object[]{"Left side of the expression must be an IntegerType"});
+		if (!(node.rhs.accept(this) instanceof IntegerType))
+			env.err.Error(node, new Object[]{"Left side of the expression must be an IntegerType"});
+		
+		//Return an Integer type if its ok, and if there was an error too, to continue the second pass
+		return new IntegerType(node.line, node.row);
 	}
 	
 	//***** PLUS *****//
 	public Type visit(Plus node){
-		//TODO: implement
+		//Both sides of the expression must be IntegerTypes
+		if (!(node.lhs.accept(this) instanceof IntegerType))
+			env.err.Error(node, new Object[]{"Left side of the expression must be an IntegerType"});
+		if (!(node.rhs.accept(this) instanceof IntegerType))
+			env.err.Error(node, new Object[]{"Left side of the expression must be an IntegerType"});
+		
+		//Return an Integer type if its ok, and if there was an error too, to continue the second pass
+		return new IntegerType(node.line, node.row);
 	}
 	
 	//***** MINUS *****//
 	public Type visit(Minus node){
-		//TODO: implement
+		//Both sides of the expression must be IntegerTypes
+		if (!(node.lhs.accept(this) instanceof IntegerType))
+			env.err.Error(node, new Object[]{"Left side of the expression must be an IntegerType"});
+		if (!(node.rhs.accept(this) instanceof IntegerType))
+			env.err.Error(node, new Object[]{"Left side of the expression must be an IntegerType"});
+		
+		//Return an Integer type if its ok, and if there was an error too, to continue the second pass
+		return new IntegerType(node.line, node.row);
 	}
 	
 	//***** ARRAY LOOKUP *****//

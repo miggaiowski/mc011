@@ -21,6 +21,6 @@ public class AttributeHandler extends TypeVisitorAdapter{
 	}
 	
 	public Type visit(VarDecl node){
-		//TODO: Implement
+		//TODO: Precisamos desse handler?
 	}
 }
