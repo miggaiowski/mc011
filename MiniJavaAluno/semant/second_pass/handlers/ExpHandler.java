@@ -156,12 +156,14 @@ public class ExpHandler extends TypeVisitorAdapter{
 	
 	//***** TRUE *****//
 	public Type visit(True node){
-		//TODO: implement
+	    // Basta retornar o tipo do nó
+	    return node.type = new BooleanType(node.line, node.row);
 	}
 	
 	//***** FALSE *****//
 	public Type visit(False node){
-		//TODO: implement
+	    // Basta retornar o tipo do nó
+        return node.type = new BooleanType(node.line, node.row);
 	}
 	
 	//***** IDENTIFIER EXP *****//
