@@ -250,12 +250,17 @@ public class ExpHandler extends TypeVisitorAdapter{
 	
 	//***** THIS *****//
 	public Type visit(This node){
-		//TODO: implement
-	    if (classInfo == null) {
-	           env.err.Error(node, new Object[]{"\'this\' utilizado na MainClass."}
-	           );
+	    // Check is 'this' was used inside the mainclass
+	    // The methodinfo should be null if this comes from the mainclass
+	    
+	    if (this.methodInfo == null) {
+	        env.err.Error(node, new Object[]{"Expressão \'this\' usada dentro da MainClass."});
+	        return null;
 	    }
-	    return null;
+
+	 //TODO: Falta coisa aqui, só fiz esse erro da mainclass!!!
+
+	 return null; // arrumar isso, nao é sempre null nao!
 	}
 	
 	//***** NEW ARRAY *****//
