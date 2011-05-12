@@ -37,6 +37,7 @@ public class ExpListHandler extends VisitorAdapter{
             expList = expList.tail;
         }
     	
+        //And then, return the start of the typeList
         return typeListStart;
     }
 }

@@ -24,13 +24,13 @@ public class ClassDeclHandler extends VisitorAdapter{
 	
 	public void visit(ClassDeclSimple node){
         Symbol name = Symbol.symbol(node.name.s);
-        ClassInfo info = new ClassInfo(name);
+        ClassInfo cinfo = env.classes.get(name);
         
 		//Do a secondpass in all the attributes of the class
 		AttributeListHandler.secondpass(env,node.varList);        
 
 		//Do a secondpass in all the methods of the class
-		MethodDeclListHandler.secondpass(env, info, node.methodList);
+		MethodDeclListHandler.secondpass(env, cinfo, node.methodList);
 	}
 	
     public void visit(ClassDeclExtends node){

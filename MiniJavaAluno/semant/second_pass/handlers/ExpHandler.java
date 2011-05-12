@@ -1,5 +1,7 @@
 package semant.second_pass.handlers;
 
+import java.util.Enumeration;
+
 import semant.Env;
 import symbol.ClassInfo;
 import symbol.MethodInfo;
@@ -289,29 +291,32 @@ public class ExpHandler extends TypeVisitorAdapter{
 	//Get variables according to the context, call it with care
 	static VarInfo getVariable(ClassInfo cinfo, MethodInfo minfo, Symbol symbol) {
 		
-		VarInfo varinfo = null;
-		
-		//TODO: Essa sequencia procura com a seguinte prioridade: local > parametro > atributo, tá certo isso?
-		
 		//If there is a method...
 		if (minfo != null){
 			//First we check if the variable is a local of the method
-			if (minfo.localsTable.containsKey(symbol)){
-				varinfo = minfo.localsTable.get(symbol);
-				return varinfo;
+			List<VarInfo> localsList = minfo.locals;
+			for( ; localsList != null; localsList = localsList.tail){
+				if (localsList.head.name == symbol)
+					return localsList.head;
 			}
+			
 			//If its not a local, maybe its a formal of the method
-			else if (minfo.formalsTable.containsKey(symbol)){
-				varinfo = minfo.formalsTable.get(symbol);
-				return varinfo;
+			List<VarInfo> formalsList = minfo.formals;
+			for( ; formalsList != null; formalsList = formalsList.tail){
+				if (formalsList.head.name == symbol)
+					return formalsList.head;
 			}
 		}
 		
 		//Well, if its has nothing to do with a method, maybe is an attribute of the class
-		if (cinfo.attributes.containsKey(symbol) )
-				varinfo = cinfo.attributes.get(symbol);
-    		
-		return varinfo;
+		for(Enumeration<VarInfo> enumer = cinfo.attributes.elements(); enumer.hasMoreElements(); ){
+			VarInfo vinfo = enumer.nextElement();
+			if (vinfo.name == symbol)
+				return vinfo;
+		}
+    	
+		//If its not anywhere, return null
+		return null;
 	}
 	
 	private MethodInfo getMethod(Symbol className, Symbol methodName){

@@ -26,7 +26,7 @@ public class MethodDeclHandler extends VisitorAdapter{
 	
 	public void visit(MethodDecl node){
         Symbol name = Symbol.symbol(node.name.s);
-        MethodInfo methodInfo = new MethodInfo(node.returnType, name, classInfo.name);
+        MethodInfo methodInfo = env.classes.env.peek().get(classInfo.name).methods.get(name);
 	    
         // confere lista de formals
         FormalListHandler.secondpass(env, methodInfo, node.formals);
