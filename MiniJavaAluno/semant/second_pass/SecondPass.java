@@ -17,7 +17,7 @@ public final class SecondPass {
     	
     	// Do a second pass in the main class
     	MainClassHandler.secondpass(e, p.mainClass);
-    	
+
     	// Do a second pass in the other classes
     	ClassDeclListHandler.secondpass(e, p.classList);
     		

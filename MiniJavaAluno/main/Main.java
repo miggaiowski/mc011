@@ -70,8 +70,8 @@ public final class Main
             ErrorEchoer err = new SimpleError(name);
             Env env = TypeChecker.TypeCheck(err, program);
             
-            EnvPrint envPrinter = new EnvPrint(env);
-            envPrinter.print();
+            //EnvPrint envPrinter = new EnvPrint(env);
+            //envPrinter.print();
 
             if ( err.ErrorCount() != 0 )
             {

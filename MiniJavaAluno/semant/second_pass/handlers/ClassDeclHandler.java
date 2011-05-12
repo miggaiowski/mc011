@@ -4,6 +4,8 @@ import semant.Env;
 import symbol.ClassInfo;
 import symbol.Symbol;
 import syntaxtree.ClassDecl;
+import syntaxtree.ClassDeclExtends;
+import syntaxtree.ClassDeclSimple;
 import syntaxtree.VisitorAdapter;
 
 public class ClassDeclHandler extends VisitorAdapter{
@@ -20,16 +22,25 @@ public class ClassDeclHandler extends VisitorAdapter{
 		cd.accept(handler);
 	}
 	
-	public void visit(ClassDecl node){
+	public void visit(ClassDeclSimple node){
         Symbol name = Symbol.symbol(node.name.s);
         ClassInfo info = new ClassInfo(name);
         
 		//Do a secondpass in all the attributes of the class
-		AttributeListHandler.secondpass(env,node.varList);
-		
+		AttributeListHandler.secondpass(env,node.varList);        
+
 		//Do a secondpass in all the methods of the class
 		MethodDeclListHandler.secondpass(env, info, node.methodList);
-		
 	}
 	
+    public void visit(ClassDeclExtends node){
+        Symbol name = Symbol.symbol(node.name.s);
+        ClassInfo info = new ClassInfo(name);
+        
+        //Do a secondpass in all the attributes of the class
+        AttributeListHandler.secondpass(env,node.varList);        
+
+        //Do a secondpass in all the methods of the class
+        MethodDeclListHandler.secondpass(env, info, node.methodList);
+    }
 }

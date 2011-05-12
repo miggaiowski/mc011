@@ -13,7 +13,7 @@ public class ClassDeclListHandler extends VisitorAdapter{
     }
 
     public static void secondpass(Env e, List<ClassDecl> classList) {
-        
+
         // percorre lista ligada classList das ClassDecl
         ClassDecl cd;
         while (classList != null) {

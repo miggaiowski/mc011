@@ -238,7 +238,7 @@ public class ExpHandler extends TypeVisitorAdapter{
 		//If the identifier was not found, an error message is shown and...
 		if (varinfo == null){
 			env.err.Error(node, new Object[]{"Identificador \'" + name +
-					                         "\' nao definido no metodo atual."}
+					                         "\' nao definido no metodo \'" + methodInfo.name.toString() + "\'"}
 			);
 			//We assume its an IntegerType
 			return new IntegerType(node.line, node.row);

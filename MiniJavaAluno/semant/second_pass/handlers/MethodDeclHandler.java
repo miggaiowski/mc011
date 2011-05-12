@@ -37,7 +37,7 @@ public class MethodDeclHandler extends VisitorAdapter{
         // confere returnExp com returnType
         Type returnExpType = ExpHandler.secondpass(env, classInfo, methodInfo, node.returnExp);
         
-        if (!(returnExpType.getClass() == node.returnType.getClass())) {
+        if (returnExpType != node.returnType) {
             env.err.Error(node, new Object[]{"Tipo de retorno inválido para o método \'" + methodInfo.name.toString() + "\' da classe \'" + classInfo.name.toString() + "\'.",
                     "Linha: " + returnExpType.line,
                     "Esperado: " + node.returnType.toString(),
@@ -47,7 +47,6 @@ public class MethodDeclHandler extends VisitorAdapter{
         
         // second pass no corpo do método
         StatementListHandler.secondpass(env, methodInfo, node.body);
-
         
 	}
 	
