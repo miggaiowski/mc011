@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import com.sun.org.apache.xml.internal.security.algorithms.Algorithm;
-
 import semant.Env;
 import symbol.ClassInfo;
 import symbol.Symbol;

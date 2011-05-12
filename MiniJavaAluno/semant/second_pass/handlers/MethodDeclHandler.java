@@ -1,26 +1,51 @@
 package semant.second_pass.handlers;
 
+import graph.Node;
 import semant.Env;
-import syntaxtree.ClassDecl;
+import symbol.ClassInfo;
+import symbol.MethodInfo;
+import symbol.Symbol;
 import syntaxtree.MethodDecl;
+import syntaxtree.Type;
 import syntaxtree.VisitorAdapter;
 
 public class MethodDeclHandler extends VisitorAdapter{
 	
 	Env env;
+	ClassInfo classInfo;
 	
-	private MethodDeclHandler(Env e){
+	private MethodDeclHandler(Env e, ClassInfo ci){
 		super();
 		env = e;
+		classInfo = ci;
 	}
 
-	public static void secondpass(Env e, MethodDecl cd){
-		MethodDeclHandler handler = new MethodDeclHandler(e);
+	public static void secondpass(Env e, ClassInfo ci, MethodDecl cd){
+		MethodDeclHandler handler = new MethodDeclHandler(e, ci);
 		cd.accept(handler);
 	}
 	
 	public void visit(MethodDecl node){
+        Symbol name = Symbol.symbol(node.name.s);
+        MethodInfo methodInfo = new MethodInfo(node.returnType, name, classInfo.name);
 	    
+        // confere lista de formals
+        FormalListHandler.secondpass(env, methodInfo, node.formals);
+        
+        // confere returnExp com returnType
+        Type returnExpType = ExpHandler.secondpass(env, classInfo, methodInfo, node.returnExp);
+        
+        if (!(returnExpType.getClass() == node.returnType.getClass())) {
+            env.err.Error(node, new Object[]{"Tipo de retorno inválido para o método \'" + methodInfo.name.toString() + "\' da classe \'" + classInfo.name.toString() + "\'.",
+                    "Linha: " + returnExpType.line,
+                    "Esperado: " + node.returnType.toString(),
+                    "Encontrado: " + returnExpType.toString() }
+            );  
+        }
+        
+        
+
+        
 	}
 	
 }
