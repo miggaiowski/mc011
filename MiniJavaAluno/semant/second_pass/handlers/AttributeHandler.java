@@ -23,7 +23,7 @@ public class AttributeHandler extends VisitorAdapter{
 	
 	public void visit(VarDecl node){
 		
-		//There is a problem only when the type is of the identifier type
+		//There is a problem only when the type is an identifier type
 		if (node.type instanceof IdentifierType){
 			
 			IdentifierType nodeType = (IdentifierType) node.type;
