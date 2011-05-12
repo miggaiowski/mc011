@@ -1,6 +1,5 @@
 package semant.second_pass.handlers;
 
-import graph.Node;
 import semant.Env;
 import symbol.ClassInfo;
 import symbol.MethodInfo;
@@ -32,6 +31,9 @@ public class MethodDeclHandler extends VisitorAdapter{
         // confere lista de formals
         FormalListHandler.secondpass(env, methodInfo, node.formals);
         
+        // confere lista de locals
+        LocalListHandler.secondpass(env, methodInfo, node.locals);
+        
         // confere returnExp com returnType
         Type returnExpType = ExpHandler.secondpass(env, classInfo, methodInfo, node.returnExp);
         
@@ -45,7 +47,8 @@ public class MethodDeclHandler extends VisitorAdapter{
         
         // second pass no corpo do método
         StatementListHandler.secondpass(env, methodInfo, node.body);
-     
+
+        
 	}
 	
 }
