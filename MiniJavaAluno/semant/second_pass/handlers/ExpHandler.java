@@ -150,11 +150,13 @@ public class ExpHandler extends TypeVisitorAdapter{
 	//***** ARRAY LOOKUP *****//
 	public Type visit(ArrayLookup node){
 		//TODO: implement
+	    return null;
 	}
 	
 	//***** ARRAY LENGTH *****//
 	public Type visit(ArrayLength node){
 		//TODO: implement
+	    return null;
 	}
 	
 	//***** CALL *****//
@@ -249,21 +251,29 @@ public class ExpHandler extends TypeVisitorAdapter{
 	//***** THIS *****//
 	public Type visit(This node){
 		//TODO: implement
+	    if (classInfo == null) {
+	           env.err.Error(node, new Object[]{"\'this\' utilizado na MainClass."}
+	           );
+	    }
+	    return null;
 	}
 	
 	//***** NEW ARRAY *****//
 	public Type visit(NewArray node){
 		//TODO: implement
+	    return null;
 	}
 	
 	//***** NEW OBJECT *****//
 	public Type visit(NewObject node){
 		//TODO: implement
+	    return null;
 	}
 	
 	//***** NOT *****//
 	public Type visit(Not node){
 		//TODO: implement
+	    return null;
 	}
 
 	
