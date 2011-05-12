@@ -43,9 +43,9 @@ public class MethodDeclHandler extends VisitorAdapter{
             );  
         }
         
-        
-
-        
+        // second pass no corpo do método
+        StatementListHandler.secondpass(env, methodInfo, node.body);
+     
 	}
 	
 }

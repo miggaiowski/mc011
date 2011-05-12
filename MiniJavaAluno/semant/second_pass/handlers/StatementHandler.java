@@ -30,11 +30,21 @@ public class StatementHandler extends VisitorAdapter{
         methodInfo = mi;
     }
 	
-	public static void secondpass(Env e, ClassInfo ci, MethodInfo mi, Statement stm){
+    private StatementHandler(Env e, MethodInfo mi){
+        super();
+        env = e;
+        methodInfo = mi;
+    }
+
+    public static void secondpass(Env e, ClassInfo ci, MethodInfo mi, Statement stm){
 		StatementHandler handler = new StatementHandler(e,ci,mi);
 		stm.accept(handler);
 	}
 	
+	public static void secondpass(Env e, MethodInfo mi, Statement stm){
+	    StatementHandler handler = new StatementHandler(e, mi);
+	    stm.accept(handler);
+	}
 	//***** BLOCK *****//
 	public void visit (Block node) {  
 	    // Check each statement from the list
