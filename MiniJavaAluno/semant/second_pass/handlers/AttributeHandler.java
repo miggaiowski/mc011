@@ -1,6 +1,7 @@
 package semant.second_pass.handlers;
 
 import semant.Env;
+import symbol.Symbol;
 import syntaxtree.IdentifierType;
 import syntaxtree.Type;
 import syntaxtree.VarDecl;
@@ -27,9 +28,10 @@ public class AttributeHandler extends VisitorAdapter{
 		if (node.type instanceof IdentifierType){
 			
 			IdentifierType nodeType = (IdentifierType) node.type;
-		    
+			Symbol name = Symbol.symbol(nodeType.name);
+			
 			//If the type of the attribute is not a class, nor one of the standard types, an error is shown
-			if (!env.classes.env.peek().containsKey(nodeType.name))
+			if (!env.classes.env.peek().containsKey(name))
 				env.err.Error(node, new Object[]{"O tipo do atributo " + node.name + " eh invalido."});
 		}
 	}

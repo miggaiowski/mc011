@@ -289,7 +289,7 @@ public class ExpHandler extends TypeVisitorAdapter{
 	    }
 	    else{
 	    	//If its used outside the main class, it makes reference to this class
-	    	return node.type = new IdentifierType(node.line, node.row, node.toString());
+	    	return node.type = new IdentifierType(node.line, node.row, classInfo.name.toString());
 	    }
 	}
 	
