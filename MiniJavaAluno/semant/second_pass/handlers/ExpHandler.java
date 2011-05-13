@@ -17,6 +17,7 @@ import syntaxtree.Exp;
 import syntaxtree.False;
 import syntaxtree.IdentifierExp;
 import syntaxtree.IdentifierType;
+import syntaxtree.IntArrayType;
 import syntaxtree.IntegerLiteral;
 import syntaxtree.IntegerType;
 import syntaxtree.LessThan;
@@ -168,11 +169,8 @@ public class ExpHandler extends TypeVisitorAdapter{
 		Symbol methodName = Symbol.symbol(node.method.s);
 		
 		//If the type returned is not an IdentifierType, then it's not class
-		if ( !(type instanceof IdentifierType)){
-			env.err.Error(node, new Object[]{"Chamada de metodo aplicada a tipo invalido",
-					                         "Esperado: <class>",
-					                         "Encontrado: " + type}
-			);
+		if ( !(type instanceof IdentifierType) ){
+			env.err.Error(node, new Object[]{"Chamada de metodo deve ser aplicada a uma classe valida"}	);
 			//After the error, suppose this call returns an integer type to continue the secondpass
 			return node.type = new IntegerType(node.line, node.row);
 		}
@@ -254,27 +252,42 @@ public class ExpHandler extends TypeVisitorAdapter{
 	public Type visit(This node){
 	    // Check is 'this' was used inside the mainclass
 	    // The methodinfo should be null if this comes from the mainclass
-	    
+
 	    if (this.methodInfo == null) {
 	        env.err.Error(node, new Object[]{"Expressão \'this\' usada dentro da MainClass."});
 	        return null;
 	    }
-
-	 //TODO: Falta coisa aqui, só fiz esse erro da mainclass!!!
-
-	 return null; // arrumar isso, nao é sempre null nao!
+	    else{
+	    	//If its used outside the main class, it makes reference to this class
+	    	return node.type = new IdentifierType(node.line, node.row, node.toString());
+	    }
 	}
 	
 	//***** NEW ARRAY *****//
 	public Type visit(NewArray node){
-		//TODO: implement
-	    return null;
+		
+		Type type = ExpHandler.secondpass(env, classInfo, methodInfo, node.size);
+		
+		//Check if the index expression return type is an IntegerType. Shows an error if its not
+		if (!(type instanceof IntegerType))
+			env.err.Error(node, new Object[]{"Tipo invalido para o indice do novo vetor.",
+                    "Esperado: int",
+                    "Encontrado: " + type}
+            );
+		
+		//Return an IntArrayType having error or not, to continue the second pass
+		return node.type = new IntArrayType(node.line, node.row);
 	}
 	
 	//***** NEW OBJECT *****//
 	public Type visit(NewObject node){
-		//TODO: implement
-	    return null;
+		//The only thing to do is to check if the object name refers to a class
+		Symbol name = Symbol.symbol(node.className.s);
+		
+		if (!(env.classes.env.peek().containsKey(name) ) )
+			return null;
+		else
+			return node.type = new IdentifierType(node.line, node.row, node.className.s);
 	}
 	
 	//***** NOT *****//
@@ -322,7 +335,20 @@ public class ExpHandler extends TypeVisitorAdapter{
 	private MethodInfo getMethod(Symbol className, Symbol methodName){
 		//Return null if the class doesnt exists
 		//Return null if the method doesnt exists in the specified class
-		return env.classes.env.peek().get(className).methods.get(methodName);
+		try {
+		
+			return env.classes.env.peek().get(className).methods.get(methodName);
+			
+		} 
+		catch (NullPointerException e){
+			//Probably, if we are here, a "this.<method>()" was called...
+			if (className.toString() == "this "){
+				MethodInfo minfo = classInfo.methods.get(methodName); //DA PAU PQ NESSE PONTO, CLASSINFO == null
+				return minfo;
+			}
+			else
+				return null;
+		}
 	}
 	
 }
