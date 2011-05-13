@@ -29,11 +29,9 @@ public class FormalsHandler extends VisitorAdapter {
         
         // inserindo nova declaracao na tabela de simbolos
         if (!info.addFormal(varInfo)) {
-            VarInfo previousInfo = info.localsTable.get(name);
             env.err.Error(node.name, new Object[]{
                     "Parametro \'" + name 
-                    + "\' do método \'" + info.name + "\' redefinido", 
-                    "Usado anteriormente em: [" + previousInfo.type.line + "," + previousInfo.type.row + "]"});
+                    + "\' do método \'" + info.name + "\' redefinido"});
         }
     }
 }
