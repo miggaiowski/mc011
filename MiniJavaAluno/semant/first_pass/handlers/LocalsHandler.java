@@ -8,7 +8,6 @@ import symbol.Symbol;
 import symbol.VarInfo;
 import syntaxtree.VarDecl;
 import syntaxtree.VisitorAdapter;
-import util.List;
 
 public class LocalsHandler extends VisitorAdapter {
 
