@@ -1,7 +1,7 @@
 package semant.first_pass.handlers;
 
 import semant.Env;
-import semant.second_pass.handlers.ExpHandler;
+import semant.EnvSearch;
 import symbol.ClassInfo;
 import symbol.MethodInfo;
 import symbol.Symbol;
@@ -32,7 +32,7 @@ public class LocalsHandler extends VisitorAdapter {
         
         // inserindo nova declaracao na tabela de simbolos
         if (!info.addLocal(varInfo)) {
-            VarInfo previousInfo = ExpHandler.getVariable(classInfo , info, name);
+            VarInfo previousInfo = EnvSearch.getVariable(classInfo , info, name);
             if (previousInfo == null) {
                 System.out.println("Declaração anterior não encontrada");
             }
