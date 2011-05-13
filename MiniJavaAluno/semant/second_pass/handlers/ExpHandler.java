@@ -123,7 +123,7 @@ public class ExpHandler extends TypeVisitorAdapter{
 			env.err.Error(node, new Object[]{"Left side of the expression must be an IntegerType"});
 		
 		//Return an Integer type if its ok, and if there was an error too, to continue the second pass
-		return new IntegerType(node.line, node.row);
+		return node.type = new IntegerType(node.line, node.row);
 	}
 	
 	//***** PLUS *****//
@@ -135,7 +135,7 @@ public class ExpHandler extends TypeVisitorAdapter{
 			env.err.Error(node, new Object[]{"Left side of the expression must be an IntegerType"});
 		
 		//Return an Integer type if its ok, and if there was an error too, to continue the second pass
-		return new IntegerType(node.line, node.row);
+		return node.type = new IntegerType(node.line, node.row);
 	}
 	
 	//***** MINUS *****//
@@ -147,19 +147,49 @@ public class ExpHandler extends TypeVisitorAdapter{
 			env.err.Error(node, new Object[]{"Left side of the expression must be an IntegerType"});
 		
 		//Return an Integer type if its ok, and if there was an error too, to continue the second pass
-		return new IntegerType(node.line, node.row);
+		return node.type = new IntegerType(node.line, node.row);
 	}
 	
 	//***** ARRAY LOOKUP *****//
 	public Type visit(ArrayLookup node){
-		//TODO: implement
-	    return null;
+
+		Type arraytype = ExpHandler.secondpass(env, classInfo, methodInfo, node.array);
+		//If the expression to be acessed is not an int[], a message error is shown
+		if ( !(arraytype instanceof IntArrayType) ){
+			env.err.Error(node, new Object[]{"Nao eh possivel acessar um elemento dentro deste tipo de variavel.",
+                                             "Esperado: int []",
+                                             "Encontrado: " + arraytype}
+            );	
+		}
+		
+		Type indextype = ExpHandler.secondpass(env, classInfo, methodInfo, node.index);
+		//If the type of the indexing expression is not int, a message error is shown
+		if ( !(indextype instanceof IntegerType) ){
+			env.err.Error(node, new Object[]{"Tipo invalido para o indice do novo vetor.",
+                     						 "Esperado: int",
+                                             "Encontrado: " + indextype}
+			);
+		}
+		
+		//Return an Integer type if its ok, and if there was an error too, to continue the second pass
+		return node.type = new IntegerType(node.line, node.row);
 	}
 	
 	//***** ARRAY LENGTH *****//
 	public Type visit(ArrayLength node){
-		//TODO: implement
-	    return null;
+		Type type = ExpHandler.secondpass(env, classInfo, methodInfo, node.array);
+		
+		if ( !(type instanceof IntArrayType) ){
+			env.err.Error(node, new Object[]{"Nao eh possivel invocar o metodo \'.length\' atraves deste tipo de variavel.",
+                                             "Esperado: int []",
+                                             "Encontrado: " + type}
+            );	
+		}
+		
+		//After the error, suppose this call returns an integer type to continue the secondpass
+		return node.type = new IntegerType(node.line, node.row);
+		
+
 	}
 	
 	//***** CALL *****//
@@ -241,7 +271,7 @@ public class ExpHandler extends TypeVisitorAdapter{
 					                         "\' nao definido no metodo \'" + methodInfo.name.toString() + "\'"}
 			);
 			//We assume its an IntegerType
-			return new IntegerType(node.line, node.row);
+			return node.type = new IntegerType(node.line, node.row);
 		}
 		
 		//If the identifier was found, return its type
@@ -292,8 +322,17 @@ public class ExpHandler extends TypeVisitorAdapter{
 	
 	//***** NOT *****//
 	public Type visit(Not node){
-		//TODO: implement
-	    return null;
+		Type type = ExpHandler.secondpass(env, classInfo, methodInfo, node.exp);
+		
+		//If we try to negate something that is not a boolean type, an error is shown
+		if (!(type instanceof BooleanType))
+			env.err.Error(node, new Object[]{"Tipo do resultado da expressao nao pode ser negado.",
+                    "Esperado: boolean",
+                    "Encontrado: " + type}
+            );
+		//With error or not, assume it is a boolean to continue the secondpass
+		return node.type = new BooleanType(node.line, node.row);
+
 	}
 
 	
