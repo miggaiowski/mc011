@@ -1,6 +1,7 @@
 package semant.second_pass.handlers;
 
 import semant.Env;
+import semant.EnvSearch;
 import symbol.ClassInfo;
 import symbol.MethodInfo;
 import symbol.Symbol;
@@ -98,7 +99,7 @@ public class StatementHandler extends VisitorAdapter{
 	public void visit (Assign node){
 		//Get the variable that is the left hand side of the assignment
 		Symbol name = Symbol.symbol(node.var.s);
-		VarInfo varinfo = StatementHandler.getVariable(classInfo,methodInfo,name);
+		VarInfo varinfo = EnvSearch.getVariable(classInfo,methodInfo,name);
 		
 		//If the variable doesnt exist, an error message is shown and the secondpass continues
 		if (varinfo == null)
@@ -121,7 +122,7 @@ public class StatementHandler extends VisitorAdapter{
 	public void visit (ArrayAssign node){
 		//Get the variable that is the left hand side of the assignment
 		Symbol name = Symbol.symbol(node.var.s);
-		VarInfo varinfo = StatementHandler.getVariable(classInfo,methodInfo,name);
+		VarInfo varinfo = EnvSearch.getVariable(classInfo,methodInfo,name);
 		
 		//If the variable doesnt exist, an error message is shown and the secondpass continues
 		if (varinfo == null)
@@ -147,35 +148,5 @@ public class StatementHandler extends VisitorAdapter{
                                              "Encontrado: " + rhsType}
 			);
 	}
-	
-	
-	
-	
-    //***** Auxiliar Method *****//
-	
-	//Get variables according to the context, call it with care
-	static VarInfo getVariable(ClassInfo cinfo, MethodInfo minfo, Symbol symbol) {
-		
-		VarInfo varinfo = null;
-		
-		//If there is a method...
-		if (minfo != null){
-			//First we check if the variable is a local of the method
-			if (minfo.localsTable.containsKey(symbol)){
-				varinfo = minfo.localsTable.get(symbol);
-				return varinfo;
-			}
-			//If its not a local, maybe its a formal of the method
-			else if (minfo.formalsTable.containsKey(symbol)){
-				varinfo = minfo.formalsTable.get(symbol);
-				return varinfo;
-			}
-		}
-		
-		//Well, if its has nothing to do with a method, maybe is an attribute of the class
-		if (cinfo.attributes.containsKey(symbol) )
-				varinfo = cinfo.attributes.get(symbol);
-    		
-		return varinfo;
-	}
+
 }

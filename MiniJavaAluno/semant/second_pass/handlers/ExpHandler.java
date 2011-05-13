@@ -1,8 +1,7 @@
 package semant.second_pass.handlers;
 
-import java.util.Enumeration;
-
 import semant.Env;
+import semant.EnvSearch;
 import symbol.ClassInfo;
 import symbol.MethodInfo;
 import symbol.Symbol;
@@ -209,7 +208,7 @@ public class ExpHandler extends TypeVisitorAdapter{
 		IdentifierType classId = (IdentifierType) type;
 		
 		//Try to find out if the method called exists in this class
-		MethodInfo method = getMethod(Symbol.symbol(classId.name), methodName);
+		MethodInfo method = EnvSearch.getMethod(env, classInfo, Symbol.symbol(classId.name), methodName);
 		
 		//If it doesn't exists, an error message is shown and we suposse the call returned an IntegerType 
 		if (method == null){
@@ -263,7 +262,7 @@ public class ExpHandler extends TypeVisitorAdapter{
 	public Type visit(IdentifierExp node){
 		//Look if the identifier exists in the method or class
 		Symbol name = Symbol.symbol(node.name.s);
-		VarInfo varinfo = ExpHandler.getVariable(classInfo, methodInfo, name);
+		VarInfo varinfo = EnvSearch.getVariable(classInfo, methodInfo, name);
 		
 		//If the identifier was not found, an error message is shown and...
 		if (varinfo == null){
@@ -333,61 +332,6 @@ public class ExpHandler extends TypeVisitorAdapter{
 		//With error or not, assume it is a boolean to continue the secondpass
 		return node.type = new BooleanType(node.line, node.row);
 
-	}
-
-	
-	
-	
-	//***** Auxiliar Methods *****//
-	
-	//Get variables according to the context, call it with care
-	public static VarInfo getVariable(ClassInfo cinfo, MethodInfo minfo, Symbol symbol) {
-		
-		//If there is a method...
-		if (minfo != null){
-			//First we check if the variable is a local of the method
-			List<VarInfo> localsList = minfo.locals;
-			for( ; localsList != null; localsList = localsList.tail){
-				if (localsList.head.name == symbol)
-					return localsList.head;
-			}
-			
-			//If its not a local, maybe its a formal of the method
-			List<VarInfo> formalsList = minfo.formals;
-			for( ; formalsList != null; formalsList = formalsList.tail){
-				if (formalsList.head.name == symbol)
-					return formalsList.head;
-			}
-		}
-		
-		//Well, if its has nothing to do with a method, maybe is an attribute of the class
-		for(Enumeration<VarInfo> enumer = cinfo.attributes.elements(); enumer.hasMoreElements(); ){
-			VarInfo vinfo = enumer.nextElement();
-			if (vinfo.name == symbol)
-				return vinfo;
-		}
-    	
-		//If its not anywhere, return null
-		return null;
-	}
-	
-	private MethodInfo getMethod(Symbol className, Symbol methodName){
-		//Return null if the class doesnt exists
-		//Return null if the method doesnt exists in the specified class
-		try {
-		
-			return env.classes.env.peek().get(className).methods.get(methodName);
-			
-		} 
-		catch (NullPointerException e){
-			//Probably, if we are here, a "this.<method>()" was called...
-			if (className.toString() == "this "){
-				MethodInfo minfo = classInfo.methods.get(methodName); //DA PAU PQ NESSE PONTO, CLASSINFO == null
-				return minfo;
-			}
-			else
-				return null;
-		}
 	}
 	
 }
