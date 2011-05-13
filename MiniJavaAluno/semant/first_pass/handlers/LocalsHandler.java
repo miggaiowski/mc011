@@ -1,11 +1,14 @@
 package semant.first_pass.handlers;
 
 import semant.Env;
+import semant.second_pass.handlers.ExpHandler;
+import symbol.ClassInfo;
 import symbol.MethodInfo;
 import symbol.Symbol;
 import symbol.VarInfo;
 import syntaxtree.VarDecl;
 import syntaxtree.VisitorAdapter;
+import util.List;
 
 public class LocalsHandler extends VisitorAdapter {
 
@@ -26,10 +29,15 @@ public class LocalsHandler extends VisitorAdapter {
     public void visit(VarDecl node) {
         Symbol name = Symbol.symbol(node.name.s);
         VarInfo varInfo = new VarInfo(node.type, name);
+        ClassInfo classInfo = env.classes.get(info.parent);
         
         // inserindo nova declaracao na tabela de simbolos
         if (!info.addLocal(varInfo)) {
-            VarInfo previousInfo = info.localsTable.get(name);
+            List<VarInfo> localsList = info.locals;
+            VarInfo previousInfo = ExpHandler.getVariable(classInfo , info, name);
+            if (previousInfo == null) {
+                System.out.println("Bla");
+            }
             env.err.Error(node.name, new Object[]{
                     "Variável local \'" + name 
                     + "\' redefinida no método \'" + info.name + "\'", 

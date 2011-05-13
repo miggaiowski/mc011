@@ -9,5 +9,8 @@ class m
 
 class c
 {
-	public int i(int p){int p; return 0;}
+	public int i(int p) {
+	   int p; 
+           return 0;
+        }
 }

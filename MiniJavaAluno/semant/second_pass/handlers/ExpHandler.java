@@ -341,7 +341,7 @@ public class ExpHandler extends TypeVisitorAdapter{
 	//***** Auxiliar Methods *****//
 	
 	//Get variables according to the context, call it with care
-	static VarInfo getVariable(ClassInfo cinfo, MethodInfo minfo, Symbol symbol) {
+	public static VarInfo getVariable(ClassInfo cinfo, MethodInfo minfo, Symbol symbol) {
 		
 		//If there is a method...
 		if (minfo != null){
