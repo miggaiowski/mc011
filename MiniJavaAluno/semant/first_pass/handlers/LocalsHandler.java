@@ -33,10 +33,9 @@ public class LocalsHandler extends VisitorAdapter {
         
         // inserindo nova declaracao na tabela de simbolos
         if (!info.addLocal(varInfo)) {
-            List<VarInfo> localsList = info.locals;
             VarInfo previousInfo = ExpHandler.getVariable(classInfo , info, name);
             if (previousInfo == null) {
-                System.out.println("Bla");
+                System.out.println("Declaração anterior não encontrada");
             }
             env.err.Error(node.name, new Object[]{
                     "Variável local \'" + name 
