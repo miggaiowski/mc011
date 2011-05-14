@@ -51,8 +51,10 @@ public class MethodDeclHandler extends VisitorAdapter{
         // se encontrar, verificar tipo de retorno.
         // overload só pode se o tipo de retorno for igual
         
+        ClassInfo baseClassInfo = null;
         
-        ClassInfo baseClassInfo = classInfo.base;
+        if (classInfo.base != null)
+        	baseClassInfo = env.classes.get(classInfo.base.name);
         
         // checa se o metodo ja foi definido nas classes base
         while (baseClassInfo != null){
@@ -69,20 +71,22 @@ public class MethodDeclHandler extends VisitorAdapter{
         		}
         		
         		// mostra uma mensagem de erro se o numero de parametros nao forem iguais
-        		if (baseMethodInfo.formals.size() != methodInfo.formals.size()){
-        			env.err.Error(node, new Object[]{"Redefinicao do metodo \'" + methodInfo.name.toString() + "\' na classe \'" + classInfo.name.toString() + "\' possue numero de parametros diferente.",
-                            "Esperado: " + baseMethodInfo.formals.size(),
-                            "Encontrado: " + methodInfo.formals.size() }
-                    );  
-        		}
+        		if (baseMethodInfo.formals != null && methodInfo.formals != null)
+	        		if (baseMethodInfo.formals.size() != methodInfo.formals.size()){
+	        			env.err.Error(node, new Object[]{"Redefinicao do metodo \'" + methodInfo.name.toString() + "\' na classe \'" + classInfo.name.toString() + "\' possue numero de parametros diferente.",
+	                            "Esperado: " + baseMethodInfo.formals.size(),
+	                            "Encontrado: " + methodInfo.formals.size() }
+	                    );  
+	        		}
         		
         		// mostra uma mensagem de erro se os tipos dos parametros nao forem iguais
         		List<VarInfo> baseFormalsList = baseMethodInfo.formals;
         		List<VarInfo> formalsList = methodInfo.formals;
         		
+        		
         		// percorre por todos os parametros, e mostra uma mensagem para os que não forem compativeis
         		for( ; baseFormalsList != null && formalsList != null; baseFormalsList = baseFormalsList.tail, formalsList = formalsList.tail){
-	        		if ( (baseFormalsList.head.type).getClass() != (formalsList.head.type).getClass()){
+	        		if ( !(baseFormalsList.head.type.toString().equals(formalsList.head.type.toString())) ){
 	        			env.err.Error(node, new Object[]{"Redefinicao do metodo \'" + methodInfo.name.toString() + "\' possue tipo do parametro \'" + formalsList.head.name + "\' diferente da definicao anterior.",
 	                            "Esperado: " + baseFormalsList.head.type.toString(),
 	                            "Encontrado: " + formalsList.head.type.toString() }

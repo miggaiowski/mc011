@@ -44,19 +44,24 @@ public class EnvSearch {
 	public static MethodInfo getMethod(Env env, ClassInfo classInfo, Symbol className, Symbol methodName){
 		//Return null if the class doesnt exists
 		//Return null if the method doesnt exists in the specified class
-		try {
 		
-			return env.classes.env.peek().get(className).methods.get(methodName);
+		if (env.classes.env.peek().containsKey(className)){
 			
-		} 
-		catch (NullPointerException e){
-			//Probably, if we are here, a "this.<method>()" was called...
-			if (className.toString() == "this "){
-				MethodInfo minfo = classInfo.methods.get(methodName); //DA PAU PQ NESSE PONTO, CLASSINFO == null
-				return minfo;
+			ClassInfo ci = env.classes.env.peek().get(className);
+			
+			if (ci.methods.containsKey(methodName)){
+				return ci.methods.get(methodName);
+			}
+			else if(ci.base != null){
+					MethodInfo mi = getMethod(env, classInfo, ci.base.name, methodName);
+					return mi;
 			}
 			else
 				return null;
 		}
+		else
+			return null; //TRATAR CASO SEJA O THIS
+		
 	}
+	
 }

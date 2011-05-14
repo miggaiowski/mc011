@@ -212,7 +212,7 @@ public class ExpHandler extends TypeVisitorAdapter{
 		
 		//If it doesn't exists, an error message is shown and we suposse the call returned an IntegerType 
 		if (method == null){
-			env.err.Error(node, new Object[]{"Metodo " + method + " nao definido para a classe \'" + classId.name + "\'"});
+			env.err.Error(node, new Object[]{"Metodo " + methodName + " nao definido para a classe \'" + classId.name + "\'"});
 			return node.type = new IntegerType(node.line, node.row);
 		}
 		
