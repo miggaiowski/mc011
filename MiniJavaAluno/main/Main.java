@@ -40,8 +40,8 @@ public final class Main
 			Start s = parser.parse();
 			
             //Uncomment this to print sablecc's AST.
-			PrettyPrint v1 = new PrettyPrint();
-			s.apply(v1);
+			//PrettyPrint v1 = new PrettyPrint();
+			//s.apply(v1);
 			
 			// ... up until here, classes and package organization
 			// are decided by SableCC
@@ -75,10 +75,12 @@ public final class Main
 
             if ( err.ErrorCount() != 0 )
             {
-                err.Print(new Object[]{err.ErrorCount() + " erros", err.WarningCount() + " avisos"});
-                return;
+            	//Uncomment this to have a final log of the total errors and warnings.
+                //err.Print(new Object[]{err.ErrorCount() + " erros", err.WarningCount() + " avisos"});
+                //return;
             }
-            
+            else
+            	System.out.println(name + ": Sucesso");
             
 		}
 		catch(Throwable e)
