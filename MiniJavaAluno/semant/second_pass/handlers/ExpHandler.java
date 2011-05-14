@@ -281,15 +281,12 @@ public class ExpHandler extends TypeVisitorAdapter{
 	public Type visit(This node){
 	    // Check is 'this' was used inside the mainclass
 	    // The methodinfo should be null if this comes from the mainclass
-
-	    if (this.methodInfo == null) {
-	        env.err.Error(node, new Object[]{"Expressão \'this\' usada dentro da MainClass."});
-	        return null;
-	    }
-	    else{
-	    	//If its used outside the main class, it makes reference to this class
-	    	return node.type = new IdentifierType(node.line, node.row, classInfo.name.toString());
-	    }
+	    if (this.methodInfo == null)
+	        env.err.Error(node, new Object[]{"Expressão \'this\' nao pode ser usada dentro do contexto estatico da MainClass."});
+	    
+	    //Return an IdentifierType making reference to the class holding this context
+	    return node.type = new IdentifierType(node.line, node.row, classInfo.name.toString());
+	    
 	}
 	
 	//***** NEW ARRAY *****//

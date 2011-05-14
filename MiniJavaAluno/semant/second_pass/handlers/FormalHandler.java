@@ -1,12 +1,10 @@
 package semant.second_pass.handlers;
 
 import semant.Env;
-import symbol.ClassInfo;
 import symbol.MethodInfo;
 import symbol.Symbol;
-import symbol.VarInfo;
-import syntaxtree.ClassDecl;
 import syntaxtree.Formal;
+import syntaxtree.IdentifierType;
 import syntaxtree.VisitorAdapter;
 
 public class FormalHandler extends VisitorAdapter{
@@ -26,10 +24,17 @@ public class FormalHandler extends VisitorAdapter{
 	}
 	
 	public void visit(Formal node){
-        Symbol name = Symbol.symbol(node.name.s);
-        VarInfo varInfo = new VarInfo(node.type, name);
-        
-        // o que tem que conferir aqui?
+
+        //There is a problem only when the type is an identifier type
+		if (node.type instanceof IdentifierType){
+			
+			IdentifierType nodeType = (IdentifierType) node.type;
+			Symbol name = Symbol.symbol(nodeType.name);
+			
+			//If the type of the formal is not a class, nor one of the standard types, an error is shown
+			if (!env.classes.env.peek().containsKey(name))
+				env.err.Error(node, new Object[]{"O tipo do parametro " + node.name + " eh invalido."});
+		}
 		
 	}
 	

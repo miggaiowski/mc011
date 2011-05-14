@@ -2,7 +2,6 @@ package semant.second_pass.handlers;
 
 import semant.Env;
 import symbol.ClassInfo;
-import symbol.MethodInfo;
 import syntaxtree.MethodDecl;
 import syntaxtree.VisitorAdapter;
 import util.List;

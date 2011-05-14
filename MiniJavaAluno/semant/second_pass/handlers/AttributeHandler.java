@@ -3,7 +3,6 @@ package semant.second_pass.handlers;
 import semant.Env;
 import symbol.Symbol;
 import syntaxtree.IdentifierType;
-import syntaxtree.Type;
 import syntaxtree.VarDecl;
 import syntaxtree.VisitorAdapter;
 

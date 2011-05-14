@@ -13,8 +13,6 @@ public class LocalListHandler extends VisitorAdapter{
     }
 
     public static void secondpass(Env env, MethodInfo methodInfo, List<VarDecl> locals) {
-
-        // TODO: Checar se há repetição de locals?.
         
         // checking each of the formals
         while(locals != null) {
