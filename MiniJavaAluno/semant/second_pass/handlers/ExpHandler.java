@@ -65,7 +65,7 @@ public class ExpHandler extends TypeVisitorAdapter{
             );
         }
         if(!(rightExp instanceof BooleanType)){
-            env.err.Error(node.rhs, new Object[]{"Tipo invalido para o lado direito do operador \'<\'.",
+            env.err.Error(node.rhs, new Object[]{"Tipo invalido para o lado direito do operador \'&&\'.",
                                                  "Esperado: int," +
                                                  "Encontrado: " + leftExp}
             );
@@ -310,9 +310,13 @@ public class ExpHandler extends TypeVisitorAdapter{
 		//The only thing to do is to check if the object name refers to a class
 		Symbol name = Symbol.symbol(node.className.s);
 		
-		if (!(env.classes.env.peek().containsKey(name) ) )
-			return null;
+		//If the class does not exists, an error is shown and the second pass continues
+		if (!(env.classes.env.peek().containsKey(name) ) ){
+			env.err.Error(node, new Object[]{"Nao eh possivel criar o objeto \'" + name + "\', a classe nao existe."});
+			return node.type = new IdentifierType(node.line, node.row, name.toString());
+		}
 		else
+			//If the class exists, the second pass continues
 			return node.type = new IdentifierType(node.line, node.row, node.className.s);
 	}
 	
