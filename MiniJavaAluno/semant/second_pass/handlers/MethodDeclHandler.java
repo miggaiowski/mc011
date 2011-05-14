@@ -39,7 +39,6 @@ public class MethodDeclHandler extends VisitorAdapter{
         
         if ((returnExpType).getClass() != (node.returnType).getClass()) {
             env.err.Error(node, new Object[]{"Tipo de retorno inválido para o método \'" + methodInfo.name.toString() + "\' da classe \'" + classInfo.name.toString() + "\'.",
-                    "Linha: " + returnExpType.line,
                     "Esperado: " + node.returnType.toString(),
                     "Encontrado: " + returnExpType.toString() }
             );  

@@ -117,9 +117,9 @@ public class ExpHandler extends TypeVisitorAdapter{
 	public Type visit(Times node){
 		//Both sides of the expression must be IntegerTypes
 		if (!(node.lhs.accept(this) instanceof IntegerType))
-			env.err.Error(node, new Object[]{"Left side of the expression must be an IntegerType"});
+			env.err.Error(node, new Object[]{"Lado esquerdo da expressao deve ser do tipo int"});
 		if (!(node.rhs.accept(this) instanceof IntegerType))
-			env.err.Error(node, new Object[]{"Left side of the expression must be an IntegerType"});
+			env.err.Error(node, new Object[]{"Lado direito da expressao deve ser do tipo int"});
 		
 		//Return an Integer type if its ok, and if there was an error too, to continue the second pass
 		return node.type = new IntegerType(node.line, node.row);
@@ -129,9 +129,9 @@ public class ExpHandler extends TypeVisitorAdapter{
 	public Type visit(Plus node){
 		//Both sides of the expression must be IntegerTypes
 		if (!(node.lhs.accept(this) instanceof IntegerType))
-			env.err.Error(node, new Object[]{"Left side of the expression must be an IntegerType"});
+			env.err.Error(node, new Object[]{"Lado esquerdo da expressao deve ser do tipo int"});
 		if (!(node.rhs.accept(this) instanceof IntegerType))
-			env.err.Error(node, new Object[]{"Left side of the expression must be an IntegerType"});
+			env.err.Error(node, new Object[]{"Lado direito da expressao deve ser do tipo int"});
 		
 		//Return an Integer type if its ok, and if there was an error too, to continue the second pass
 		return node.type = new IntegerType(node.line, node.row);
@@ -141,9 +141,9 @@ public class ExpHandler extends TypeVisitorAdapter{
 	public Type visit(Minus node){
 		//Both sides of the expression must be IntegerTypes
 		if (!(node.lhs.accept(this) instanceof IntegerType))
-			env.err.Error(node, new Object[]{"Left side of the expression must be an IntegerType"});
+			env.err.Error(node, new Object[]{"Lado esquerdo da expressao deve ser do tipo int"});
 		if (!(node.rhs.accept(this) instanceof IntegerType))
-			env.err.Error(node, new Object[]{"Left side of the expression must be an IntegerType"});
+			env.err.Error(node, new Object[]{"Lado direito da expressao deve ser do tipo int"});
 		
 		//Return an Integer type if its ok, and if there was an error too, to continue the second pass
 		return node.type = new IntegerType(node.line, node.row);
@@ -224,7 +224,7 @@ public class ExpHandler extends TypeVisitorAdapter{
 		//Check if all the parameters are compatible
 		for (formals = method.formals, i = 1; actuals != null && formals != null; actuals = actuals.tail, formals = formals.tail, i++){
 			if (!(TypeHandler.compatible(env, formals.head.type, actuals.head))){
-				env.err.Error(node, new Object[]{"Tipo do argumento #" + i + " para o metodo " + classId.name + "." + method.name + "nao eh compativel.",
+				env.err.Error(node, new Object[]{"Tipo do argumento #" + i + " para o metodo " + classId.name + "." + method.name + " nao eh compativel.",
                                                  "Esperado: " + formals.head.type,
                                                  "Encontrado: " + actuals.head}
 				);

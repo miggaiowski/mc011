@@ -61,8 +61,9 @@ public class StatementHandler extends VisitorAdapter{
         // Checking the statements from thenClause
         StatementHandler.secondpass(env, classInfo, methodInfo, node.thenClause);
 
-        // Must also check the statement from elseClause
-        StatementHandler.secondpass(env, classInfo, methodInfo, node.elseClause);        
+        if (node.elseClause != null)
+        	// Must also check the statement from elseClause
+        	StatementHandler.secondpass(env, classInfo, methodInfo, node.elseClause);        
 	}
 	
 	//***** WHILE *****//
