@@ -46,11 +46,7 @@ public class MethodDeclHandler extends VisitorAdapter{
             );  
         }
         
-        // checar se a classe deste método herda de outra
-        // se sim, procurar este método nas classes pai 
-        // se encontrar, verificar tipo de retorno.
-        // overload só pode se o tipo de retorno for igual
-        
+        // agora vamos checar os problemas de sobrecarga de metodos
         ClassInfo baseClassInfo = null;
         
         if (classInfo.base != null)
@@ -97,9 +93,6 @@ public class MethodDeclHandler extends VisitorAdapter{
         	
         	baseClassInfo = baseClassInfo.base;
         }
-        
-        	
-        
         
         // second pass no corpo do método
         StatementListHandler.secondpass(env, classInfo, methodInfo, node.body);

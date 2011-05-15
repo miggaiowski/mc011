@@ -12,10 +12,10 @@ public class TypeChecker
         super();
     }
 
-    public static Env TypeCheck(ErrorEchoer err, Program p)
-    {		
+    public static Env TypeCheck(ErrorEchoer err, Program p) {
+       //First phase of the Type Checking 
        Env e = FirstPass.firstPass(err, p);
-       
+       //Second phase of the Type Checking 
        SecondPass.secondPass(e, p);
        return e;
     }

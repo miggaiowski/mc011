@@ -45,13 +45,16 @@ public class EnvSearch {
 		//Return null if the class doesnt exists
 		//Return null if the method doesnt exists in the specified class
 		
+		//If the class exists...
 		if (env.classes.env.peek().containsKey(className)){
 			
 			ClassInfo ci = env.classes.env.peek().get(className);
 			
+			//Check if the class has the specified method
 			if (ci.methods.containsKey(methodName)){
 				return ci.methods.get(methodName);
 			}
+			//If there is no method, look at the base classes
 			else if(ci.base != null){
 					MethodInfo mi = getMethod(env, classInfo, ci.base.name, methodName);
 					return mi;
@@ -60,7 +63,7 @@ public class EnvSearch {
 				return null;
 		}
 		else
-			return null; //TRATAR CASO SEJA O THIS
+			return null;
 		
 	}
 	

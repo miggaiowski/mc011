@@ -43,7 +43,5 @@ public class ClassDeclHandler extends VisitorAdapter{
         //Do a secondpass in all the methods of the class
         MethodDeclListHandler.secondpass(env, cinfo, node.methodList);
         
-        // Conferir se métodos com overload tem o mesmo tipo de retorno
-        
     }
 }

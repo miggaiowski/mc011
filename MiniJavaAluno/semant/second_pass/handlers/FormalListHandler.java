@@ -13,8 +13,6 @@ public class FormalListHandler extends VisitorAdapter{
     }
 
     public static void secondpass(Env env, MethodInfo methodInfo, List<Formal> formals) {
-
-        // TODO: Checar se há repetição de Formals.
         
         // checking each of the formals
         while(formals != null) {

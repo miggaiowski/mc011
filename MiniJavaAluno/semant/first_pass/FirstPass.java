@@ -12,6 +12,7 @@ public final class FirstPass {
     }
     
     public static Env firstPass(ErrorEchoer err, Program p) {
+    	// Do the first pass in the program
         return ProgramHandler.firstPass(err, p);
     }
 }
