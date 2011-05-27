@@ -4,19 +4,11 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.io.PushbackReader;
 
-import assem.Instr;
-
-import canon.BasicBlocks;
-import canon.Canon;
-import canon.TraceSchedule;
-
-import errors.ErrorEchoer;
-import frame.Frame;
-import frame.Proc;
-
+import minijava.lexer.Lexer;
+import minijava.node.Start;
+import minijava.parser.Parser;
 import reg_alloc.RegAlloc;
 import semant.Env;
 import semant.TypeChecker;
@@ -27,12 +19,15 @@ import translate.Translate;
 import translate.VtableFrag;
 import util.List;
 import util.conversor.SyntaxTreeGenerator;
+import assem.Instr;
+import canon.BasicBlocks;
+import canon.Canon;
+import canon.TraceSchedule;
+import errors.ErrorEchoer;
+import frame.Frame;
+import frame.Proc;
 
-import minijava.lexer.Lexer;
-import minijava.node.Start;
-import minijava.parser.Parser;
-
-// Uma coisa n„o especificada em minijava eh se
+// Uma coisa n√£o especificada em minijava eh se
 // subclasses podem redeclarar atributos.
 // Solucao adotada: podem; perdem o acesso a variavel
 // da super classe se o fizerem.
@@ -55,7 +50,7 @@ public final class Main
 			
 			Start s = parser.parse();
 			
-            // the parser is correct(???); no need to print sablecc's AST.
+            // the parser is correct; no need to print sablecc's AST.
 			//System.out.println(s);
             
 			// ... up until here, classes and package organization
@@ -87,7 +82,7 @@ public final class Main
 			// program.accept(v1);
             //--------------------------------------------------
 			
-	    // now we've got to apply the 2-pass semant analyser.
+	        // now we've got to apply the 2-pass semant analyser.
             ErrorEchoer err = new SimpleError(name);
             Env env = TypeChecker.TypeCheck(err, program);
 
@@ -97,7 +92,7 @@ public final class Main
                 return;
             }
 			
-	    // here the AST is transformed into the Intemediate Representation
+	        // here the AST is transformed into the Intermediate Representation
             Frame frame = new x86.Frame();
             Frag f = Translate.translate(frame, env, program);
             
@@ -148,7 +143,7 @@ public final class Main
                     
                     
                     // Instruction Selection is done                   
-                    List<Instr> instrs = p.frame.codegen(ts.stms);
+                    List<Instr> instrs = p.frame.codegen(ts.stms); //TODO: CodeGen ainda naum faz instruction selection
                     
                     instrs = p.frame.procEntryExit2(instrs);
                                                             
