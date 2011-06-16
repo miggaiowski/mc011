@@ -17,6 +17,8 @@ import translate.Frag;
 import translate.ProcFrag;
 import translate.Translate;
 import translate.VtableFrag;
+import tree.PrintIR;
+import tree.Stm;
 import util.List;
 import util.conversor.SyntaxTreeGenerator;
 import assem.Instr;
@@ -141,6 +143,12 @@ public final class Main
                     // the IR is canonicalized.
                     TraceSchedule ts = new TraceSchedule(new BasicBlocks(Canon.linearize(p.body)));
                     
+                    PrintIR pir = new PrintIR(System.out);
+                    List<Stm> stmlist = ts.stms;
+                    while (stmlist != null){
+                    	pir.printStatement(stmlist.head);
+                    	stmlist = stmlist.tail;
+                    }
                     
                     // Instruction Selection is done                   
                     List<Instr> instrs = p.frame.codegen(ts.stms); //TODO: CodeGen ainda naum faz instruction selection
