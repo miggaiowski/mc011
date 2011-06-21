@@ -144,7 +144,7 @@ public class Codegen
     	}
     	else if (exp instanceof MEM) {
             System.out.println("munchExpMem((MEM) exp)");
-    		//TODO: munchExpMem((MEM) exp);
+    		ret = munchExpMem((MEM) exp);
     	}
     	else if (exp instanceof NAME) {
             System.out.println("munchExpName((NAME) exp)");
@@ -162,6 +162,15 @@ public class Codegen
     	return ret;
     }
     
+    private Temp munchExpMem(MEM exp) {
+        Temp dst = new Temp();
+        Temp src = munchExp(exp.exp);
+        emit(new assem.OPER("mov `d0, [`s0]", 
+                new List<Temp>(dst, null),
+                new List<Temp>(src, null)));
+        return dst;
+    }
+
     private Temp munchExpCall(CALL exp) {
         //TODO: Fazer direito, só coloquei isso pra testar
      
