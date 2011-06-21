@@ -1,5 +1,7 @@
 package x86;
 
+import java.util.ArrayList;
+
 import assem.Instr;
 import temp.Label;
 import temp.Temp;
@@ -40,22 +42,38 @@ public class Codegen
 
     // **MUNCH STATEMENT** // 
     private void munchStm (Stm s) {
-    	if (s instanceof MOVE)
-    		munchMove((MOVE) s);    		
-    	else if (s instanceof EXPSTM)
-    		//TODO: munchExpStm((EXPSTM) s);
-    		System.out.println("munchExpStm((EXPSTM) s)");
-    	else if (s instanceof CJUMP)
+    	if (s instanceof MOVE) {
+            System.out.println("munchMove((MOVE) s)");
+    		munchMove((MOVE) s);
+    	}
+    	else if (s instanceof EXPSTM) {
+            System.out.println("munchExpStm((EXPSTM) s)");
+    		munchExpStm((EXPSTM) s);
+    	}
+    	else if (s instanceof CJUMP) {
+            System.out.println("munchCJump((CJUMP) s)");
     		//TODO: munchCJump((CJUMP) s);
-    		System.out.println("munchCJump((CJUMP) s)");
-    	else if (s instanceof LABEL)
-    		//TODO: munchLabel((LABEL) s);
-    		System.out.println("munchLabel((LABEL) s)");
-    	else if (s instanceof JUMP)
+    	}
+    	else if (s instanceof LABEL) {
+    	    System.out.println("munchLabel((LABEL) s)");
+    	    munchLabel((LABEL) s); 
+    	}
+    	else if (s instanceof JUMP) {
     		munchJump((JUMP) s);
+    	}
     	else
     		throw new Error("Unhandled: " + s.getClass());
     }
+    
+    private void munchExpStm(EXPSTM s) {
+        munchExp(s.exp);
+    }
+
+    private void munchLabel(LABEL l) {
+        emit(new assem.LABEL(l.label.toString() + ":", l.label));
+    }
+    
+    
     
     // **MUNCH MOVE (MOVE)** //
     private void munchMove (MOVE s){
@@ -68,17 +86,23 @@ public class Codegen
     // **MUNCH MOVE (MEM, Exp)** //
     private void munchMove (MEM dst, Exp src){
     	Temp val = munchExp(src);
-    	Temp add = munchExp(dst.exp);
+    	Temp add = munchExp(dst.exp); // o "destino" é o resultado desta Exp.
     	
-    	emit (new assem.OPER("mov [`s0] `s1",
+    	emit (new assem.OPER("mov [`s0], `s1",
     						  null,
     						  new List<Temp>(add, new List<Temp>(val,null)))); //add = s0, val = s1
     	return;
-    }
+      }
     
     // **MUNCH MOVE (TEMP, Exp)** //
     private void munchMove (TEMP s, Exp src){
-    	//TODO: implement
+    	Temp val = munchExp(src);
+    	Temp reg = s.temp; // já temos o Temp de destino
+    	
+    	emit (new assem.OPER("mov `d0, `s0", 
+    	        new List<Temp>(reg, null),
+    	        new List<Temp>(val, null)));
+    	return;
     }
     
     // **MUNCH JUMP (JUMP)** //
@@ -101,32 +125,106 @@ public class Codegen
     
     // **MUNCH EXP** //
     private Temp munchExp (Exp exp){
-    	if (exp instanceof BINOP)
+        Temp ret = null;
+    	if (exp instanceof BINOP) {
+            System.out.println("munchBinop((BINOP) exp)");
     		//TODO: munchBinop((BINOP) exp);
-    		System.out.println("munchBinop((BINOP) exp)");
-    	else if (exp instanceof CALL)
-    		//TODO: munchCall((CALL) exp);
-    		System.out.println("munchCall((CALL) exp)");
-    	else if (exp instanceof CONST)
-    		//TODO: munchConst((CONST) exp);
-    		System.out.println("munchConst((CONST) exp)");
-    	else if (exp instanceof ESEQ)
-    		//TODO: munchESeq((ESEQ) exp);
-    		System.out.println("munchESeq((ESEQ) exp)");
-    	else if (exp instanceof MEM)
-    		//TODO: munchMem((MEM) exp);
-    		System.out.println("munchMem((MEM) exp)");
-    	else if (exp instanceof NAME)
-    		//TODO: munchName((NAME) exp);
-    		System.out.println("munchName((NAME) exp)");
-    	else if (exp instanceof TEMP)
-    		//TODO: munchTemp((TEMP) exp);
-    		System.out.println("munchTemp((TEMP) exp)");
+    	}
+    	else if (exp instanceof CALL) {
+            System.out.println("munchExpCall((CALL) exp)");
+    		ret = munchExpCall((CALL) exp);
+    	}
+    	else if (exp instanceof CONST) {
+            System.out.println("munchExpConst((CONST) exp)");
+    		ret = munchExpConst((CONST) exp);
+    	}
+    	else if (exp instanceof ESEQ) {
+            System.out.println("munchExpESeq((ESEQ) exp)");
+    		//TODO: munchExpESeq((ESEQ) exp);
+    	}
+    	else if (exp instanceof MEM) {
+            System.out.println("munchExpMem((MEM) exp)");
+    		//TODO: munchExpMem((MEM) exp);
+    	}
+    	else if (exp instanceof NAME) {
+            System.out.println("munchExpName((NAME) exp)");
+    		ret = munchExpName((NAME) exp);
+    	}
+    	else if (exp instanceof TEMP) {
+            System.out.println("munchExpTemp((TEMP) exp)");
+    	    ret = munchExpTemp((TEMP) exp);
+    	}
     	else
     		throw new Error("Unhandled: " + exp.getClass());
     	
-    	return null; //TODO: delete this!
+    	if (ret == null)
+    	    System.out.println("WTFFFFF");
+    	return ret;
     }
+    
+    private Temp munchExpCall(CALL exp) {
+        //TODO: Fazer direito, só coloquei isso pra testar
+     
+        // lista com os parâmetros em ordem inversa a chamada
+        ArrayList<tree.Exp> paramsArrayList = new ArrayList<tree.Exp>();
+        
+        int num_args = 0; // numero de params da funcao
+        
+        List<tree.Exp> args = exp.args;
+        while (args != null) { // percorre a lista de parametros
+            num_args += 1; // contando o numero de params
+            paramsArrayList.add(0, args.head); // e inserindo no começo da outra lista, para ficar em ordem inversa
+            args = args.tail;
+        }
+        
+        System.out.println("Total de params: " +  num_args);
+
+        // Percorrer lista de parametros colocando na pilha
+        // em ordem inversa
+        for (Exp param : paramsArrayList) {
+            Temp p = munchExp(param);
+            emit(new assem.OPER("push `s0",
+                    null,
+                    new List<Temp>(p, null)));
+        }
+        
+        // Colocando endereço da função num registrador
+        Temp funcAdd = munchExp(exp.func);
+        emit(new assem.OPER("call `s0", null, new List<Temp>(funcAdd, null)));
+        
+        emit(new assem.OPER("add esp, " + (num_args * 4), null, null));
+        
+        // precisa pegar o valor de retorno
+        
+        return new Temp();
+    }
+
+    private Temp munchExpConst(CONST exp) {
+        // Só coloca a constante num registrador, com mov
+        Temp retTemp = new Temp();
+        
+        emit(new assem.OPER("mov `d0, " + exp.value,
+                new List<Temp>(retTemp, null),
+                null));
+        return retTemp;
+    }
+
+    private Temp munchExpTemp(TEMP tmp) {
+        return new Temp();
+    }
+    
+    private Temp munchExpName(NAME name) {
+        Temp retTemp = new Temp();
+        
+        emit(new assem.OPER("mov `d0, " + name.label.toString(), 
+                new List<Temp>(retTemp, null), 
+                null));
+        return retTemp;
+    }
+    
+    
+    
+    
     
     /*-------------------------------------------------------------*
      *                              MAIN                           *
