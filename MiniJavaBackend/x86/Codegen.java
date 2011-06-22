@@ -96,6 +96,7 @@ public class Codegen
     
     // **MUNCH MOVE (TEMP, Exp)** //
     private void munchMove (TEMP s, Exp src){
+        System.out.println("MOVING-------------------------------------");
     	Temp val = munchExp(src);
     	Temp reg = s.temp; // já temos o Temp de destino
     	
@@ -205,9 +206,11 @@ public class Codegen
         Temp left = munchExp(exp.left);
         Temp right = munchExp(exp.right);
         if (exp.binop == BINOP.PLUS) {
+            System.out.println("munchExpBinop(PLUS)");
             emit(new assem.OPER("add `d0, `s0", new List<Temp>(left, null), new List<Temp>(right, new List<Temp>(left, null))));
         }
         if (exp.binop == BINOP.MINUS) {
+            System.out.println("munchExpBinop(SUB)");            
             emit(new assem.OPER("sub `d0, `s0", new List<Temp>(left, null), new List<Temp>(right, new List<Temp>(left, null))));
         }
         
@@ -255,11 +258,15 @@ public class Codegen
         // Se tivermos o label, damos call nele
         if (exp.func instanceof NAME) {
             NAME calledFunction = (NAME)(exp.func);
-            emit(new assem.OPER("call " + calledFunction.label.toString(), new List<Temp>(Frame.esp ,Frame.calldefs), new List<Temp>(Frame.esp, paramsTemp)));
+            emit(new assem.OPER("call " + calledFunction.label.toString(), 
+                    new List<Temp>(Frame.esp ,Frame.calldefs), 
+                    new List<Temp>(Frame.esp, paramsTemp)));
         }
         else { // Senão temos que processar e jogar o endereço num registrador para dar call.
             Temp funcAdd = munchExp(exp.func);
-            emit(new assem.OPER("call `s0", new List<Temp>(Frame.esp ,Frame.calldefs), new List<Temp>(funcAdd, new List<Temp>(Frame.esp, paramsTemp))));
+            emit(new assem.OPER("call `s0", 
+                    new List<Temp>(Frame.esp ,Frame.calldefs), 
+                    new List<Temp>(funcAdd, new List<Temp>(Frame.esp, paramsTemp))));
         }
         
         // Só tira coisas da pilha se tiver argumentos, pra não aparecer um add esp, 0
@@ -285,7 +292,7 @@ public class Codegen
     }
 
     private Temp munchExpTemp(TEMP tmp) {
-        return new Temp();
+        return tmp.temp;
     }
     
     private Temp munchExpName(NAME name) {
