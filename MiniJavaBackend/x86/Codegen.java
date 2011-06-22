@@ -99,9 +99,9 @@ public class Codegen
     	Temp val = munchExp(src);
     	Temp reg = s.temp; // já temos o Temp de destino
     	
-    	emit (new assem.OPER("mov `d0, `s0", 
-    	        new List<Temp>(reg, null),
-    	        new List<Temp>(val, null)));
+    	emit (new assem.MOVE("mov `d0, `s0", 
+    	        reg,
+    	        val));
     	return;
     }
     
@@ -229,20 +229,32 @@ public class Codegen
 
         // Percorrer lista de parametros colocando na pilha
         // em ordem inversa
+        List<Temp> paramsTemp = null;
         for (Exp param : paramsArrayList) {
             Temp p = munchExp(param);
+            paramsTemp = new List<Temp>(p, paramsTemp);
             emit(new assem.OPER("push `s0",
                     null,
                     new List<Temp>(p, null)));
         }
         
-        // Colocando endereço da função num registrador
-        Temp funcAdd = munchExp(exp.func);
-        emit(new assem.OPER("call `s0", null, new List<Temp>(funcAdd, null)));
+        // Se tivermos o label, damos call nele
+        if (exp.func instanceof NAME) {
+            NAME calledFunction = (NAME)(exp.func);
+            emit(new assem.OPER("call " + calledFunction.label.toString(), Frame.calldefs, paramsTemp));
+        }
+        else { // Senão temos que processar e jogar o endereço num registrador para dar call.
+            Temp funcAdd = munchExp(exp.func);
+            emit(new assem.OPER("call `s0", Frame.calldefs, new List<Temp>(funcAdd, paramsTemp)));
+        }
         
-        emit(new assem.OPER("add esp, " + (num_args * 4), null, null));
+        // Só tira coisas da pilha se tiver argumentos, pra não aparecer um add esp, 0
+        if (num_args > 0) {
+            emit(new assem.OPER("add esp, " + (num_args * 4), new List<Temp>(Frame.esp, null), null));
+        }
         
         // precisa pegar o valor de retorno
+        
         
         return new Temp();
     }
