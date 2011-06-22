@@ -97,8 +97,6 @@ public class Liveness extends InterferenceGraph
     
     private void computeDFA()
     {	
-    	//TODO: Conferir implementação
-
         // Inicializa in, out, inprime, outprime
         in = new Hashtable<Node, HashSet<Temp>>();
         out = new Hashtable<Node, HashSet<Temp>>();
@@ -110,7 +108,7 @@ public class Liveness extends InterferenceGraph
         for ( List<Node> aux = graph.nodes(); aux != null; aux = aux.tail )
         {
             nodes.add(0, aux.head);
-            System.out.println(nodes.toString());
+            //System.out.println(nodes.toString());
             in.put(aux.head, new HashSet<Temp>()); // Começa 
             out.put(aux.head, new HashSet<Temp>());
         }
@@ -124,12 +122,7 @@ public class Liveness extends InterferenceGraph
                 // in'[n] <- in[n]
                 inprime.put(n, in.get(n));
             }
-//            Boolean insBoolean = compara(in, inprime);
-//            Boolean outsBoolean = compara(out, outprime);
-//            if (insBoolean == true && outsBoolean == true) {
-//                System.out.println("Deu certo a cópia");
-//            }
-//            System.out.println("out1:"+ out + "\noutprime1" + outprime);
+
             for (Node n : nodes) {
                 // in[n] <- use[n] U (out[n] - def[n]);
                 HashSet<Temp> t = new HashSet<Temp>();
@@ -146,8 +139,6 @@ public class Liveness extends InterferenceGraph
                 } 
                 out.put(n, r);
             }            
-            
-            // TODO: Resolver bug abaixo.
  
         } while (compara_ins() == false || compara_outs() == false);
         System.out.println("Saiu");
@@ -178,8 +169,6 @@ public class Liveness extends InterferenceGraph
                 return false;
             }
         }
-        
-
         return true;
     }
     
