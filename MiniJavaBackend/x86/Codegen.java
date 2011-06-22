@@ -178,8 +178,7 @@ public class Codegen
     		ret = munchExpConst((CONST) exp);
     	}
     	else if (exp instanceof ESEQ) {
-            System.out.println("munchExpESeq((ESEQ) exp)");
-    		//TODO: munchExpESeq((ESEQ) exp);
+    		munchExpESeq((ESEQ) exp);
     	}
     	else if (exp instanceof MEM) {
             System.out.println("munchExpMem((MEM) exp)");
@@ -199,6 +198,11 @@ public class Codegen
     	if (ret == null)
     	    System.out.println("WTFFFFF");
     	return ret;
+    }
+    
+    private Temp munchExpESeq(ESEQ eseq){
+    	munchStm(eseq.stm);
+    	return munchExp(eseq.exp);
     }
     
     private Temp munchExpBinop(BINOP exp) {
