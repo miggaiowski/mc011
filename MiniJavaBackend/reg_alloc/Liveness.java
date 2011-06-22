@@ -101,32 +101,32 @@ public class Liveness extends InterferenceGraph
         Hashtable<Node, HashSet<Temp>> inprime = new Hashtable<Node, HashSet<Temp>>();
         Hashtable<Node, HashSet<Temp>> outprime = new Hashtable<Node, HashSet<Temp>>();
         
-        HashSet<Temp> conjuntoVazio = new HashSet<Temp>();
-        
+
         ArrayList<Node> nodes = new ArrayList<Node>();
         for ( List<Node> aux = graph.nodes(); aux != null; aux = aux.tail )
         {
             nodes.add(0, aux.head);
-            in.put(aux.head, conjuntoVazio);
-            out.put(aux.head, conjuntoVazio);
+            System.out.println(nodes.toString());
+            in.put(aux.head, new HashSet<Temp>());
+            out.put(aux.head, new HashSet<Temp>());
         }
                 
         do {
-            outprime.clear();
-            inprime.clear();
             for (Node n : nodes) {
                 // out'[n] <- out[n];
-                outprime.put(n, out.get(n));
+                HashSet<Temp> outtemp = new HashSet<Temp>();
+                outtemp.addAll(out.get(n));
+                outprime.put(n, outtemp);
                 // in'[n] <- in[n]
                 inprime.put(n, in.get(n));
-                
-                Boolean insBoolean = compara(in, inprime);
-                Boolean outsBoolean = compara(out, outprime);
-                if (insBoolean == true && outsBoolean == true) {
-                    System.out.println("Deu certo a cópia");
-                }
-
-                
+            }
+//            Boolean insBoolean = compara(in, inprime);
+//            Boolean outsBoolean = compara(out, outprime);
+//            if (insBoolean == true && outsBoolean == true) {
+//                System.out.println("Deu certo a cópia");
+//            }
+            System.out.println("out1:"+ out + "\noutprime1" + outprime);
+            for (Node n : nodes) {
                 // in[n] <- use[n] U (out[n] - def[n]);
                 HashSet<Temp> t = new HashSet<Temp>();
                 t.addAll(gen.get(n));
@@ -141,25 +141,26 @@ public class Liveness extends InterferenceGraph
                     r.addAll(in.get(s));
                 } 
                 out.put(n, r);
-            }             
-
+            }            
+//            System.out.println("out2:" + out + "\noutprime2" + outprime);
+            
+            // TODO: Resolver bug abaixo.
+            // Na chamada de função compara(out, outprime), o outprime que aparece dentro da função
+            // é diferente deste visto aqui em cima. Pq?????
         } while (compara(in, inprime) == false || compara(out, outprime) == false);
+        System.out.println("Saiu");
     }
     
     private Boolean compara(Hashtable<Node, HashSet<Temp>> a, Hashtable<Node, HashSet<Temp>> b) {
         // Primeiro testa se ambas hashtables tem as mesmas chaves.
-        for (Node n : a.keySet()) {
-            if (b.keySet().contains(n) == false) {
+            if (b.keySet().containsAll(a.keySet()) == false) {
                 System.out.println("pau1");
                 return false;
             }
-        }
-        for (Node n : b.keySet()) {
-            if (a.keySet().contains(n) == false) {
+            if (a.keySet().containsAll(b.keySet()) == false) {
                 System.out.println("pau2");
                 return false;
             }
-        }
 
         // Testa se a[n] C b[n] e se b[n] C a[n].
         // Se sim, é porque n mapeia para o mesmo conjunto
@@ -169,7 +170,7 @@ public class Liveness extends InterferenceGraph
                 return false;
             }
             if (b.get(n).containsAll(a.get(n)) == false) {
-                System.out.println("pau4 " + n);
+                System.out.println("pau4 " + a + "\n" + b);
                 return false;
             }
         }
