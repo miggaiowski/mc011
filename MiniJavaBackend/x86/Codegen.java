@@ -150,12 +150,19 @@ public class Codegen
     		case CJUMP.LT:
     			emit (new assem.OPER("jl `j0", null,null, new List<Label>(s.ifTrue,null)));
     			break;
-    			
-    		//TODO: O que são esses jumps?
+    		//TODO: Confirmar esses jumps abaixo
     		case CJUMP.UGE:
+    			emit (new assem.OPER("jge `j0", null,null, new List<Label>(s.ifTrue,null)));
+    			break;
     		case CJUMP.UGT:
+    			emit (new assem.OPER("jg `j0", null,null, new List<Label>(s.ifTrue,null)));
+    			break;
     		case CJUMP.ULE:
+    			emit (new assem.OPER("jle `j0", null,null, new List<Label>(s.ifTrue,null)));
+    			break;
     		case CJUMP.ULT:
+    			emit (new assem.OPER("jl `j0", null,null, new List<Label>(s.ifTrue,null)));
+    			break;
     		default:
     			throw new Error("Unhandled Conditional Jump: " + s.op);
     	}
