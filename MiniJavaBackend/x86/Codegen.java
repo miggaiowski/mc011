@@ -97,6 +97,7 @@ public class Codegen
     // **MUNCH MOVE (TEMP, Exp)** //
     private void munchMove (TEMP s, Exp src){
         System.out.println("MOVING-------------------------------------");
+//        if (src instanceof )
     	Temp val = munchExp(src);
     	Temp reg = s.temp; // já temos o Temp de destino
     	
@@ -215,15 +216,44 @@ public class Codegen
     
     private Temp munchExpBinop(BINOP exp) {
         Temp left = munchExp(exp.left);
-        Temp right = munchExp(exp.right);
-        if (exp.binop == BINOP.PLUS) {
-            System.out.println("munchExpBinop(PLUS)");
-            emit(new assem.OPER("add `d0, `s0", new List<Temp>(left, null), new List<Temp>(right, new List<Temp>(left, null))));
+
+        if (exp.binop == BINOP.LSHIFT) {
+            System.out.println("munchExpBinop(LSHIFT)");
+            CONST bla = null;
+            if (exp.right instanceof CONST) {
+                bla = (CONST)exp.right;
+            }
+            emit(new assem.OPER("shl `d0, " + bla.value, new List<Temp>(left, null), new List<Temp>(left, null)));
         }
-        if (exp.binop == BINOP.MINUS) {
-            System.out.println("munchExpBinop(SUB)");            
-            emit(new assem.OPER("sub `d0, `s0", new List<Temp>(left, null), new List<Temp>(right, new List<Temp>(left, null))));
+        else {
+            Temp right = munchExp(exp.right);
+            if (exp.binop == BINOP.PLUS) {
+                System.out.println("munchExpBinop(PLUS)");
+                emit(new assem.OPER("add `d0, `s0", new List<Temp>(left, null), new List<Temp>(right, new List<Temp>(left, null))));
+            }
+            else if (exp.binop == BINOP.MINUS) {
+                System.out.println("munchExpBinop(SUB)");            
+                emit(new assem.OPER("sub `d0, `s0", new List<Temp>(left, null), new List<Temp>(right, new List<Temp>(left, null))));
+            }
+            else if (exp.binop == BINOP.AND) {
+                System.out.println("munchExpBinop(AND)");            
+                emit(new assem.OPER("and `d0, `s0", new List<Temp>(left, null), new List<Temp>(right, new List<Temp>(left, null))));
+            }
+            else if (exp.binop == BINOP.OR) {
+                System.out.println("munchExpBinop(OR)");            
+                emit(new assem.OPER("or `d0, `s0", new List<Temp>(left, null), new List<Temp>(right, new List<Temp>(left, null))));
+            }
+            else if (exp.binop == BINOP.XOR) {
+                System.out.println("munchExpBinop(XOR)");            
+                emit(new assem.OPER("xor `d0, `s0", new List<Temp>(left, null), new List<Temp>(right, new List<Temp>(left, null))));
+            }
+            else if (exp.binop == BINOP.TIMES) {
+                System.out.println("munchExpBinop(TIMES)");            
+                emit(new assem.OPER("imul `d0, `s0", new List<Temp>(left, null), new List<Temp>(right, new List<Temp>(left, null))));
+            }
+
         }
+
         
         return left;
     }
@@ -270,7 +300,7 @@ public class Codegen
         if (exp.func instanceof NAME) {
             NAME calledFunction = (NAME)(exp.func);
             emit(new assem.OPER("call " + calledFunction.label.toString(), 
-                    new List<Temp>(Frame.esp ,Frame.calldefs), 
+                    new List<Temp>(Frame.esp, Frame.calldefs), 
                     new List<Temp>(Frame.esp, paramsTemp)));
         }
         else { // Senão temos que processar e jogar o endereço num registrador para dar call.
@@ -282,7 +312,7 @@ public class Codegen
         
         // Só tira coisas da pilha se tiver argumentos, pra não aparecer um add esp, 0
         if (num_args > 0) {
-            emit(new assem.OPER("add esp, " + (num_args * 4), new List<Temp>(Frame.esp, null), null));
+            emit(new assem.OPER("add esp, " + (num_args * 4), new List<Temp>(Frame.esp, null), new List<Temp>(Frame.esp, null)));
         }
         
         // precisa pegar o valor de retorno
