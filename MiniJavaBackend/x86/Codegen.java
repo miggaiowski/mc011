@@ -52,7 +52,7 @@ public class Codegen
     	}
     	else if (s instanceof CJUMP) {
             System.out.println("munchCJump((CJUMP) s)");
-    		//TODO: munchCJump((CJUMP) s);
+    		munchCJump((CJUMP) s);
     	}
     	else if (s instanceof LABEL) {
     	    System.out.println("munchLabel((LABEL) s)");
@@ -121,6 +121,45 @@ public class Codegen
     				             null,
     				             new List<Temp>(target,null), s.targets));
     	}
+    }
+    
+    // **MUNCH CJUMP (JUMP)** //
+    private void munchCJump (CJUMP s){
+    	Temp left = munchExp(s.left);
+    	Temp right = munchExp(s.right);
+    	
+    	emit (new assem.OPER("cmp `s0, `s1", null, new List<Temp>(left, new List<Temp>(right, null))));
+    	
+    	switch (s.op){
+    		case CJUMP.EQ:
+    			emit (new assem.OPER("je `j0", null,null, new List<Label>(s.ifTrue,null)));
+    			break;
+    		case CJUMP.NE:
+    			emit (new assem.OPER("jne `j0", null,null, new List<Label>(s.ifTrue,null)));
+    			break;
+    		case CJUMP.GE:
+    			emit (new assem.OPER("jge `j0", null,null, new List<Label>(s.ifTrue,null)));
+    			break;
+    		case CJUMP.GT:
+    			emit (new assem.OPER("jg `j0", null,null, new List<Label>(s.ifTrue,null)));
+    			break;
+    		case CJUMP.LE:
+    			emit (new assem.OPER("jle `j0", null,null, new List<Label>(s.ifTrue,null)));
+    			break;
+    		case CJUMP.LT:
+    			emit (new assem.OPER("jl `j0", null,null, new List<Label>(s.ifTrue,null)));
+    			break;
+    			
+    		//TODO: O que são esses jumps?
+    		case CJUMP.UGE:
+    		case CJUMP.UGT:
+    		case CJUMP.ULE:
+    		case CJUMP.ULT:
+    		default:
+    			throw new Error("Unhandled Conditional Jump: " + s.op);
+    	}
+    	
+    	//TODO: Se for false, creio q ele vai pra instrução de baixo sozinho, ou será que tem que por um jump pra linha de baixo ...?
     }
     
     // **MUNCH EXP** //
