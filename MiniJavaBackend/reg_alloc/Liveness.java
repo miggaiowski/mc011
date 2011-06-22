@@ -1,14 +1,14 @@
 package reg_alloc;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.LinkedList;
 
-import flow_graph.FlowGraph;
-import graph.Node;
 import temp.Temp;
 import util.List;
+import flow_graph.FlowGraph;
+import graph.Node;
 
 public class Liveness extends InterferenceGraph
 {
@@ -95,7 +95,93 @@ public class Liveness extends InterferenceGraph
     
     private void computeDFA()
     {	
-    	//TODO: Implement
+    	//TODO: Conferir implementação
+        in = new Hashtable<Node, HashSet<Temp>>();
+        out = new Hashtable<Node, HashSet<Temp>>();
+        Hashtable<Node, HashSet<Temp>> inprime = new Hashtable<Node, HashSet<Temp>>();
+        Hashtable<Node, HashSet<Temp>> outprime = new Hashtable<Node, HashSet<Temp>>();
+        
+        HashSet<Temp> conjuntoVazio = new HashSet<Temp>();
+        
+        ArrayList<Node> nodes = new ArrayList<Node>();
+        for ( List<Node> aux = graph.nodes(); aux != null; aux = aux.tail )
+        {
+            nodes.add(0, aux.head);
+            in.put(aux.head, conjuntoVazio);
+            out.put(aux.head, conjuntoVazio);
+        }
+                
+        do {
+            outprime.clear();
+            inprime.clear();
+            for (Node n : nodes) {
+                // out'[n] <- out[n];
+                outprime.put(n, out.get(n));
+                // in'[n] <- in[n]
+                inprime.put(n, in.get(n));
+                
+                Boolean insBoolean = compara(in, inprime);
+                Boolean outsBoolean = compara(out, outprime);
+                if (insBoolean == true && outsBoolean == true) {
+                    System.out.println("Deu certo a cópia");
+                }
+
+                
+                // in[n] <- use[n] U (out[n] - def[n]);
+                HashSet<Temp> t = new HashSet<Temp>();
+                t.addAll(gen.get(n));
+                t.addAll(out_menos_def(n));
+                in.put(n, t);
+                
+                // out[n] <- U(s in succ[n]) (in[s]) 
+                HashSet<Temp> r = new HashSet<Temp>();
+                for ( List<Node> succ = n.succ(); succ != null; succ = succ.tail )
+                {
+                    Node s = succ.head;
+                    r.addAll(in.get(s));
+                } 
+                out.put(n, r);
+            }             
+
+        } while (compara(in, inprime) == false || compara(out, outprime) == false);
+    }
+    
+    private Boolean compara(Hashtable<Node, HashSet<Temp>> a, Hashtable<Node, HashSet<Temp>> b) {
+        // Primeiro testa se ambas hashtables tem as mesmas chaves.
+        for (Node n : a.keySet()) {
+            if (b.keySet().contains(n) == false) {
+                System.out.println("pau1");
+                return false;
+            }
+        }
+        for (Node n : b.keySet()) {
+            if (a.keySet().contains(n) == false) {
+                System.out.println("pau2");
+                return false;
+            }
+        }
+
+        // Testa se a[n] C b[n] e se b[n] C a[n].
+        // Se sim, é porque n mapeia para o mesmo conjunto
+        for (Node n : a.keySet()) {
+            if (a.get(n).containsAll(b.get(n)) == false) {
+                System.out.println("pau3");
+                return false;
+            }
+            if (b.get(n).containsAll(a.get(n)) == false) {
+                System.out.println("pau4 " + n);
+                return false;
+            }
+        }
+        
+
+        return true;
+    }
+    
+    private HashSet<Temp> out_menos_def(Node n) {
+        HashSet<Temp> res = out.get(n);
+        res.removeAll(kill.get(n));
+        return res;
     }
     
     private Node getNode(Temp t)
