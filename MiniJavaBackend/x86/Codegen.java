@@ -166,8 +166,8 @@ public class Codegen
     private Temp munchExp (Exp exp){
         Temp ret = null;
     	if (exp instanceof BINOP) {
-            System.out.println("munchBinop((BINOP) exp)");
-    		//TODO: munchBinop((BINOP) exp);
+            System.out.println("munchExpBinop((BINOP) exp)");
+    		ret = munchExpBinop((BINOP) exp);
     	}
     	else if (exp instanceof CALL) {
             System.out.println("munchExpCall((CALL) exp)");
@@ -201,6 +201,19 @@ public class Codegen
     	return ret;
     }
     
+    private Temp munchExpBinop(BINOP exp) {
+        Temp left = munchExp(exp.left);
+        Temp right = munchExp(exp.right);
+        if (exp.binop == BINOP.PLUS) {
+            emit(new assem.OPER("add `d0, `s0", new List<Temp>(left, null), new List<Temp>(right, new List<Temp>(left, null))));
+        }
+        if (exp.binop == BINOP.MINUS) {
+            emit(new assem.OPER("sub `d0, `s0", new List<Temp>(left, null), new List<Temp>(right, new List<Temp>(left, null))));
+        }
+        
+        return left;
+    }
+
     private Temp munchExpMem(MEM exp) {
         Temp dst = new Temp();
         Temp src = munchExp(exp.exp);
@@ -234,18 +247,19 @@ public class Codegen
             Temp p = munchExp(param);
             paramsTemp = new List<Temp>(p, paramsTemp);
             emit(new assem.OPER("push `s0",
-                    null,
-                    new List<Temp>(p, null)));
+                    new List<Temp>(Frame.esp, null),
+                    new List<Temp>(p, 
+                            new List<Temp>(Frame.esp, null))));
         }
         
         // Se tivermos o label, damos call nele
         if (exp.func instanceof NAME) {
             NAME calledFunction = (NAME)(exp.func);
-            emit(new assem.OPER("call " + calledFunction.label.toString(), Frame.calldefs, paramsTemp));
+            emit(new assem.OPER("call " + calledFunction.label.toString(), new List<Temp>(Frame.esp ,Frame.calldefs), new List<Temp>(Frame.esp, paramsTemp)));
         }
         else { // Senão temos que processar e jogar o endereço num registrador para dar call.
             Temp funcAdd = munchExp(exp.func);
-            emit(new assem.OPER("call `s0", Frame.calldefs, new List<Temp>(funcAdd, paramsTemp)));
+            emit(new assem.OPER("call `s0", new List<Temp>(Frame.esp ,Frame.calldefs), new List<Temp>(funcAdd, new List<Temp>(Frame.esp, paramsTemp))));
         }
         
         // Só tira coisas da pilha se tiver argumentos, pra não aparecer um add esp, 0
@@ -254,9 +268,10 @@ public class Codegen
         }
         
         // precisa pegar o valor de retorno
+        Temp retornoTemp = new Temp();
+        emit(new assem.MOVE("mov `d0, eax", retornoTemp, Frame.eax));
         
-        
-        return new Temp();
+        return retornoTemp;
     }
 
     private Temp munchExpConst(CONST exp) {
