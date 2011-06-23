@@ -143,15 +143,13 @@ public final class Main
                     // the IR is canonicalized.
                     TraceSchedule ts = new TraceSchedule(new BasicBlocks(Canon.linearize(p.body)));
                     
-                    PrintIR pir = new PrintIR(System.out);
-                    List<Stm> stmlist = ts.stms;
-                    while (stmlist != null){
-                    	pir.printStatement(stmlist.head);
-                    	stmlist = stmlist.tail;
+                    for (List<Stm> stm_list = ts.stms; stm_list != null; stm_list = stm_list.tail) {
+                        Stm stm = stm_list.head;
+                        new PrintIR(System.out).printStatement(stm);
                     }
                     
                     // Instruction Selection is done                   
-                    List<Instr> instrs = p.frame.codegen(ts.stms); //TODO: CodeGen ainda naum faz instruction selection
+                    List<Instr> instrs = p.frame.codegen(ts.stms);
                     
                     instrs = p.frame.procEntryExit2(instrs);
                                                             

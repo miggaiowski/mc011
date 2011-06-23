@@ -115,7 +115,6 @@ public class RegAlloc implements TempMap
             Init();
             Build();
             MakeWorklist();
-            
             do
             {
                 if ( simplifyWorklist.size() != 0 )

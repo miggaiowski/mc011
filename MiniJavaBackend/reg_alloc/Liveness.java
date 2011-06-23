@@ -127,7 +127,11 @@ public class Liveness extends InterferenceGraph
                 // in[n] <- use[n] U (out[n] - def[n]);
                 HashSet<Temp> t = new HashSet<Temp>();
                 t.addAll(gen.get(n));
-                t.addAll(out_menos_def(n));
+                //t.addAll(out_menos_def(n));
+                HashSet<Temp> res = new HashSet<Temp>();
+                res.addAll(out.get(n));
+                res.removeAll(kill.get(n));
+                t.addAll(res);
                 in.put(n, t);
                 
                 // out[n] <- U(s in succ[n]) (in[s]) 
@@ -142,6 +146,8 @@ public class Liveness extends InterferenceGraph
  
         } while (compara_ins() == false || compara_outs() == false);
         System.out.println("Saiu");
+        //dump(System.err);
+        //graph.show(System.out);
     }
     
     private Boolean compara_ins() {
@@ -201,7 +207,8 @@ public class Liveness extends InterferenceGraph
     }
     
     private HashSet<Temp> out_menos_def(Node n) {
-        HashSet<Temp> res = (HashSet<Temp>) out.get(n).clone();
+        HashSet<Temp> res = new HashSet<Temp>();
+        res.addAll(out.get(n));
         res.removeAll(kill.get(n));
         return res;
     }

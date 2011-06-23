@@ -42,29 +42,29 @@ public class Codegen
 
     // **MUNCH STATEMENT** // 
     private void munchStm (Stm s) {
-    	if (s instanceof MOVE) {
+        if (s instanceof MOVE) {
             System.out.println("munchMove((MOVE) s)");
-    		munchMove((MOVE) s);
-    	}
-    	else if (s instanceof EXPSTM) {
+            munchMove((MOVE) s);
+        }
+        else if (s instanceof EXPSTM) {
             System.out.println("munchExpStm((EXPSTM) s)");
-    		munchExpStm((EXPSTM) s);
-    	}
-    	else if (s instanceof CJUMP) {
+            munchExpStm((EXPSTM) s);
+        }
+        else if (s instanceof CJUMP) {
             System.out.println("munchCJump((CJUMP) s)");
-    		munchCJump((CJUMP) s);
-    	}
-    	else if (s instanceof LABEL) {
-    	    System.out.println("munchLabel((LABEL) s)");
-    	    munchLabel((LABEL) s); 
-    	}
-    	else if (s instanceof JUMP) {
-    		munchJump((JUMP) s);
-    	}
-    	else
-    		throw new Error("Unhandled: " + s.getClass());
+            munchCJump((CJUMP) s);
+        }
+        else if (s instanceof LABEL) {
+            System.out.println("munchLabel((LABEL) s)");
+            munchLabel((LABEL) s); 
+        }
+        else if (s instanceof JUMP) {
+            munchJump((JUMP) s);
+        }
+        else
+            throw new Error("Unhandled: " + s.getClass());
     }
-    
+
     private void munchExpStm(EXPSTM s) {
         munchExp(s.exp);
     }
@@ -72,148 +72,171 @@ public class Codegen
     private void munchLabel(LABEL l) {
         emit(new assem.LABEL(l.label.toString() + ":", l.label));
     }
-    
-    
-    
+
+
+
     // **MUNCH MOVE (MOVE)** //
     private void munchMove (MOVE s){
-    	if (s.dst instanceof MEM)
-    		munchMove((MEM) s.dst, s.src);
-    	else
-    		munchMove((TEMP) s.dst, s.src);
+        if (s.dst instanceof MEM)
+            munchMove((MEM) s.dst, s.src);
+        else
+            munchMove((TEMP) s.dst, s.src);
     }
-    
+
     // **MUNCH MOVE (MEM, Exp)** //
     private void munchMove (MEM dst, Exp src){
-    	Temp val = munchExp(src);
-    	Temp add = munchExp(dst.exp); // o "destino" é o resultado desta Exp.
-    	
-    	emit (new assem.OPER("mov [`s0], `s1",
-    						  null,
-    						  new List<Temp>(add, new List<Temp>(val,null)))); //add = s0, val = s1
-    	return;
-      }
-    
+        Temp val = munchExp(src);
+
+        if (dst.exp instanceof BINOP) {
+            BINOP bo = (BINOP) dst.exp;
+            if (bo.binop == BINOP.PLUS) {
+                if (bo.left instanceof TEMP && bo.right instanceof CONST) {
+                    CONST c = (CONST) bo.right;
+                    TEMP t = (TEMP)bo.left;
+                    emit(new assem.OPER("mov [`s0 + " + c.value + "], `s1", 
+                            null,
+                            new List<Temp>(t.temp, new List<Temp>(val, null))));
+                    return;
+                }
+            }
+            else if (bo.binop == BINOP.MINUS) {
+                if (bo.left instanceof TEMP && bo.right instanceof CONST) {
+                    CONST c = (CONST) bo.right;
+                    TEMP t = (TEMP)bo.left;
+                    emit(new assem.OPER("mov [`s0 - " + c.value + "], `s1",                     
+                            null,
+                            new List<Temp>(t.temp, new List<Temp>(val, null))));
+                    return;
+                }
+            }
+        }
+        Temp add = munchExp(dst.exp); // o "destino" é o resultado desta Exp.
+        emit (new assem.OPER("mov [`s0], `s1",
+                null,
+                new List<Temp>(add, new List<Temp>(val,null)))); //add = s0, val = s1
+        return;
+    }
+
     // **MUNCH MOVE (TEMP, Exp)** //
     private void munchMove (TEMP s, Exp src){
         System.out.println("MOVING-------------------------------------");
-//        if (src instanceof )
-    	Temp val = munchExp(src);
-    	Temp reg = s.temp; // já temos o Temp de destino
-    	
-    	emit (new assem.MOVE("mov `d0, `s0", 
-    	        reg,
-    	        val));
-    	return;
+        //        if (src instanceof )
+        Temp val = munchExp(src);
+        Temp reg = s.temp; // já temos o Temp de destino
+
+        emit (new assem.MOVE("mov `d0, `s0", 
+                reg,
+                val));
+        return;
     }
-    
+
     // **MUNCH JUMP (JUMP)** //
     private void munchJump (JUMP s){
-    	//Tratando o caso mais comum de jump: -> jump label
-    	if (s.exp instanceof NAME){
-    		NAME l = (NAME) s.exp;
-    		emit (new assem.OPER("jmp `j0",
-    				             null, null,
-    				             new List<Label>(l.label,null)));
-    	}
-    	//Tratando caso mais complexo de jump: -> jump expressao
-    	else {
-    		Temp target = munchExp(s.exp);
-    		emit (new assem.OPER("jmp `s0",
-    				             null,
-    				             new List<Temp>(target,null), s.targets));
-    	}
+        //Tratando o caso mais comum de jump: -> jump label
+        if (s.exp instanceof NAME){
+            NAME l = (NAME) s.exp;
+            emit (new assem.OPER("jmp `j0",
+                    null, null,
+                    new List<Label>(l.label,null)));
+        }
+        //Tratando caso mais complexo de jump: -> jump expressao
+        else {
+            Temp target = munchExp(s.exp);
+            emit (new assem.OPER("jmp `s0",
+                    null,
+                    new List<Temp>(target,null), s.targets));
+        }
     }
-    
+
     // **MUNCH CJUMP (JUMP)** //
     private void munchCJump (CJUMP s){
-    	Temp left = munchExp(s.left);
-    	Temp right = munchExp(s.right);
-    	
-    	emit (new assem.OPER("cmp `s0, `s1", null, new List<Temp>(left, new List<Temp>(right, null))));
-    	
-    	switch (s.op){
-    		case CJUMP.EQ:
-    			emit (new assem.OPER("je `j0", null,null, new List<Label>(s.ifTrue,null)));
-    			break;
-    		case CJUMP.NE:
-    			emit (new assem.OPER("jne `j0", null,null, new List<Label>(s.ifTrue,null)));
-    			break;
-    		case CJUMP.GE:
-    			emit (new assem.OPER("jge `j0", null,null, new List<Label>(s.ifTrue,null)));
-    			break;
-    		case CJUMP.GT:
-    			emit (new assem.OPER("jg `j0", null,null, new List<Label>(s.ifTrue,null)));
-    			break;
-    		case CJUMP.LE:
-    			emit (new assem.OPER("jle `j0", null,null, new List<Label>(s.ifTrue,null)));
-    			break;
-    		case CJUMP.LT:
-    			emit (new assem.OPER("jl `j0", null,null, new List<Label>(s.ifTrue,null)));
-    			break;
-    		//TODO: Confirmar esses jumps abaixo
-    		case CJUMP.UGE:
-    			emit (new assem.OPER("jge `j0", null,null, new List<Label>(s.ifTrue,null)));
-    			break;
-    		case CJUMP.UGT:
-    			emit (new assem.OPER("jg `j0", null,null, new List<Label>(s.ifTrue,null)));
-    			break;
-    		case CJUMP.ULE:
-    			emit (new assem.OPER("jle `j0", null,null, new List<Label>(s.ifTrue,null)));
-    			break;
-    		case CJUMP.ULT:
-    			emit (new assem.OPER("jl `j0", null,null, new List<Label>(s.ifTrue,null)));
-    			break;
-    		default:
-    			throw new Error("Unhandled Conditional Jump: " + s.op);
-    	}
-    	
-    	//TODO: Se for false, creio q ele vai pra instrução de baixo sozinho, ou será que tem que por um jump pra linha de baixo ...?
+        Temp left = munchExp(s.left);
+        Temp right = munchExp(s.right);
+
+        emit (new assem.OPER("cmp `s0, `s1", null, new List<Temp>(left, new List<Temp>(right, null))));
+
+        switch (s.op){
+        case CJUMP.EQ:
+            emit (new assem.OPER("je `j0", null,null, new List<Label>(s.ifTrue,null)));
+            break;
+        case CJUMP.NE:
+            emit (new assem.OPER("jne `j0", null,null, new List<Label>(s.ifTrue,null)));
+            break;
+        case CJUMP.GE:
+            emit (new assem.OPER("jge `j0", null,null, new List<Label>(s.ifTrue,null)));
+            break;
+        case CJUMP.GT:
+            emit (new assem.OPER("jg `j0", null,null, new List<Label>(s.ifTrue,null)));
+            break;
+        case CJUMP.LE:
+            emit (new assem.OPER("jle `j0", null,null, new List<Label>(s.ifTrue,null)));
+            break;
+        case CJUMP.LT:
+            emit (new assem.OPER("jl `j0", null,null, new List<Label>(s.ifTrue,null)));
+            break;
+            //TODO: Confirmar esses jumps abaixo
+        case CJUMP.UGE:
+            emit (new assem.OPER("jge `j0", null,null, new List<Label>(s.ifTrue,null)));
+            break;
+        case CJUMP.UGT:
+            emit (new assem.OPER("jg `j0", null,null, new List<Label>(s.ifTrue,null)));
+            break;
+        case CJUMP.ULE:
+            emit (new assem.OPER("jle `j0", null,null, new List<Label>(s.ifTrue,null)));
+            break;
+        case CJUMP.ULT:
+            emit (new assem.OPER("jl `j0", null,null, new List<Label>(s.ifTrue,null)));
+            break;
+        default:
+            throw new Error("Unhandled Conditional Jump: " + s.op);
+        }
+
+        //TODO: Se for false, creio q ele vai pra instrução de baixo sozinho, ou será que tem que por um jump pra linha de baixo ...?
     }
-    
+
     // **MUNCH EXP** //
     private Temp munchExp (Exp exp){
         Temp ret = null;
-    	if (exp instanceof BINOP) {
+        if (exp instanceof BINOP) {
             System.out.println("munchExpBinop((BINOP) exp)");
-    		ret = munchExpBinop((BINOP) exp);
-    	}
-    	else if (exp instanceof CALL) {
+            ret = munchExpBinop((BINOP) exp);
+        }
+        else if (exp instanceof CALL) {
             System.out.println("munchExpCall((CALL) exp)");
-    		ret = munchExpCall((CALL) exp);
-    	}
-    	else if (exp instanceof CONST) {
+            ret = munchExpCall((CALL) exp);
+        }
+        else if (exp instanceof CONST) {
             System.out.println("munchExpConst((CONST) exp)");
-    		ret = munchExpConst((CONST) exp);
-    	}
-    	else if (exp instanceof ESEQ) {
-    		munchExpESeq((ESEQ) exp);
-    	}
-    	else if (exp instanceof MEM) {
+            ret = munchExpConst((CONST) exp);
+        }
+        else if (exp instanceof ESEQ) {
+            munchExpESeq((ESEQ) exp);
+        }
+        else if (exp instanceof MEM) {
             System.out.println("munchExpMem((MEM) exp)");
-    		ret = munchExpMem((MEM) exp);
-    	}
-    	else if (exp instanceof NAME) {
+            ret = munchExpMem((MEM) exp);
+        }
+        else if (exp instanceof NAME) {
             System.out.println("munchExpName((NAME) exp)");
-    		ret = munchExpName((NAME) exp);
-    	}
-    	else if (exp instanceof TEMP) {
+            ret = munchExpName((NAME) exp);
+        }
+        else if (exp instanceof TEMP) {
             System.out.println("munchExpTemp((TEMP) exp)");
-    	    ret = munchExpTemp((TEMP) exp);
-    	}
-    	else
-    		throw new Error("Unhandled: " + exp.getClass());
-    	
-    	if (ret == null)
-    	    System.out.println("WTFFFFF");
-    	return ret;
+            ret = munchExpTemp((TEMP) exp);
+        }
+        else
+            throw new Error("Unhandled: " + exp.getClass());
+
+        if (ret == null)
+            System.out.println("WTFFFFF");
+        return ret;
     }
-    
+
     private Temp munchExpESeq(ESEQ eseq){
-    	munchStm(eseq.stm);
-    	return munchExp(eseq.exp);
+        munchStm(eseq.stm);
+        return munchExp(eseq.exp);
     }
-    
+
     private Temp munchExpBinop(BINOP exp) {
         Temp left = munchExp(exp.left);
 
@@ -226,40 +249,71 @@ public class Codegen
             emit(new assem.OPER("shl `d0, " + bla.value, new List<Temp>(left, null), new List<Temp>(left, null)));
         }
         else {
-            Temp right = munchExp(exp.right);
             if (exp.binop == BINOP.PLUS) {
                 System.out.println("munchExpBinop(PLUS)");
-                emit(new assem.OPER("add `d0, `s0", new List<Temp>(left, null), new List<Temp>(right, new List<Temp>(left, null))));
+                CONST constante = null;
+                if (exp.right instanceof CONST) {
+                    constante = (CONST)exp.right;
+                    emit(new assem.OPER("add `d0, " + constante.value, new List<Temp>(left, null), null));
+                }
+                else {
+                    Temp right = munchExp(exp.right);
+                    emit(new assem.OPER("add `d0, `s1", new List<Temp>(left, null), new List<Temp>(left, new List<Temp>(right, null))));                }
             }
-            else if (exp.binop == BINOP.MINUS) {
-                System.out.println("munchExpBinop(SUB)");            
-                emit(new assem.OPER("sub `d0, `s0", new List<Temp>(left, null), new List<Temp>(right, new List<Temp>(left, null))));
-            }
-            else if (exp.binop == BINOP.AND) {
-                System.out.println("munchExpBinop(AND)");            
-                emit(new assem.OPER("and `d0, `s0", new List<Temp>(left, null), new List<Temp>(right, new List<Temp>(left, null))));
-            }
-            else if (exp.binop == BINOP.OR) {
-                System.out.println("munchExpBinop(OR)");            
-                emit(new assem.OPER("or `d0, `s0", new List<Temp>(left, null), new List<Temp>(right, new List<Temp>(left, null))));
-            }
-            else if (exp.binop == BINOP.XOR) {
-                System.out.println("munchExpBinop(XOR)");            
-                emit(new assem.OPER("xor `d0, `s0", new List<Temp>(left, null), new List<Temp>(right, new List<Temp>(left, null))));
-            }
-            else if (exp.binop == BINOP.TIMES) {
-                System.out.println("munchExpBinop(TIMES)");            
-                emit(new assem.OPER("imul `d0, `s0", new List<Temp>(left, null), new List<Temp>(right, new List<Temp>(left, null))));
+            else {
+                Temp right = munchExp(exp.right);
+                if (exp.binop == BINOP.MINUS) {
+                    System.out.println("munchExpBinop(SUB)");            
+                    emit(new assem.OPER("sub `d0, `s1", new List<Temp>(left, null), new List<Temp>(left, new List<Temp>(right, null))));
+                }
+                else if (exp.binop == BINOP.AND) {
+                    System.out.println("munchExpBinop(AND)");            
+                    emit(new assem.OPER("and `d0, `s1", new List<Temp>(left, null), new List<Temp>(left, new List<Temp>(right, null))));
+                }
+                else if (exp.binop == BINOP.OR) {
+                    System.out.println("munchExpBinop(OR)");            
+                    emit(new assem.OPER("or `d0, `s1", new List<Temp>(left, null), new List<Temp>(left, new List<Temp>(right, null))));
+                }
+                else if (exp.binop == BINOP.XOR) {
+                    System.out.println("munchExpBinop(XOR)");            
+                    emit(new assem.OPER("xor `d0, `s1", new List<Temp>(left, null), new List<Temp>(left, new List<Temp>(right, null))));
+                }
+                else if (exp.binop == BINOP.TIMES) {
+                    System.out.println("munchExpBinop(TIMES)");            
+                    emit(new assem.OPER("imul `d0, `s1", new List<Temp>(left, null), new List<Temp>(left, new List<Temp>(right, null))));
+                }
             }
 
         }
-
-        
         return left;
     }
 
     private Temp munchExpMem(MEM exp) {
         Temp dst = new Temp();
+
+        if (exp.exp instanceof BINOP) {
+            BINOP bo = (BINOP) exp.exp;
+            if (bo.binop == BINOP.PLUS) {
+                if (bo.left instanceof TEMP && bo.right instanceof CONST) {
+                    CONST c = (CONST) bo.right;
+                    TEMP t = (TEMP)bo.left;
+                    emit(new assem.OPER("mov `d0, [`s0 + " + c.value + "]",  
+                            new List<Temp>(dst, null),
+                            new List<Temp>(t.temp, null)));
+                    return dst;
+                }
+            }
+            else if (bo.binop == BINOP.MINUS) {
+                if (bo.left instanceof TEMP && bo.right instanceof CONST) {
+                    CONST c = (CONST) bo.right;
+                    TEMP t = (TEMP)bo.left;
+                    emit(new assem.OPER("mov `d0, [`s0 - " + c.value + "]",  
+                            new List<Temp>(dst, null),
+                            new List<Temp>(t.temp, null)));
+                    return dst;
+                }
+            }
+        }
         Temp src = munchExp(exp.exp);
         emit(new assem.OPER("mov `d0, [`s0]", 
                 new List<Temp>(dst, null),
@@ -268,20 +322,18 @@ public class Codegen
     }
 
     private Temp munchExpCall(CALL exp) {
-        //TODO: Fazer direito, só coloquei isso pra testar
-     
         // lista com os parâmetros em ordem inversa a chamada
         ArrayList<tree.Exp> paramsArrayList = new ArrayList<tree.Exp>();
-        
+
         int num_args = 0; // numero de params da funcao
-        
+
         List<tree.Exp> args = exp.args;
         while (args != null) { // percorre a lista de parametros
             num_args += 1; // contando o numero de params
             paramsArrayList.add(0, args.head); // e inserindo no começo da outra lista, para ficar em ordem inversa
             args = args.tail;
         }
-        
+
         System.out.println("Total de params: " +  num_args);
 
         // Percorrer lista de parametros colocando na pilha
@@ -295,7 +347,7 @@ public class Codegen
                     new List<Temp>(p, 
                             new List<Temp>(Frame.esp, null))));
         }
-        
+
         // Se tivermos o label, damos call nele
         if (exp.func instanceof NAME) {
             NAME calledFunction = (NAME)(exp.func);
@@ -309,23 +361,23 @@ public class Codegen
                     new List<Temp>(Frame.esp ,Frame.calldefs), 
                     new List<Temp>(funcAdd, new List<Temp>(Frame.esp, paramsTemp))));
         }
-        
+
         // Só tira coisas da pilha se tiver argumentos, pra não aparecer um add esp, 0
         if (num_args > 0) {
             emit(new assem.OPER("add esp, " + (num_args * 4), new List<Temp>(Frame.esp, null), new List<Temp>(Frame.esp, null)));
         }
-        
+
         // precisa pegar o valor de retorno
         Temp retornoTemp = new Temp();
         emit(new assem.MOVE("mov `d0, eax", retornoTemp, Frame.eax));
-        
+
         return retornoTemp;
     }
 
     private Temp munchExpConst(CONST exp) {
         // Só coloca a constante num registrador, com mov
         Temp retTemp = new Temp();
-        
+
         emit(new assem.OPER("mov `d0, " + exp.value,
                 new List<Temp>(retTemp, null),
                 null));
@@ -335,20 +387,20 @@ public class Codegen
     private Temp munchExpTemp(TEMP tmp) {
         return tmp.temp;
     }
-    
+
     private Temp munchExpName(NAME name) {
         Temp retTemp = new Temp();
-        
+
         emit(new assem.OPER("mov `d0, " + name.label.toString(), 
                 new List<Temp>(retTemp, null), 
                 null));
         return retTemp;
     }
-    
-    
-    
-    
-    
+
+
+
+
+
     /*-------------------------------------------------------------*
      *                              MAIN                           *
      *-------------------------------------------------------------*/
@@ -360,11 +412,11 @@ public class Codegen
         ilist=last=null;
         return l;
     }
-    
+
     List<Instr> codegen(List<Stm> body)
     {
         List<Instr> l = null, t = null;
-        
+
         for( ; body != null; body = body.tail )
         {
             munchStm(body.head);
