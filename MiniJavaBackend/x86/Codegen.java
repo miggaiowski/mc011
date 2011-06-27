@@ -172,7 +172,11 @@ public class Codegen
             emit (new assem.OPER("jle `j0", null,null, new List<Label>(s.ifTrue,null)));
             break;
         case CJUMP.LT:
-            emit (new assem.OPER("jl `j0", null,null, new List<Label>(s.ifTrue,null)));
+            Label LabelTrue = new Label();
+            emit (new assem.OPER("jl `j0", null,null, new List<Label>(LabelTrue,null)));
+            emit (new assem.OPER("jmp `j0", null,null, new List<Label>(s.ifFalse,null)));
+            emit (new assem.LABEL(LabelTrue.toString() + ":", LabelTrue));      
+            emit (new assem.OPER("jmp `j0", null,null, new List<Label>(s.ifTrue,null)));
             break;
         case CJUMP.UGE:
             emit (new assem.OPER("jge `j0", null,null, new List<Label>(s.ifTrue,null)));
@@ -418,7 +422,9 @@ public class Codegen
     }
 
     private Temp munchExpTemp(TEMP tmp) {
-        return tmp.temp;
+        Temp t = new Temp();
+        emit(new assem.MOVE("mov `d0, `s0", t, tmp.temp));
+        return t;
     }
 
     private Temp munchExpName(NAME name) {
