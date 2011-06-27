@@ -174,7 +174,6 @@ public class Codegen
         case CJUMP.LT:
             emit (new assem.OPER("jl `j0", null,null, new List<Label>(s.ifTrue,null)));
             break;
-            //TODO: Confirmar esses jumps abaixo
         case CJUMP.UGE:
             emit (new assem.OPER("jge `j0", null,null, new List<Label>(s.ifTrue,null)));
             break;
@@ -190,10 +189,9 @@ public class Codegen
         default:
             throw new Error("Unhandled Conditional Jump: " + s.op);
         }
-
-        //TODO: Se for false, creio q ele vai pra instrução de baixo sozinho, ou será que tem que por um jump pra linha de baixo ...?
     }
 
+    
     // **MUNCH EXP** //
     private Temp munchExp (Exp exp){
         Temp ret = null;
@@ -238,7 +236,12 @@ public class Codegen
     }
 
     private Temp munchExpBinop(BINOP exp) {
-        Temp left = munchExp(exp.left);
+        Temp tmp = munchExp(exp.left);
+        Temp left = new Temp();
+
+        emit (new assem.MOVE("mov `d0, `s0", 
+                left,
+                tmp));
 
         if (exp.binop == BINOP.LSHIFT) {
             System.out.println("munchExpBinop(LSHIFT)");
@@ -254,19 +257,28 @@ public class Codegen
                 CONST constante = null;
                 if (exp.right instanceof CONST) {
                     constante = (CONST)exp.right;
-                    emit(new assem.OPER("add `d0, " + constante.value, new List<Temp>(left, null), null));
+                    emit(new assem.OPER("add `d0, " + constante.value, new List<Temp>(left, null), new List<Temp>(left, null)));
                 }
                 else {
                     Temp right = munchExp(exp.right);
                     emit(new assem.OPER("add `d0, `s1", new List<Temp>(left, null), new List<Temp>(left, new List<Temp>(right, null))));                }
             }
-            else {
-                Temp right = munchExp(exp.right);
-                if (exp.binop == BINOP.MINUS) {
-                    System.out.println("munchExpBinop(SUB)");            
+            else if (exp.binop == BINOP.MINUS){
+                System.out.println("munchExpBinop(SUB)");  
+                CONST constante = null;
+                if (exp.right instanceof CONST) {
+                    constante = (CONST)exp.right;
+                    emit(new assem.OPER("sub `d0, " + constante.value, new List<Temp>(left, null), new List<Temp>(left, null)));
+                }
+                else {
+                    Temp right = munchExp(exp.right);
                     emit(new assem.OPER("sub `d0, `s1", new List<Temp>(left, null), new List<Temp>(left, new List<Temp>(right, null))));
                 }
-                else if (exp.binop == BINOP.AND) {
+            }
+            else {
+                Temp right = munchExp(exp.right);
+
+                if (exp.binop == BINOP.AND) {
                     System.out.println("munchExpBinop(AND)");            
                     emit(new assem.OPER("and `d0, `s1", new List<Temp>(left, null), new List<Temp>(left, new List<Temp>(right, null))));
                 }
@@ -301,6 +313,27 @@ public class Codegen
                             new List<Temp>(dst, null),
                             new List<Temp>(t.temp, null)));
                     return dst;
+                }
+                else if ((bo.left instanceof TEMP || bo.left instanceof MEM) && bo.right instanceof BINOP) {
+                    BINOP bo_shl = (BINOP) bo.right;
+                    Temp t = munchExp(bo.left);
+                    if (bo_shl.binop == BINOP.LSHIFT) {
+                        System.out.println("Tratando aquele caso --------------------*************************************************");
+                        CONST c = (CONST) bo_shl.right;
+                        if (bo_shl.left instanceof CONST) {
+                            CONST bo_shl_left = (CONST) bo_shl.left;
+                            emit(new assem.OPER("mov `d0, [`s0 + " + (int)Math.pow(2, c.value) * bo_shl_left.value + "]",  
+                                    new List<Temp>(dst, null),
+                                    new List<Temp>(t, null)));
+                        }
+                        else {
+                            Temp index = munchExp(bo_shl.left);
+                            emit(new assem.OPER("mov `d0, [`s0 + " + (int)Math.pow(2, c.value) + " * `s1]",  
+                                    new List<Temp>(dst, null),
+                                    new List<Temp>(t, new List<Temp>(index, null))));
+                        }
+                        return dst; 
+                    }
                 }
             }
             else if (bo.binop == BINOP.MINUS) {
