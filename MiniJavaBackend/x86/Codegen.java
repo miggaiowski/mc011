@@ -98,6 +98,36 @@ public class Codegen
                             new List<Temp>(t.temp, new List<Temp>(val, null))));
                     return;
                 }
+                else if ((bo.left instanceof TEMP || bo.left instanceof MEM) && bo.right instanceof BINOP) {
+                    BINOP bo_shl = (BINOP) bo.right;
+                    Temp t = null;
+                    if (bo.left instanceof MEM) {
+                        t = munchExp(bo.left);
+                    }
+                    else {
+                        TEMP te = (TEMP)bo.left;
+                        t = te.temp;
+                    }
+                    if (bo_shl.binop == BINOP.LSHIFT) {
+                        System.out.println("Tratando aquele caso --------------------*************************************************");
+                        CONST c = (CONST) bo_shl.right;
+                        if (bo_shl.left instanceof CONST) {
+                            System.out.println("ExpMem com Plus e LSHIFTexp");
+                            CONST bo_shl_left = (CONST) bo_shl.left;
+                            emit(new assem.OPER("mov [`s0 + " + (int)Math.pow(2, c.value) * bo_shl_left.value + "], `s1",  
+                                    null,
+                                    new List<Temp>(t, new List<Temp>(val, null))));
+                        }
+                        else {
+                            System.out.println("ExpMem com Plus e LSHIFTexp");                            
+                            Temp index = munchExp(bo_shl.left);
+                            emit(new assem.OPER("mov [`s0 + " + (int)Math.pow(2, c.value) + " * `s1], `s2",  
+                                    null,
+                                    new List<Temp>(t, new List<Temp>(index, new List<Temp>(val, null)))));
+                        }
+                        return;
+                    }
+                }
             }
             else if (bo.binop == BINOP.MINUS) {
                 if (bo.left instanceof TEMP && bo.right instanceof CONST) {
@@ -110,6 +140,9 @@ public class Codegen
                 }
             }
         }
+        
+        
+        
         Temp add = munchExp(dst.exp); // o &destino é o resultado desta Exp.
         emit (new assem.OPER("mov [`s0], `s1",
                 null,
@@ -140,7 +173,7 @@ public class Codegen
             NAME l = (NAME) s.exp;
             emit (new assem.OPER("jmp `j0",
                     null, null,
-                    new List<Label>(l.label,s.targets)));
+                    new List<Label>(l.label,null)));
         }
         //Tratando caso mais complexo de jump: -> jump expressao
         else {
@@ -156,43 +189,40 @@ public class Codegen
         Temp left = munchExp(s.left);
         Temp right = munchExp(s.right);
 
-        emit (new assem.OPER("cmp `s0, `s1", null, new List<Temp>(left, new List<Temp>(right, null))));
+        emit (new assem.OPER("cmp `s0, `s1", 
+                null, 
+                new List<Temp>(left, new List<Temp>(right, null))));
 
         switch (s.op){
         case CJUMP.EQ:
-            emit (new assem.OPER("je `j0", null,null, new List<Label>(s.ifTrue,null)));
+            emit (new assem.OPER("je `j0", null,null, new List<Label>(s.ifTrue,new List<Label>(s.ifFalse, null))));
             break;
         case CJUMP.NE:
-            emit (new assem.OPER("jne `j0", null,null, new List<Label>(s.ifTrue,null)));
+            emit (new assem.OPER("jne `j0", null,null, new List<Label>(s.ifTrue,new List<Label>(s.ifFalse, null))));
             break;
         case CJUMP.GE:
-            emit (new assem.OPER("jge `j0", null,null, new List<Label>(s.ifTrue,null)));
+            emit (new assem.OPER("jge `j0", null,null, new List<Label>(s.ifTrue,new List<Label>(s.ifFalse, null))));
             break;
         case CJUMP.GT:
-            emit (new assem.OPER("jg `j0", null,null, new List<Label>(s.ifTrue,null)));
+            emit (new assem.OPER("jg `j0", null,null, new List<Label>(s.ifTrue,new List<Label>(s.ifFalse, null))));
             break;
         case CJUMP.LE:
-            emit (new assem.OPER("jle `j0", null,null, new List<Label>(s.ifTrue,null)));
+            emit (new assem.OPER("jle `j0", null,null, new List<Label>(s.ifTrue,new List<Label>(s.ifFalse, null))));
             break;
         case CJUMP.LT:
-//            emit (new assem.OPER("jl `j0", null,null, new List<Label>(s.ifTrue,null)));
-            Label LabelTrue = new Label();
-            emit (new assem.OPER("jl `j0", null,null, new List<Label>(LabelTrue,null)));
-            emit (new assem.OPER("jmp `j0", null,null, new List<Label>(s.ifFalse,null)));
-            emit (new assem.LABEL(LabelTrue.toString() + ":", LabelTrue));      
-            emit (new assem.OPER("jmp `j0", null,null, new List<Label>(s.ifTrue,null)));
+            emit (new assem.OPER("jl `j0", null,null, new List<Label>(s.ifTrue, new List<Label>(s.ifFalse, null))));
             break;
         case CJUMP.UGE:
-            emit (new assem.OPER("jge `j0", null,null, new List<Label>(s.ifTrue,null)));
+            emit (new assem.OPER("jge `j0", null,null, new List<Label>(s.ifTrue,new List<Label>(s.ifFalse, null))));
             break;
         case CJUMP.UGT:
-            emit (new assem.OPER("jg `j0", null,null, new List<Label>(s.ifTrue,null)));
+            emit (new assem.OPER("jg `j0", null,null, new List<Label>(s.ifTrue,new List<Label>(s.ifFalse, null))));
             break;
         case CJUMP.ULE:
-            emit (new assem.OPER("jle `j0", null,null, new List<Label>(s.ifTrue,null)));
+            emit (new assem.OPER("jle `j0", null,null, new List<Label>(s.ifTrue,new List<Label>(s.ifFalse, null))));
             break;
         case CJUMP.ULT:
-            emit (new assem.OPER("jl `j0", null,null, new List<Label>(s.ifTrue,null)));
+            emit (new assem.OPER("jl `j0", null,null, new List<Label>(s.ifTrue,new List<Label>(s.ifFalse, null))));
             break;
         default:
             throw new Error("Unhandled Conditional Jump: " + s.op);
