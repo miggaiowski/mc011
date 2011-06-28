@@ -304,7 +304,12 @@ public class Codegen
                 CONST constante = null;
                 if (exp.right instanceof CONST) {
                     constante = (CONST)exp.right;
-                    emit(new assem.OPER("add `d0, " + constante.value, new List<Temp>(left, null), new List<Temp>(left, null)));
+                    if (constante.value == 1) {
+                        emit(new assem.OPER("inc `d0", new List<Temp>(left, null), new List<Temp>(left, null)));
+                    }
+                    else {
+                        emit(new assem.OPER("add `d0, " + constante.value, new List<Temp>(left, null), new List<Temp>(left, null)));
+                    }
                 }
                 else {
                     Temp right = munchExp(exp.right);
@@ -315,7 +320,12 @@ public class Codegen
                 CONST constante = null;
                 if (exp.right instanceof CONST) {
                     constante = (CONST)exp.right;
-                    emit(new assem.OPER("sub `d0, " + constante.value, new List<Temp>(left, null), new List<Temp>(left, null)));
+                    if (constante.value == 1) {
+                        emit(new assem.OPER("dec `d0", new List<Temp>(left, null), new List<Temp>(left, null)));
+                    }
+                    else {
+                        emit(new assem.OPER("sub `d0, " + constante.value, new List<Temp>(left, null), new List<Temp>(left, null)));
+                    }
                 }
                 else {
                     Temp right = munchExp(exp.right);
@@ -450,7 +460,7 @@ public class Codegen
             Temp funcAdd = munchExp(exp.func);
             emit(new assem.OPER("call `s0", 
                     new List<Temp>(Frame.esp ,Frame.calldefs), 
-                    new List<Temp>(funcAdd, new List<Temp>(Frame.esp, paramsTemp))));
+                    new List<Temp>(funcAdd, new List<Temp>(Frame.esp, null))));
         }
 
         // Só tira coisas da pilha se tiver argumentos, pra não aparecer um add esp, 0
