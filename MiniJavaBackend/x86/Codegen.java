@@ -24,6 +24,7 @@ import util.List;
 public class Codegen
 {
     Frame frame;
+    static Boolean debug = false;
     public Codegen(Frame f)
     {
         frame=f;        
@@ -39,23 +40,28 @@ public class Codegen
         else 
             last = ilist = new List<Instr>(inst,null);
     }
+    
+    private void print_debug(String s) {
+        if (debug == true)
+            System.out.println(s);
+    }
 
     // **MUNCH STATEMENT** // 
     private void munchStm (Stm s) {
         if (s instanceof MOVE) {
-            System.out.println("munchMove((MOVE) s)");
+            print_debug("munchMove((MOVE) s)");
             munchMove((MOVE) s);
         }
         else if (s instanceof EXPSTM) {
-            System.out.println("munchExpStm((EXPSTM) s)");
+            print_debug("munchExpStm((EXPSTM) s)");
             munchExpStm((EXPSTM) s);
         }
         else if (s instanceof CJUMP) {
-            System.out.println("munchCJump((CJUMP) s)");
+            print_debug("munchCJump((CJUMP) s)");
             munchCJump((CJUMP) s);
         }
         else if (s instanceof LABEL) {
-            System.out.println("munchLabel((LABEL) s)");
+            print_debug("munchLabel((LABEL) s)");
             munchLabel((LABEL) s); 
         }
         else if (s instanceof JUMP) {
@@ -109,17 +115,17 @@ public class Codegen
                         t = te.temp;
                     }
                     if (bo_shl.binop == BINOP.LSHIFT) {
-                        System.out.println("Tratando aquele caso --------------------*************************************************");
+                        print_debug("Tratando aquele caso --------------------*************************************************");
                         CONST c = (CONST) bo_shl.right;
                         if (bo_shl.left instanceof CONST) {
-                            System.out.println("ExpMem com Plus e LSHIFTexp");
+                            print_debug("ExpMem com Plus e LSHIFTexp");
                             CONST bo_shl_left = (CONST) bo_shl.left;
                             emit(new assem.OPER("mov [`s0 + " + (int)Math.pow(2, c.value) * bo_shl_left.value + "], `s1",  
                                     null,
                                     new List<Temp>(t, new List<Temp>(val, null))));
                         }
                         else {
-                            System.out.println("ExpMem com Plus e LSHIFTexp");                            
+                            print_debug("ExpMem com Plus e LSHIFTexp");                            
                             Temp index = munchExp(bo_shl.left);
                             emit(new assem.OPER("mov [`s0 + " + (int)Math.pow(2, c.value) + " * `s1], `s2",  
                                     null,
@@ -152,7 +158,7 @@ public class Codegen
 
     // **MUNCH MOVE (TEMP, Exp)** //
     private void munchMove (TEMP s, Exp src){
-        System.out.println("MOVING-------------------------------------");
+        print_debug("MOVING-------------------------------------");
         Temp val = munchExp(src);
         //Temp reg = munchExpTemp(s);
         Temp reg = s.temp; // já temos o Temp de destino        
@@ -210,7 +216,12 @@ public class Codegen
             emit (new assem.OPER("jle `j0", null,null, new List<Label>(s.ifTrue,new List<Label>(s.ifFalse, null))));
             break;
         case CJUMP.LT:
-            emit (new assem.OPER("jl `j0", null,null, new List<Label>(s.ifTrue, new List<Label>(s.ifFalse, null))));
+            //emit (new assem.OPER("jl `j0", null,null, new List<Label>(s.ifTrue, new List<Label>(s.ifFalse, null))));
+            Label LabelTrue = new Label();
+            emit (new assem.OPER("jl `j0", null,null, new List<Label>(LabelTrue, new List<Label>(s.ifTrue,new List<Label>(s.ifFalse, null)))));
+            emit (new assem.OPER("jmp `j0", null,null, new List<Label>(s.ifFalse,null)));
+            emit (new assem.LABEL(LabelTrue.toString() + ":", LabelTrue));
+            emit (new assem.OPER("jmp `j0", null,null, new List<Label>(s.ifTrue,null)));
             break;
         case CJUMP.UGE:
             emit (new assem.OPER("jge `j0", null,null, new List<Label>(s.ifTrue,new List<Label>(s.ifFalse, null))));
@@ -234,30 +245,30 @@ public class Codegen
     private Temp munchExp (Exp exp){
         Temp ret = null;
         if (exp instanceof BINOP) {
-            System.out.println("munchExpBinop((BINOP) exp)");
+            print_debug("munchExpBinop((BINOP) exp)");
             ret = munchExpBinop((BINOP) exp);
         }
         else if (exp instanceof CALL) {
-            System.out.println("munchExpCall((CALL) exp)");
+            print_debug("munchExpCall((CALL) exp)");
             ret = munchExpCall((CALL) exp);
         }
         else if (exp instanceof CONST) {
-            System.out.println("munchExpConst((CONST) exp)");
+            print_debug("munchExpConst((CONST) exp)");
             ret = munchExpConst((CONST) exp);
         }
         else if (exp instanceof ESEQ) {
             munchExpESeq((ESEQ) exp);
         }
         else if (exp instanceof MEM) {
-            System.out.println("munchExpMem((MEM) exp)");
+            print_debug("munchExpMem((MEM) exp)");
             ret = munchExpMem((MEM) exp);
         }
         else if (exp instanceof NAME) {
-            System.out.println("munchExpName((NAME) exp)");
+            print_debug("munchExpName((NAME) exp)");
             ret = munchExpName((NAME) exp);
         }
         else if (exp instanceof TEMP) {
-            System.out.println("munchExpTemp((TEMP) exp)");
+            print_debug("munchExpTemp((TEMP) exp)");
             ret = munchExpTemp((TEMP) exp);
         }
         else
@@ -280,7 +291,7 @@ public class Codegen
                 tmp));
 
         if (exp.binop == BINOP.LSHIFT) {
-            System.out.println("munchExpBinop(LSHIFT)");
+            print_debug("munchExpBinop(LSHIFT)");
             CONST bla = null;
             if (exp.right instanceof CONST) {
                 bla = (CONST)exp.right;
@@ -289,7 +300,7 @@ public class Codegen
         }
         else {
             if (exp.binop == BINOP.PLUS) {
-                System.out.println("munchExpBinop(PLUS)");
+                print_debug("munchExpBinop(PLUS)");
                 CONST constante = null;
                 if (exp.right instanceof CONST) {
                     constante = (CONST)exp.right;
@@ -300,7 +311,7 @@ public class Codegen
                     emit(new assem.OPER("add `d0, `s1", new List<Temp>(left, null), new List<Temp>(left, new List<Temp>(right, null))));                }
             }
             else if (exp.binop == BINOP.MINUS){
-                System.out.println("munchExpBinop(SUB)");  
+                print_debug("munchExpBinop(SUB)");  
                 CONST constante = null;
                 if (exp.right instanceof CONST) {
                     constante = (CONST)exp.right;
@@ -315,19 +326,19 @@ public class Codegen
                 Temp right = munchExp(exp.right);
 
                 if (exp.binop == BINOP.AND) {
-                    System.out.println("munchExpBinop(AND)");            
+                    print_debug("munchExpBinop(AND)");            
                     emit(new assem.OPER("and `d0, `s1", new List<Temp>(left, null), new List<Temp>(left, new List<Temp>(right, null))));
                 }
                 else if (exp.binop == BINOP.OR) {
-                    System.out.println("munchExpBinop(OR)");            
+                    print_debug("munchExpBinop(OR)");            
                     emit(new assem.OPER("or `d0, `s1", new List<Temp>(left, null), new List<Temp>(left, new List<Temp>(right, null))));
                 }
                 else if (exp.binop == BINOP.XOR) {
-                    System.out.println("munchExpBinop(XOR)");            
+                    print_debug("munchExpBinop(XOR)");            
                     emit(new assem.OPER("xor `d0, `s1", new List<Temp>(left, null), new List<Temp>(left, new List<Temp>(right, null))));
                 }
                 else if (exp.binop == BINOP.TIMES) {
-                    System.out.println("munchExpBinop(TIMES)");            
+                    print_debug("munchExpBinop(TIMES)");            
                     emit(new assem.OPER("imul `d0, `s1", new List<Temp>(left, null), new List<Temp>(left, new List<Temp>(right, null))));
                 }
             }
@@ -343,7 +354,7 @@ public class Codegen
             BINOP bo = (BINOP) exp.exp;
             if (bo.binop == BINOP.PLUS) {
                 if (bo.left instanceof TEMP && bo.right instanceof CONST) {
-                    System.out.println("ExpMem com Plus e Const");
+                    print_debug("ExpMem com Plus e Const");
                     CONST c = (CONST) bo.right;
                     TEMP t = (TEMP)bo.left;
                     emit(new assem.OPER("mov `d0, [`s0 + " + c.value + "]",  
@@ -362,17 +373,17 @@ public class Codegen
                         t = te.temp;
                     }
                     if (bo_shl.binop == BINOP.LSHIFT) {
-                        System.out.println("Tratando aquele caso --------------------*************************************************");
+                        print_debug("Tratando aquele caso --------------------*************************************************");
                         CONST c = (CONST) bo_shl.right;
                         if (bo_shl.left instanceof CONST) {
-                            System.out.println("ExpMem com Plus e LSHIFTexp");
+                            print_debug("ExpMem com Plus e LSHIFTexp");
                             CONST bo_shl_left = (CONST) bo_shl.left;
                             emit(new assem.OPER("mov `d0, [`s0 + " + (int)Math.pow(2, c.value) * bo_shl_left.value + "]",  
                                     new List<Temp>(dst, null),
                                     new List<Temp>(t, null)));
                         }
                         else {
-                            System.out.println("ExpMem com Plus e LSHIFTexp");                            
+                            print_debug("ExpMem com Plus e LSHIFTexp");                            
                             Temp index = munchExp(bo_shl.left);
                             emit(new assem.OPER("mov `d0, [`s0 + " + (int)Math.pow(2, c.value) + " * `s1]",  
                                     new List<Temp>(dst, null),
@@ -383,7 +394,7 @@ public class Codegen
                 }
             }
             else if (bo.binop == BINOP.MINUS) {
-                System.out.println("ExpMem com Minus");
+                print_debug("ExpMem com Minus");
                 if (bo.left instanceof TEMP && bo.right instanceof CONST) {
                     CONST c = (CONST) bo.right;
                     TEMP t = (TEMP)bo.left;
@@ -414,7 +425,7 @@ public class Codegen
             args = args.tail;
         }
 
-        System.out.println("Total de params: " +  num_args);
+        print_debug("Total de params: " +  num_args);
 
         // Percorrer lista de parametros colocando na pilha
         // em ordem inversa
@@ -433,7 +444,7 @@ public class Codegen
             NAME calledFunction = (NAME)(exp.func);
             emit(new assem.OPER("call " + calledFunction.label.toString(), 
                     new List<Temp>(Frame.esp, Frame.calldefs), 
-                    new List<Temp>(Frame.esp, paramsTemp)));
+                    new List<Temp>(Frame.esp, null)));
         }
         else { // Senão temos que processar e jogar o endereço num registrador para dar call.
             Temp funcAdd = munchExp(exp.func);

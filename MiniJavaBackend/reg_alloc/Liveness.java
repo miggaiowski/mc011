@@ -97,6 +97,7 @@ public class Liveness extends InterferenceGraph
     
     private void computeDFA()
     {	
+        //System.out.println("Começando computeDFA()");
         // Inicializa in, out, inprime, outprime
         in = new Hashtable<Node, HashSet<Temp>>();
         out = new Hashtable<Node, HashSet<Temp>>();
@@ -145,10 +146,11 @@ public class Liveness extends InterferenceGraph
             }            
  
         } while (compara_ins() == false || compara_outs() == false);
-        System.out.println("Saiu");
+        //System.out.println("Saiu");
         //dump(System.err);
         //graph.show(System.out);
     }
+    
     
     private Boolean compara_ins() {
         Hashtable<Node, HashSet<Temp>> a = in;
