@@ -158,6 +158,55 @@ public class Codegen
 
     // **MUNCH MOVE (TEMP, Exp)** //
     private void munchMove (TEMP s, Exp src){
+        
+        // munch de:
+        // x = x + 1;
+        // x = 1 + x;
+        // x = x - 1;
+        if (src instanceof BINOP) {
+            BINOP bo = (BINOP)src;
+            if (bo.binop == BINOP.PLUS) {
+                if (bo.left instanceof TEMP) {
+                    TEMP temp = (TEMP) bo.left;
+                    if (temp.temp == s.temp) {
+                        if (bo.right instanceof CONST) {
+                            CONST c = (CONST) bo.right;
+                            if (c.value == 1) {
+                                emit(new assem.OPER("inc `d0", new List<Temp>(s.temp, null), new List<Temp>(s.temp, null)));
+                                return;
+                            }
+                        }
+                    }
+                }
+                if (bo.right instanceof TEMP) {
+                    TEMP temp = (TEMP) bo.right;
+                    if (temp.temp == s.temp) {
+                        if (bo.left instanceof CONST) {
+                            CONST c = (CONST) bo.left;
+                            if (c.value == 1) {
+                                emit(new assem.OPER("inc `d0", new List<Temp>(s.temp, null), new List<Temp>(s.temp, null)));
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            if (bo.binop == BINOP.MINUS) {
+                if (bo.left instanceof TEMP) {
+                    TEMP temp = (TEMP) bo.left;
+                    if (temp.temp == s.temp) {
+                        if (bo.right instanceof CONST) {
+                            CONST c = (CONST) bo.right;
+                            if (c.value == 1) {
+                                emit(new assem.OPER("dec `d0", new List<Temp>(s.temp, null), new List<Temp>(s.temp, null)));
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
         print_debug("MOVING-------------------------------------");
         Temp val = munchExp(src);
         //Temp reg = munchExpTemp(s);
@@ -169,6 +218,7 @@ public class Codegen
 //        emit (new assem.OPER("mov `d0, `s0", 
 //                new List<Temp>(reg, null),
 //                new List<Temp>(val, null)));
+        
         return;
     }
 
@@ -283,6 +333,7 @@ public class Codegen
     }
 
     private Temp munchExpBinop(BINOP exp) {
+
         Temp tmp = munchExp(exp.left);
         Temp left = new Temp();
 
@@ -307,7 +358,8 @@ public class Codegen
                     if (constante.value == 1) {
                         emit(new assem.OPER("inc `d0", new List<Temp>(left, null), new List<Temp>(left, null)));
                     }
-                    else {
+                    else 
+                    {
                         emit(new assem.OPER("add `d0, " + constante.value, new List<Temp>(left, null), new List<Temp>(left, null)));
                     }
                 }
